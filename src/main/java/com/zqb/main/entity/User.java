@@ -1,21 +1,21 @@
 package com.zqb.main.entity;
 
 /**
- * @author zqb
- * @decription
- * @create 2017/7/21
+ * Created by zqb on 2018/4/3.
  */
 public class User {
-    private int userId;
-    private String userName;
-    private String userPass;
+    private String id;
 
-    public int getUserId() {
-        return userId;
+    private String userName;
+
+    private String userPassword;
+
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -26,20 +26,21 @@ public class User {
         this.userName = userName;
     }
 
-    public String getUserPass() {
-        return userPass;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setUserPass(String userPass) {
-        this.userPass = userPass;
+    public void setUserPassword(String userPassword)
+    {
+        this.userPassword = userPassword;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
+                "id='" + id + '\'' +
                 ", userName='" + userName + '\'' +
-                ", userPass='" + userPass + '\'' +
+                ", userPassword='" + userPassword + '\'' +
                 '}';
     }
 }

@@ -5,6 +5,7 @@
 <configuration>
 
     <settings>
+        <setting name="useColumnLabel" value="true" />
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
@@ -13,8 +14,5 @@
     </typeAliases>
 
 
-    <mappers>
-        <mapper resource="mapper/UserMapper"></mapper>
-    </mappers>
 
 </configuration>

@@ -6,12 +6,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by zqb on 2017/7/21.
+ * Created by zqb on 2018/4/3.
  */
 @Repository
-public interface UserMapper {
-
-    List<User> selectAll();
+public interface UserDao {
 
     int addUser(User user);
+
+    List<User> getAll();
+
 }

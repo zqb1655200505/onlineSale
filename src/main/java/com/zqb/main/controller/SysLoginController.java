@@ -4,13 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * @author zqb
- * @decription
- * @create 2017/7/21
+ * Created by zqb on 2018/4/3.
  */
 @Controller
-@RequestMapping(value = "${projectName}/user")
-public class UserController {
-
-
+@RequestMapping(value = "/onlineSale/sysLogin")
+public class SysLoginController {
 }

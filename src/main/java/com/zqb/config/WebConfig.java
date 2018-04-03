@@ -50,9 +50,9 @@ public class WebConfig extends WebMvcConfigurerAdapter{
     public void addInterceptors(InterceptorRegistry registry){
         InterceptorRegistration interceptorRegistration =  registry.addInterceptor(new SpringMVCInterceptor());
         //在所有handler操作前进行拦截检查，除了注册与登录操作
-        interceptorRegistration.addPathPatterns("/basic/*");
-        interceptorRegistration.excludePathPatterns("/basic/register");
-        interceptorRegistration.excludePathPatterns("/basic/login");
+        interceptorRegistration.addPathPatterns("/onlineSale/*");
+        interceptorRegistration.excludePathPatterns("/onlineSale/register");
+        interceptorRegistration.excludePathPatterns("/onlineSale/login");
     }
 
     @Bean(name="multipartResolver")

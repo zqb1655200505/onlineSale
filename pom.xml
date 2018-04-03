@@ -2,14 +2,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.glf.jxframe</groupId>
-    <artifactId>jxframe</artifactId>
+    <groupId>com.zqb</groupId>
+    <artifactId>onlineSale</artifactId>
     <version>1.2.7</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <packaging>war</packaging>
 
-    <name>GLF</name>
-    <url>http://quanquan6.com</url>
-    <inceptionYear>2016-2017</inceptionYear>
+    <name>zqb</name>
+    <url>http://maven.apache.org</url>
 
     <!-- 项目属性 -->
     <properties>
@@ -19,11 +30,6 @@
         <validator.version>5.2.4.Final</validator.version>
         <mybatis.version>3.2.8</mybatis.version>
         <mybatis-spring.version>1.2.3</mybatis-spring.version>
-        <druid.version>1.0.18</druid.version>
-        <ehcache.version>2.6.11</ehcache.version>
-        <ehcache-web.version>2.0.4</ehcache-web.version>
-        <shiro.version>1.2.3</shiro.version>
-        <sitemesh.version>2.4.2</sitemesh.version>
 
         <!-- tools version setting -->
         <slf4j.version>1.7.7</slf4j.version>
@@ -38,12 +44,9 @@
 
         <!-- jdbc driver setting -->
         <mysql.driver.version>5.1.30</mysql.driver.version>
-        <oracle.driver.version>10.2.0.4.0</oracle.driver.version>
-        <mssql.driver.version>1.3.1</mssql.driver.version>
 
         <!-- environment setting -->
         <jdk.version>1.8</jdk.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <downloadSources>true</downloadSources>
 
     </properties>
@@ -56,15 +59,6 @@
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>
     </repositories>
-
-    <!-- 设定插件仓库 -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>plugin-repos</id>
-            <name>plugin Repository</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <!-- 依赖项定义 -->
     <dependencies>
@@ -125,34 +119,8 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- bean validate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${validator.version}</version>
-        </dependency>
-        <!-- SPRING end -->
-
-        <!-- AOP begin -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.7.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.7.4</version>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <!-- AOP end -->
 
         <!-- PERSISTENCE begin -->
-
         <!-- MyBatis -->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -165,12 +133,6 @@
             <version>${mybatis-spring.version}</version>
         </dependency>
 
-        <!-- connection pool -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>${druid.version}</version>
-        </dependency>
 
         <!-- jdbc driver -->
         <dependency>
@@ -179,20 +141,7 @@
             <version>${mysql.driver.version}</version>
             <scope>runtime</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.oracle</groupId>-->
-            <!--<artifactId>ojdbc14</artifactId>-->
-            <!--<version>${oracle.driver.version}</version>-->
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ojdbc14-10.2.0.4.0.jar</systemPath>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>net.sourceforge.jtds</groupId>-->
-            <!--<artifactId>jtds</artifactId>-->
-            <!--<version>${mssql.driver.version}</version>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
-        <!-- PERSISTENCE end -->
+
 
         <!-- WEB begin -->
         <dependency>
@@ -210,36 +159,9 @@
             <artifactId>spring-oxm</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <dependency>
-            <groupId>opensymphony</groupId>
-            <artifactId>sitemesh</artifactId>
-            <version>${sitemesh.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>taglibs</groupId>
-            <artifactId>standard</artifactId>
-            <version>1.1.2</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.1</version>
-            <scope>provided</scope>
-        </dependency>
+
         <!-- WEB end -->
+
 
         <!-- LOGGING begin -->
         <dependency>
@@ -252,13 +174,11 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <!-- common-logging 实际调用slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <!-- java.util.logging 实际调用slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
@@ -363,8 +283,6 @@
         </dependency>
         <!-- TEST end -->
 
-
-
         <dependency>
             <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
@@ -372,60 +290,7 @@
             <classifier>jdk15</classifier>
         </dependency>
 
-
-
     </dependencies>
 
-    <build>
-        <outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/classes/</outputDirectory>
-        <plugins>
-            <!-- Compiler 插件, 设定JDK版本 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                    <showWarnings>true</showWarnings>
-                </configuration>
-            </plugin>
-
-            <!-- resource插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-
-            <!-- install插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-            </plugin>
-
-            <!-- clean插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.6.1</version>
-            </plugin>
-
-            <!-- ant插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
-            </plugin>
-
-            <!-- dependency插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

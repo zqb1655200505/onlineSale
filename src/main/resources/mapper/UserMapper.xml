@@ -2,12 +2,17 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper>
-    <select id="selectAll">
-        SELECT * from t_user
-    </select>
+<mapper namespace="com.zqb.main.dao.UserDao">
 
-    <insert id="addNewUser" parameterType="User">
-        INSERT INTO t_user(user_name,user_pass) VALUE ()
+
+
+    <insert id="addUser" parameterType="user">
+        INSERT INTO
+          t_user(id,user_name,user_password)
+          value(#{id},#{userName},#{userPassword})
     </insert>
+
+    <select id="getAll" resultType="user">
+        SELECT * FROM t_user
+    </select>
 </mapper>
