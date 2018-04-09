@@ -17,6 +17,7 @@
             </plugin>
         </plugins>
     </build>
+
     <packaging>war</packaging>
 
     <name>zqb</name>
@@ -27,7 +28,6 @@
 
         <!-- main version setting -->
         <spring.version>4.1.9.RELEASE</spring.version>
-        <validator.version>5.2.4.Final</validator.version>
         <mybatis.version>3.2.8</mybatis.version>
         <mybatis-spring.version>1.2.3</mybatis-spring.version>
 
@@ -160,6 +160,24 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- WEB end -->
 
 
