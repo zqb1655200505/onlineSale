@@ -11,8 +11,12 @@
 
     <typeAliases>
         <typeAlias type="com.zqb.main.entity.User" alias="user"></typeAlias>
+        <typeAlias type="com.zqb.main.entity.Message" alias="message"></typeAlias>
     </typeAliases>
 
 
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.EnumTypeHandler" javaType="com.zqb.main.entity.UserType"></typeHandler>
+    </typeHandlers>
 
 </configuration>
