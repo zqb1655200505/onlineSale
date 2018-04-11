@@ -63,9 +63,17 @@
         .goods-item-img
         {
             width: 100%;
-            height: auto;
+            height: 230px;
         }
 
+        .goods-item-description
+        {
+            background-color: #2baee9;
+            font-size: 20px;
+            padding: 10px;
+            width: 100%;
+            height: 100px;
+        }
     </style>
 
 </head>
@@ -108,7 +116,7 @@
         <Content class="layout-content-center">
             <Row>
                 <i-col offset="2" span="20">
-                    <Carousel v-model="value2" autoplay  loop>
+                    <Carousel v-model="value2" autoplay autoplay-speed="3000" loop>
                         <Carousel-item>
                             <div class="demo-carousel">1</div>
                         </Carousel-item>
@@ -126,85 +134,83 @@
             </Row>
 
             <Row :gutter="64">
-                <i-col span="5" offset="2">
+                <i-col span="5" offset="2" style="margin-top: 30px;">
                     <Card>
-                        <img src="#" class="goods-item-img">
+                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
                         <div class="goods-item-description">
-
+                            <span>你好是大V按时大Vad深V</span>
                         </div>
                     </Card>
                 </i-col>
-                <i-col  span="5">
+                <i-col  span="5" style="margin-top: 30px;">
                     <Card>
-                        <img src="#" class="goods-item-img">
+                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
                         <div class="goods-item-description">
-
+                            <span>你好是大V按时大Vad深V</span>
                         </div>
                     </Card>
                 </i-col>
-                <i-col  span="5">
+                <i-col  span="5" style="margin-top: 30px;">
                     <Card>
-                        <img src="#" class="goods-item-img">
+                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
                         <div class="goods-item-description">
-
+                            <span>你好是大V按时大Vad深V</span>
                         </div>
                     </Card>
                 </i-col>
-                <i-col  span="5">
+                <i-col  span="5" style="margin-top: 30px;">
                     <Card>
-                        <img src="#" class="goods-item-img">
+                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
                         <div class="goods-item-description">
-
+                            <span>你好是大V按时大Vad深V</span>
                         </div>
                     </Card>
                 </i-col>
 
-                <i-col span="5" offset="2">
+                <i-col span="5" offset="2" style="margin-top: 30px;">
                     <Card>
-                        <img src="#" class="goods-item-img">
+                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
                         <div class="goods-item-description">
-
+                            <span>你好是大V按时大Vad深V</span>
                         </div>
                     </Card>
                 </i-col>
-                <i-col  span="5">
+                <i-col  span="5" style="margin-top: 30px;">
                     <Card>
-                        <img src="#" class="goods-item-img">
+                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
                         <div class="goods-item-description">
-
+                            <span>你好是大V按时大Vad深V</span>
                         </div>
                     </Card>
                 </i-col>
-                <i-col  span="5">
+                <i-col  span="5" style="margin-top: 30px;">
                     <Card>
-                        <img src="#" class="goods-item-img">
+                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
                         <div class="goods-item-description">
-
+                            <span>你好是大V按时大Vad深V</span>
                         </div>
                     </Card>
                 </i-col>
-                <i-col  span="5">
+                <i-col  span="5" style="margin-top: 30px;">
                     <Card>
-                        <img src="#" class="goods-item-img">
+                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
                         <div class="goods-item-description">
-
+                            <span>你好是大V按时大Vad深V</span>
                         </div>
                     </Card>
                 </i-col>
             </Row>
 
-
         </Content>
         <Footer class="layout-footer-center">2011-2016 &copy; TalkingData</Footer>
     </Layout>
-
-
 </div>
-<script src="<%=basePath%>/static/common/js/jquery-2.0.0.min.js"></script>
-<script src="<%=basePath%>/static/common/js/common.js"></script>
+<script type="text/javascript" src="<%=basePath%>/static/js/jquery-2.0.0.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/vue/vue.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/iview/iview.min.js"></script>
 <script type="text/javascript">
+    //# sourceURL=index.js
     var app = new Vue({
         el: "#app",
 
