@@ -1,4 +1,4 @@
-package com.zqb.main.entity;
+package com.zqb.main.dto;
 
 /**
  * Created by xcd on 2017/4/20.

@@ -260,12 +260,13 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!-- fastjson json
+        <!-- fastjson json-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency> -->
+            <version>1.2.47</version>
+        </dependency>
+
 
 
         <!-- poi office -->
@@ -286,6 +287,20 @@
         </dependency>
 
 
+        <!-- kafka begin -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.12</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
+
 
 
         <!-- TEST begin -->
@@ -301,12 +316,12 @@
         </dependency>
         <!-- TEST end -->
 
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.4</version>
-            <classifier>jdk15</classifier>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>net.sf.json-lib</groupId>-->
+            <!--<artifactId>json-lib</artifactId>-->
+            <!--<version>2.4</version>-->
+            <!--<classifier>jdk15</classifier>-->
+        <!--</dependency>-->
 
     </dependencies>
 

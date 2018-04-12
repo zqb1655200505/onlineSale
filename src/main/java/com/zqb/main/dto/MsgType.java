@@ -1,12 +1,13 @@
-package com.zqb.main.entity;
+package com.zqb.main.dto;
 
 /**
  * Created by xcd on 2017/4/20.
  */
 public enum MsgType
 {
-    Success(200,"成功"),
-    Error(400,"错误");
+    Success(200,"操作成功"),
+    Error(400,"操作失败"),
+    AccessNotAllow(100,"尚未登录");
 
 
     MsgType(int code,String msgName)

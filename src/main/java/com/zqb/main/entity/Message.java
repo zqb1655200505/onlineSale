@@ -12,7 +12,7 @@ public class Message extends BasicEntity {
 
     private Date sendTime;
 
-    private String message;
+    private String message;//为kafkaMsg.toString()，是一个json对象
 
     public User getSendUser() {
         return sendUser;

@@ -1,8 +1,8 @@
 package com.zqb.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zqb.main.entity.AjaxMessage;
-import com.zqb.main.entity.MsgType;
+import com.zqb.main.dto.AjaxMessage;
+import com.zqb.main.dto.MsgType;
 import com.zqb.main.entity.User;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
