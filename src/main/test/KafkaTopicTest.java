@@ -9,7 +9,7 @@ public class KafkaTopicTest {
     public static void main(String[] args)
     {
         //TopicUtils.queryTopic(zookeeper_connect,"test");
-        TopicUtils.createTopic(zookeeper_connect,"test",1,3);
+        TopicUtils.createTopic("test",1,3);
         //TopicUtils.deleteTopic(zookeeper_connect,"test");
     }
 }
