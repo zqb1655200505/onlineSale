@@ -8,8 +8,9 @@ var app = new Vue({
         avatarSrc:"/upload/image/defaultAvatar.jpg",
         username:"zqb",
         haveLogin:false,
-    }
+    },
 });
 $(document).ready(function () {
 
 });
+

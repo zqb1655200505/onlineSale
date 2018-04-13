@@ -32,9 +32,9 @@
     font-size: 18px;
 }
 
-MenuItem
+.ivu-menu-item
 {
-    margin-left: 20px;
+    font-size: 18px;
 }
 
 .layout-footer-center{
@@ -48,4 +48,9 @@ MenuItem
 {
     width: 30px;
     height: 30px;
+}
+
+
+[v-cloak] {
+    display: none !important;
 }

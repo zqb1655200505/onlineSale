@@ -20,51 +20,57 @@
 </head>
 <body >
 <Header v-cloak id="header">
+
     <i-menu mode="horizontal" theme="dark">
         <div class="layout-logo"></div>
         <div class="layout-nav">
             <template v-if="haveLogin">
-                <MenuItem name="login" >
+                <Menu-Item name="login" >
                     <a href="#">
                         <Icon type="ios-navigate"></Icon>
                         登录
                     </a>
-                </MenuItem>
-                <MenuItem name="register">
+                </Menu-Item>
+                <Menu-Item name="register">
                     <a href="#1">
                         <Icon type="ios-keypad"></Icon>
                         注册
                     </a>
-                </MenuItem>
+                </Menu-Item>
             </template>
 
-
-            <MenuItem name="username" v-else>
-                <a>
+            <Submenu name="username" v-else>
+                <a slot="title">
                     <template>
                         <Avatar id="userPic" :src="'<%=basePath%>'+avatarSrc"/>
                     </template>
                     <span>{{username}}</span>
                 </a>
+                <Menu-Group title="使用">
+                    <Menu-Item name="3-1">新增和启动</Menu-Item>
+                    <Menu-Item name="3-2">活跃分析</Menu-Item>
+                    <Menu-Item name="3-3">时段分析</Menu-Item>
+                </Menu-Group>
+            </Submenu>
 
-            </MenuItem>
-
-            <MenuItem name="MyCart">
+            <Menu-Item name="MyCart">
                 <a>
                     <Icon type="ios-analytics"></Icon>
                     购物车
                 </a>
 
-            </MenuItem>
-            <MenuItem name="MyOrder">
+            </Menu-Item>
+            <Menu-Item name="MyOrder">
                 <a>
                     <Icon type="ios-paper"></Icon>
                     我的订单
                 </a>
 
-            </MenuItem>
+            </Menu-Item>
         </div>
     </i-menu>
+
+
 </Header>
 </body>
 </html>
