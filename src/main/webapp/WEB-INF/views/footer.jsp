@@ -19,7 +19,7 @@
 <body>
 <Footer class="layout-footer-center">
     <hr style="margin-bottom: 10px;"/>
-    2011-2016 &copy; TalkingData
+    2014-2018 &copy; software engineering
 </Footer>
 <script type="text/javascript" src="<%=basePath%>/static/js/jquery-2.0.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>

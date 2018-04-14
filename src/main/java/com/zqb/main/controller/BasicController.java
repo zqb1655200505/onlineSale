@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/onlineSale")
 public class BasicController {
 
-
     @RequestMapping(value = "")
     public String index()
     {
@@ -28,12 +27,13 @@ public class BasicController {
     @RequestMapping(value = "/login")
     public String login()
     {
-        return "customer/login";
+        return "login";
     }
 
-    @RequestMapping(value = "/sysLogin")
-    public String sysLogin()
+
+    @RequestMapping(value = "/register")
+    public String register()
     {
-        return "seller/sysLogin";
+        return "register";
     }
 }

@@ -24,48 +24,56 @@
     <i-menu mode="horizontal" theme="dark">
         <div class="layout-logo"></div>
         <div class="layout-nav">
-            <template v-if="haveLogin">
-                <Menu-Item name="login" >
-                    <a href="#">
+            <template v-if="!haveLogin">
+                <Menu-Item name="login">
+                    <a href="/onlineSale/login">
                         <Icon type="ios-navigate"></Icon>
                         登录
                     </a>
                 </Menu-Item>
                 <Menu-Item name="register">
-                    <a href="#1">
+                    <a href="/onlineSale/register">
                         <Icon type="ios-keypad"></Icon>
                         注册
                     </a>
                 </Menu-Item>
             </template>
 
-            <Submenu name="username" v-else>
-                <a slot="title">
+            <Menu-Item name="username" v-else>
+                <a>
                     <template>
                         <Avatar id="userPic" :src="'<%=basePath%>'+avatarSrc"/>
                     </template>
                     <span>{{username}}</span>
                 </a>
-                <Menu-Group title="使用">
-                    <Menu-Item name="3-1">新增和启动</Menu-Item>
-                    <Menu-Item name="3-2">活跃分析</Menu-Item>
-                    <Menu-Item name="3-3">时段分析</Menu-Item>
-                </Menu-Group>
-            </Submenu>
+            </Menu-Item>
 
             <Menu-Item name="MyCart">
-                <a>
-                    <Icon type="ios-analytics"></Icon>
+                <a href="/onlineSale/myCart">
+                    <Icon type="ios-cart"></Icon>
                     购物车
                 </a>
 
             </Menu-Item>
             <Menu-Item name="MyOrder">
-                <a>
-                    <Icon type="ios-paper"></Icon>
+                <a href="/onlineSale/myOrder">
+                    <Icon type="ios-list"></Icon>
                     我的订单
                 </a>
+            </Menu-Item>
 
+            <Menu-Item name="MyOrder" v-if="haveLogin">
+                <a href="/onlineSale/myShopStore">
+                    <Icon type="ios-list"></Icon>
+                    我的店铺
+                </a>
+            </Menu-Item>
+
+            <Menu-Item name="logout" v-if="haveLogin">
+                <a style="color: #cd121b" href="/onlineSale/logout">
+                    <Icon type="log-out"></Icon>
+                    退出
+                </a>
             </Menu-Item>
         </div>
     </i-menu>

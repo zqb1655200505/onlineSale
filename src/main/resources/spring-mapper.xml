@@ -34,4 +34,5 @@
         <property name="annotationClass" value="org.springframework.stereotype.Repository"></property>
     </bean>
 
+
 </beans>

@@ -25,7 +25,8 @@
     left: 20px;
 }
 .layout-nav{
-    width: 420px;
+    width: 450px;
+    height: 100%;
     margin: 0 auto;
     margin-right: 20px;
     color: white;
@@ -35,13 +36,14 @@
 .ivu-menu-item
 {
     font-size: 18px;
+    padding: 0 10px !important;
 }
 
 .layout-footer-center{
     text-align: center;
     font-size: 17px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 25px;
+    margin-bottom: 20px;
 }
 
 #userPic
