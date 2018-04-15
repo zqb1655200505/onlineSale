@@ -18,7 +18,7 @@ public class KafkaConsumerTest extends Thread{
     {
         while (true)
         {
-           List<KafkaMsg> list= ConsumerUtils.getRowMessage("mytest",10);
+           List<KafkaMsg> list= ConsumerUtils.getRowMessage("mytest");
         }
     }
 }

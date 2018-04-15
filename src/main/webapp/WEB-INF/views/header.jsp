@@ -14,7 +14,7 @@
 %>
 <html>
 <head>
-    <title>**在线销售系统</title>
+    <title>优铺在线销售系统</title>
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>/static/css/header.css" rel="stylesheet" type="text/css"/>
 </head>

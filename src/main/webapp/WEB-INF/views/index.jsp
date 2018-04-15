@@ -160,15 +160,10 @@
     function changePage(pageNo) {
         if(pageNo != null)
             app.page.no = pageNo;
-        refresh() ;
+        refresh();
     };
 
     function refresh() {
-        <%--ajaxGet("${ctx}/science/infoInstitution/list?pageNo=" + app.page.no + "&pageSize=" + app.page.size--%>
-            <%--, function (d) {--%>
-                <%--app.goodsList = d.data.list;--%>
-                <%--app.page.total = d.data.total;--%>
-            <%--}, null, false);--%>
         app.goodsList.splice(0,app.goodsList.length);
         for(var i=0;i<app.page.size;i++)
         {

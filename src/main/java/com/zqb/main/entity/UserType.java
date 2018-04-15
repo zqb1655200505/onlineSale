@@ -2,8 +2,8 @@ package com.zqb.main.entity;
 
 public enum UserType {
 
-    USER(1,"普通用户"),
-    ADMINISTRATOR(2,"商家用户");
+    USER(0,"普通用户"),
+    ADMINISTRATOR(1,"商家用户");
 
     private int id;
     private String name;

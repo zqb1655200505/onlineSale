@@ -14,7 +14,7 @@
 %>
 <html>
 <head>
-    <title>用户登录</title>
+    <title>优铺在线销售系统-登录</title>
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
     <style>
         body
@@ -66,8 +66,8 @@
             <Card style="padding: 8px 10px;">
                 <p slot="title" style="font-size: 18px;"><Icon type="log-in"></Icon> 登录</p>
                 <i-form ref="form" :model="userInfo" :rules="validate" style="margin-top: 20px;">
-                    <Form-Item prop="username">
-                        <i-input type="text" v-model="userInfo.username" placeholder="Username">
+                    <Form-Item prop="userName">
+                        <i-input type="text" v-model="userInfo.userName" placeholder="userName">
                             <Icon type="ios-person" slot="prepend" size="18"></Icon>
                         </i-input>
                     </Form-Item>
@@ -92,20 +92,21 @@
     </div>
 </body>
 <script type="text/javascript" src="<%=basePath%>/static/js/jquery-2.0.0.min.js"></script>
-<script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/vue/vue.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/iview/iview.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
 <script type="text/javascript">
+    //# sourceURL=login.js
     var app = new Vue({
         el: "#app",
 
         data: {
             userInfo:{
-                username:"",
+                userName:"",
                 userPassword:""
             },
             validate: {
-                username: [
+                userName: [
                     { required: true, message: '用户名不能为空', trigger: 'blur' }
                 ],
                 userPassword: [
@@ -129,7 +130,19 @@
         app.$refs['form'].validate( function (valid) {
             if (valid)
             {
-                app.$Message.success('登录成功!');
+                console.log(app.userInfo);
+
+                $.ajax({
+                    type : 'post',
+                    url : "/onlineSale/doLogin",
+                    data:app.userInfo,
+                    success:function (data) {
+                        console.log(data);
+                    },
+                    error:function () {
+                        app.$Message.error('请求出错!');
+                    }
+                });
             }
             else
             {

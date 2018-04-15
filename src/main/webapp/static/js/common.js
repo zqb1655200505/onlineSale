@@ -7,21 +7,12 @@
  */
 
 
-
 function successMsg(msg){
-
-    //if(typeof(app) != "undefined")
-        //app.$Message.success(msg);
-        window.top.app.$Message.success(msg);
-    //else
-    //    window.top.toastr.success("", msg);
+    window.top.app.$Message.success(msg);
 }
 
 function errorMsg(msg){
-   // if(typeof(app) != "undefined")
-        window.top.app.$Message.error(msg);
-   // else
-   //     window.top.toastr.error("", msg);
+    window.top.app.$Message.error(msg);
 }
 
 /**
@@ -35,8 +26,6 @@ function errorMsg(msg){
 function ajaxGet(url, successCallback,errorCallback,showMsg) {
 
     showMsg = showMsg || true;
-    var index = layer.load();
-
 
     //headers['CSRFToken']=$("#csrftoken").val();
     $.ajax({
@@ -46,38 +35,24 @@ function ajaxGet(url, successCallback,errorCallback,showMsg) {
         //dataType : 'json',
         success : function(d, status) {
 
-            layer.close(index);
-
-            if(typeof d == "string" && d.indexOf('login-body') != -1) {
-                window.location.href= "/login";
+            if(d.code==="accessnotallow")
+            {
+                window.location.href= "/onlineSale/login";
                 return;
             }
 
             //有返回消息
             if (showMsg && d.message && d.message != "") {
                 if (d.code == 'success') {
-
                     successMsg(d.message);
-                    //window.top.layer.msg(d.message, { offset: '100px' });
-                    //window.top.toastr.success("", d.message);
-                    //toastr.pop('success', "", d.message, 2000);
                 } else {
-
                     errorMsg(d.message);
-                    //window.top.layer.msg(d.message, { offset: '100px' });
-                    //window.top.toastr.error("", d.message);
-                    //toaster.pop('error', "", d.message, 2000);
 
                 }
             }
-
-
             if (typeof (successCallback) == 'function') successCallback(d,status);
-
         },
         error : function(e, err1, err2) {
-
-            layer.close(index);
 
             //webapi调用失败
             if (e && typeof (e) != 'object' && e != "") {
@@ -110,7 +85,6 @@ function ajaxGet(url, successCallback,errorCallback,showMsg) {
 
 function ajaxPost(url, data, successCallback,errorCallback,showMsg) {
     showMsg = showMsg || true;
-    var index = layer.load();
     // var headers={};
     // headers['CSRFToken']=$("#csrftoken").val();
 
@@ -127,27 +101,18 @@ function ajaxPost(url, data, successCallback,errorCallback,showMsg) {
         //headers:headers,
         success : function(d, status) {
 
-            layer.close(index);
-            if(typeof d == "string" && d.indexOf('login-body') != -1) {
-                window.location.href= "/login";
+            if(d.code==="accessnotallow")
+            {
+                window.location.href= "/onlineSale/login";
                 return;
             }
 
             //有返回消息
             if (showMsg && d.message && d.message != "") {
                 if (d.code == 'success') {
-
                     successMsg(d.message);
-                    //window.top.layer.msg(d.message, { offset: '100px' });
-                    //window.top.toastr.success("", d.message);
-                    //toaster.pop('success', "", d.message, 2000);
                 } else {
-
                     errorMsg(d.message);
-                    //window.top.layer.msg(d.message, { offset: '100px' });
-                    //window.top.toastr.error("", d.message);
-                    //toaster.pop('error', "", d.message, 2000);
-
                 }
             }
 
@@ -155,18 +120,12 @@ function ajaxPost(url, data, successCallback,errorCallback,showMsg) {
 
         },
         error : function(e, err1, err2) {
-
-            layer.close(index);
-
             //webapi调用失败
            if (e && typeof (e) != 'object' && e != "") {
                errorMsg(e);
-               //window.top.toastr.error("", e);
             }
             else if(e && e.responseText){
-
                errorMsg(e.responseText);
-               //window.top.toastr.error("", e.responseText);
             }
 
             if (typeof (errorCallback) == 'function') errorCallback(e);
@@ -190,10 +149,6 @@ function ajaxPost(url, data, successCallback,errorCallback,showMsg) {
 
 function ajaxPostJSON(url, data, successCallback,errorCallback,showMsg) {
     showMsg = showMsg || true;
-    // var headers={};
-    // headers['CSRFToken']=$("#csrftoken").val();
-    var index = layer.load();
-
     $.ajax({
         type : 'post',
         url : url,
@@ -207,29 +162,18 @@ function ajaxPostJSON(url, data, successCallback,errorCallback,showMsg) {
         //headers:headers,
         success : function(d, status) {
 
-            layer.close(index);
-            if(typeof d == "string" && d.indexOf('login-body') != -1) {
-                window.location.href= "/login";
+            if(d.code==="accessnotallow")
+            {
+                window.location.href= "/onlineSale/login";
                 return;
             }
 
             //有返回消息
             if (showMsg && d.message && d.message != "") {
                 if (d.code == 'success') {
-
                     successMsg(d.message);
-
-                    //window.top.layer.msg(d.message, { offset: '100px' });
-                    //window.top.toastr.success("", d.message);
-                    //toaster.pop('success', "", d.message, 2000);
                 } else {
-
                     errorMsg(d.message);
-
-                    //window.top.layer.msg(d.message, { offset: '100px' });
-                    //window.top.toastr.error("", d.message);
-                    //toaster.pop('error', "", d.message, 2000);
-
                 }
             }
 
@@ -238,16 +182,13 @@ function ajaxPostJSON(url, data, successCallback,errorCallback,showMsg) {
         },
         error : function(e, err1, err2) {
 
-            layer.close(index);
-
             //webapi调用失败
             if (e && typeof (e) != 'object' && e != "") {
                 errorMsg(e);
-                //window.top.toastr.error("", e);
+
             }
             else if(e && e.responseText){
                 errorMsg(e.responseText);
-                //window.top.toastr.error("", e.responseText);
             }
 
             if (typeof (errorCallback) == 'function') errorCallback(e);
@@ -314,8 +255,6 @@ function toTreeData(a, idStr, pidStr, childrenStr) {
 };
 
 
-
-
 // 引入js和css文件
 function include(id, path, file){
 	if (document.getElementById(id)==null){
@@ -346,26 +285,6 @@ function getQueryString(name, url) {
     if (r != null) return unescape(r[2]); return null;
 }
 
-//获取字典标签
-function getDictLabel(data, value, defaultValue){
-    for (var i=0; i<data.length; i++){
-        var row = data[i];
-        if (row.value == value){
-            return row.label;
-        }
-    }
-    return defaultValue;
-}
-
-
-
-// 打开一个窗体
-function windowOpen(url, name, width, height){
-	var top=parseInt((window.screen.height-height)/2,10),left=parseInt((window.screen.width-width)/2,10),
-		options="location=no,menubar=no,toolbar=no,dependent=yes,minimizable=no,modal=yes,alwaysRaised=yes,"+
-		"resizable=yes,scrollbars=yes,"+"width="+width+",height="+height+",top="+top+",left="+left;
-	window.open(url ,name , options);
-}
 
 // 警告对话框
 function alertx(mess, closed){
@@ -538,4 +457,8 @@ function abbr(name, maxLength){
 function isPositiveNum(s){
     var re = /^[0-9]*[1-9][0-9]*$/;
     return re.test(s);
+}
+
+function testCommon() {
+    alert("能引入");
 }

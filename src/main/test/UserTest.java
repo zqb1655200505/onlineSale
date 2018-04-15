@@ -1,5 +1,6 @@
 import com.zqb.config.MyConfig;
 import com.zqb.main.dao.UserDao;
+import com.zqb.main.entity.User;
 import com.zqb.main.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ public class UserTest {
     @Test
     public void addUser()
     {
-        userService.addUser();
+        //userService.addUser();
     }
 
 
@@ -33,5 +34,13 @@ public class UserTest {
     public void getAll()
     {
         System.out.println(userService.getAll());
+    }
+
+    @Test
+    public void getUserByName()
+    {
+        User user=new User();
+        user.setUserName(null);
+        System.out.println(userService.getUserByName(user));
     }
 }

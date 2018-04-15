@@ -14,7 +14,7 @@
 %>
 <html>
 <head>
-    <title>注册</title>
+    <title>优铺在线销售系统-注册</title>
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
     <style>
         body{
@@ -71,13 +71,13 @@
                         <i-form ref="form" :model="userInfo" :rules="validate">
                             <Form-Item>
                                 <%--<lable style="font-size: 18px;">用户类型：</lable>--%>
-                                <Radio-Group v-model="userInfo.userType" @on-change="changeUserType($event)">
+                                <Radio-Group v-model="userInfo.userType" ><%--@on-change="changeUserType($event)"--%>
                                     <Radio label="0">普通客户</Radio>
                                     <Radio label="1">商家用户</Radio>
                                 </Radio-Group>
                             </Form-Item>
-                            <Form-Item prop="username">
-                                <i-input type="text" v-model="userInfo.username" placeholder="Username">
+                            <Form-Item prop="userName">
+                                <i-input type="text" v-model="userInfo.userName" placeholder="userName">
 
                                 </i-input>
                             </Form-Item>
@@ -122,17 +122,17 @@
 <script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/vue/vue.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/iview/iview.min.js"></script>
-<script>
+<script type="text/javascript">
+    //# sourceURL=register.js
     var app = new Vue({
         el: "#app",
 
         data: {
             userInfo:{
-                username:"",
+                userName:"",
                 userPassword:"",
                 confirmPassword:"",
                 userType:"0",
-
             },
             checkProtocol:true,
             const: validatePwdCheck = function (rule, value, callback) {
@@ -147,7 +147,7 @@
             },
             toLogin:"/onlineSale/login",
             validate: {
-                username: [
+                userName: [
                     { required: true, message: '用户名不能为空', trigger: 'blur' }
                 ],
                 userPassword: [
@@ -166,7 +166,6 @@
         {
             handleSubmit();
         }
-
     }
 
     function handleSubmit()
@@ -174,8 +173,15 @@
         app.$refs['form'].validate( function (valid) {
             if (valid)
             {
-                alert(app.userInfo.userType);
-                app.$Message.success('登录成功!');
+                var user={
+                    userName:app.userInfo.userName,
+                    userPassword:app.userInfo.userPassword,
+                    userType:app.userInfo.userType
+                };
+
+                ajaxPost("/onlineSale/doRegister",user,function (data) {
+                    console.log(data);
+                },null,false);
             }
             else
             {
@@ -183,16 +189,7 @@
             }
         })
     }
-    function changeUserType(value) {
-        if(app.userInfo.userType==0)
-        {
-            app.toLogin="/onlineSale/login";
-        }
-        else
-        {
-            app.toLogin="/onlineSale/sysLogin"
-        }
-    }
+
 </script>
 </body>
 </html>

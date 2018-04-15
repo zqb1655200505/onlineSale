@@ -18,4 +18,5 @@ public interface UserDao {
 
     User selectById(@Param("id") String userId);
 
+    User getUserByName(User user);
 }
