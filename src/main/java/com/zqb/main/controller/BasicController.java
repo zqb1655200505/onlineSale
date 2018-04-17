@@ -110,6 +110,6 @@ public class BasicController {
     public String logout(HttpSession session)
     {
         session.removeAttribute("userSession");
-        return "login";//退出后返回主页
+        return "login";//退出后返回登录页
     }
 }

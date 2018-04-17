@@ -56,4 +56,11 @@ public class UserService {
         }
         return false;
     }
+
+
+    public User getUserFromSession(HttpSession session)
+    {
+        User user= (User) session.getAttribute("userSession");
+        return user;
+    }
 }

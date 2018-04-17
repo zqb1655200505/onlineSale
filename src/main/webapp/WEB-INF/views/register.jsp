@@ -181,7 +181,7 @@
 
                 ajaxPost("/onlineSale/doRegister",user,function (res) {
                     if(res.code==="success")
-                        window.location.href="/onlineSale/login"
+                        window.location.href="/onlineSale/login";
                     else
                     {
                         app.userInfo.userName="";
