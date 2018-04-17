@@ -7,6 +7,9 @@
 %>
 <html>
 <head>
+    <title>优铺在线销售系统</title>
+    <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
+    <link href="<%=basePath%>/static/css/header.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         .demo-carousel
         {
@@ -19,26 +22,17 @@
         .goods-item-img
         {
             width: 100%;
-            height: 230px;
+            height: auto;
         }
 
         .goods-item-description
         {
             background-color: #2baee9;
-            font-size: 20px;
+            font-size: 17px;
             padding: 10px;
             width: 100%;
             height: 100px;
         }
-        .ivu-page-next .ivu-icon
-        {
-            line-height: 2;
-        }
-        .ivu-page-prev .ivu-icon
-        {
-            line-height: 2;
-        }
-
 
         .sk_hd_lk{
             display: block;
@@ -68,7 +62,71 @@
 <body>
 <div class="layout" v-cloak id="app">
     <Layout>
-        <jsp:include page="header.jsp"/>
+
+        <Header>
+            <i-menu mode="horizontal" theme="dark">
+                <div class="layout-logo">
+                    <a href="/onlineSale/index">
+                        <img src="<%=basePath%>/upload/image/logo.png" class="logo-img">
+                    </a>
+                </div>
+                <div class="layout-nav">
+                    <template v-if="!haveLogin">
+                        <Menu-Item name="login">
+                            <a href="/onlineSale/login">
+                                <Icon type="ios-navigate"></Icon>
+                                登录
+                            </a>
+                        </Menu-Item>
+                        <Menu-Item name="register">
+                            <a href="/onlineSale/register">
+                                <Icon type="ios-keypad"></Icon>
+                                注册
+                            </a>
+                        </Menu-Item>
+                    </template>
+
+                    <Menu-Item name="username" v-else>
+                        <a>
+                            <template>
+                                <Avatar id="userPic" :src="'<%=basePath%>'+avatarSrc"/>
+                            </template>
+                            <span>{{username}}</span>
+                        </a>
+                    </Menu-Item>
+
+                    <Menu-Item name="MyCart">
+                        <a href="/onlineSale/myCart/">
+                            <Icon type="ios-cart"></Icon>
+                            购物车
+                        </a>
+
+                    </Menu-Item>
+                    <Menu-Item name="MyOrder">
+                        <a href="/onlineSale/myOrder/">
+                            <Icon type="bag"></Icon>
+                            我的订单
+                        </a>
+                    </Menu-Item>
+
+                    <Menu-Item name="MyOrder" v-if="haveLogin && isSeller">
+                        <a href="/onlineSale/myStore/">
+                            <Icon type="home"></Icon>
+                            我的店铺
+                        </a>
+                    </Menu-Item>
+
+                    <Menu-Item name="logout" v-if="haveLogin">
+                        <a style="color: #cd121b" href="/onlineSale/logout">
+                            <Icon type="log-out"></Icon>
+                            退出
+                        </a>
+                    </Menu-Item>
+                </div>
+            </i-menu>
+
+
+        </Header>
 
         <Content class="layout-content-center">
             <Row>
@@ -85,10 +143,8 @@
                 <i-col offset="1" span="12">
                     <Carousel autoplay autoplay-speed="3000" loop>
                         <Carousel-item v-for="(item,index) in seckillList">
-                            <div class="demo-carousel">
-                                <a :href="item.link">
-                                    <img :src="item.image" style="width: 100%;height: 100%;">
-                                </a>
+                            <div class="demo-carousel" @click="gotoSeckill(index)">
+                                <img :src="'<%=basePath%>'+item.image" style="width: 100%;height: 100%;">
                             </div>
                         </Carousel-item>
 
@@ -99,7 +155,7 @@
             <Row :gutter="64">
                 <i-col v-for="(item,index) in goodsList" v-if="index%4==0" span="5" offset="2" style="margin-top: 30px;">
                     <Card>
-                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
+                        <a :href="item.link"><img :src="'<%=basePath%>'+item.image" class="goods-item-img"></a>
                         <div class="goods-item-description">
                             <span>{{item.description}}{{index}}</span>
                         </div>
@@ -107,7 +163,7 @@
                 </i-col>
                 <i-col v-else span="5" style="margin-top: 30px;">
                     <Card>
-                        <img src="<%=basePath%>/upload/image/test.jpg" class="goods-item-img">
+                        <a :href="item.link"><img :src="'<%=basePath%>'+item.image" class="goods-item-img"></a>
                         <div class="goods-item-description">
                             <span>{{item.description}}{{index}}</span>
                         </div>
@@ -137,6 +193,12 @@
         el: "#app",
 
         data: {
+
+            avatarSrc:"/upload/image/defaultAvatar.jpg",
+            username:"",
+            haveLogin:false,
+            isSeller:false,
+
             seckillList:[],
             goodsList:[],
             // 分页对象
@@ -169,7 +231,8 @@
         {
             var item={
                 description:"aas搭嘎第三方八十多分",
-                image:""
+                image:"/upload/image/test.jpg",
+                link:"#"+i,
             };
             app.goodsList.push(item);
         }
@@ -179,16 +242,32 @@
         {
             var item={
                 description:"aas搭嘎第三方八十多分",
-                link:"#",
-                image:"<%=basePath%>/upload/image/test.jpg"
+                link:"#"+1,
+                image:"/upload/image/test.jpg"
             };
             app.seckillList.push(item);
         }
     }
 
     $(document).ready(function () {
-       refresh();
+        ajaxGet("/onlineSale/getLoginUserInfo",function (res) {
+            if(res.code==="success")
+            {
+                app.username=res.data.userName;
+                app.avatarSrc=res.data.userPic;
+                app.haveLogin=true;
+                if(res.data.userType==="ADMINISTRATOR")
+                {
+                    app.isSeller=true;
+                }
+            }
+        },null,false);
+        refresh();
     });
+
+    function gotoSeckill(id) {
+        alert(id);
+    }
 </script>
 </body>
 </html>

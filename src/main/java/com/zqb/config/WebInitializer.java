@@ -2,6 +2,9 @@ package com.zqb.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
 /**
  * @author zqb
  * @decription 代替web.xml对项目进行初始化配置
@@ -22,5 +25,11 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
     protected String[] getServletMappings() {
         //‘/’表示会处理所有dispatcher-servlet请求
         return new String[]{"/"};
+    }
+
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        super.onStartup(servletContext);
+        servletContext.addListener(new SessionListener());
     }
 }

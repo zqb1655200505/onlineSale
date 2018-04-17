@@ -1,3 +1,6 @@
+body{
+    background: #f5f7f9;
+}
 .layout{
     border: 1px solid #d7dde4;
     background: #f5f7f9;
@@ -16,26 +19,31 @@
 
 .layout-logo{
     width: 100px;
-    height: 30px;
-    background: #5b6270;
+    height: 40px;
+    /*background: #5b6270;*/
     border-radius: 3px;
     float: left;
     position: relative;
-    top: 15px;
-    left: 20px;
+    top: 10px;
+    left: 30px;
+    margin: 0 auto;
+}
+.logo-img
+{
+    height: 35px;
 }
 .layout-nav{
-    width: 450px;
     height: 100%;
-    margin: 0 auto;
-    margin-right: 20px;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
+    position: absolute;
+    top:0;
+    right: 50px;
 }
 
 .ivu-menu-item
 {
-    font-size: 18px;
+    font-size: 16px;
     padding: 0 10px !important;
 }
 
@@ -53,6 +61,21 @@
 }
 
 
+.ivu-page-next .ivu-icon
+{
+    line-height: 2;
+}
+.ivu-page-prev .ivu-icon
+{
+    line-height: 2;
+}
+
+.ivu-input-number
+{
+    width:100%;
+}
+
 [v-cloak] {
     display: none !important;
 }
+

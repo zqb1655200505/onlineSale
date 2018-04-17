@@ -48,9 +48,11 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        //InterceptorRegistration interceptorRegistration =  registry.addInterceptor(new SpringMVCInterceptor());
+        InterceptorRegistration interceptorRegistration =  registry.addInterceptor(new SpringMVCInterceptor());
         //在所有handler操作前进行拦截检查，拦截后后执行SpringMVCInterceptor的preHandle操作
-        //interceptorRegistration.addPathPatterns("/onlineSale/*");
+        interceptorRegistration.addPathPatterns("/onlineSale/myCart/*");
+        interceptorRegistration.addPathPatterns("/onlineSale/myOrder/*");
+        interceptorRegistration.addPathPatterns("/onlineSale/myStore/*");
 
         //排除特定handler不需要拦截检查
 //        interceptorRegistration.excludePathPatterns("/onlineSale/register");

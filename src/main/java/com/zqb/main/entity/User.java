@@ -65,6 +65,7 @@ public class User extends BasicEntity{
                 ", userType=" + userType +
                 ", userPic='" + userPic + '\'' +
                 ", userMobile='" + userMobile + '\'' +
+                ", deleteFlag=" + getDeleteFlag() +
                 '}';
     }
 }

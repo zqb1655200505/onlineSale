@@ -66,6 +66,7 @@ public class Seckill extends BasicEntity{
                 ", seckillPrice=" + seckillPrice +
                 ", seckillBeginTime=" + seckillBeginTime +
                 ", seckillEndTime=" + seckillEndTime +
+                ", deleteFlag=" + getDeleteFlag() +
                 '}';
     }
 }

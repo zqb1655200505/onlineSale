@@ -8,6 +8,8 @@ import com.zqb.main.utils.IdGen;
 public class BasicEntity {
     private String id;
 
+    private boolean deleteFlag;
+
     public String getId() {
         return id;
     }
@@ -19,5 +21,13 @@ public class BasicEntity {
     public void preInsert()
     {
         this.id= IdGen.uuid();
+    }
+
+    public boolean getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 }

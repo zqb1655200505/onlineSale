@@ -1,7 +1,9 @@
 import com.zqb.config.MyConfig;
 import com.zqb.main.dao.UserDao;
 import com.zqb.main.entity.User;
+import com.zqb.main.entity.UserType;
 import com.zqb.main.service.UserService;
+import com.zqb.main.utils.Encryption;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,12 @@ public class UserTest {
     @Test
     public void addUser()
     {
-        //userService.addUser();
+        User user=new User();
+        user.setUserName("zqb");
+        user.setUserPassword(Encryption.entryptPasswordMD5("123456"));
+        user.setUserType(UserType.ADMINISTRATOR);
+        user.preInsert();
+        userService.addUser(user);
     }
 
 
@@ -39,8 +46,12 @@ public class UserTest {
     @Test
     public void getUserByName()
     {
-        User user=new User();
-        user.setUserName(null);
-        System.out.println(userService.getUserByName(user));
+        System.out.println(userService.getUserByName("zqb"));
+    }
+
+    @Test
+    public void getUserByNameAndPwd()
+    {
+        System.out.println(userService.getUserByNameAndPwd("zqb","123456"));
     }
 }

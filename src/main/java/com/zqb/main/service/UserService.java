@@ -8,6 +8,7 @@ import com.zqb.main.utils.IdGen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -32,8 +33,27 @@ public class UserService {
     }
 
 
-    public User getUserByName(User user)
+    public User getUserByName(String userName)
     {
-        return userDao.getUserByName(user);
+        return userDao.getUserByName(userName);
+    }
+
+
+    public User getUserByNameAndPwd(String userName,String password)
+    {
+        return userDao.getUserByNameAndPwd(userName,Encryption.entryptPasswordMD5(password));
+    }
+
+    public boolean checkUserPermission(HttpSession session)
+    {
+        User user= (User) session.getAttribute("userSession");
+        if(user!=null)
+        {
+            if(user.getUserType().equals(UserType.ADMINISTRATOR))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

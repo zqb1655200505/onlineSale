@@ -54,6 +54,7 @@ public class Order extends BasicEntity{
                 ", goodsNum=" + goodsNum +
                 ", orderPrice=" + orderPrice +
                 ", orderTime=" + orderTime +
+                ", deleteFlag=" + getDeleteFlag() +
                 '}';
     }
 }

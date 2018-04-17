@@ -52,6 +52,7 @@ public class OrderGoods extends BasicEntity {
                 ", goods=" + goods +
                 ", goodsNum=" + goodsNum +
                 ", isSeckill=" + isSeckill +
+                ", deleteFlag=" + getDeleteFlag() +
                 '}';
     }
 }

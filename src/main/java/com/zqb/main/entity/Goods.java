@@ -17,7 +17,6 @@ public class Goods extends BasicEntity{
 
     private double goodsPrice;
 
-
     public String getGoodsName() {
         return goodsName;
     }
@@ -76,6 +75,7 @@ public class Goods extends BasicEntity{
                 ", goodsPic='" + goodsPic + '\'' +
                 ", goodsDescription='" + goodsDescription + '\'' +
                 ", goodsPrice=" + goodsPrice +
+                ", deleteFlag=" + getDeleteFlag() +
                 '}';
     }
 }

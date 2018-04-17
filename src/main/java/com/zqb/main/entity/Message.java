@@ -54,6 +54,7 @@ public class Message extends BasicEntity {
                 ", receiveUser=" + receiveUser +
                 ", sendTime=" + sendTime +
                 ", message='" + message + '\'' +
+                ", deleteFlag=" + getDeleteFlag() +
                 '}';
     }
 }

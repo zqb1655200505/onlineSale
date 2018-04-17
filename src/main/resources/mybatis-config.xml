@@ -16,9 +16,9 @@
 
     <!--通常我们希望将表示状态的数值存入数据库，即ComputerState.OPEN存入数据库取值为0或1。-->
     <!--EnumTypeHandler-->
-    <!--这是默认的枚举转换器，该转换器将枚举实例转换为实例名称的字符串，即将ComputerState.OPEN转换OPEN。-->
+    <!--这是默认的枚举转换器，该转换器将枚举实例转换为 ‘实例名称’ 的字符串，即将ComputerState.OPEN转换OPEN。-->
     <!--EnumOrdinalTypeHandler-->
-    <!--顾名思义这个转换器将枚举实例的ordinal属性作为取值，即ComputerState.OPEN转换为0,ComputerState.CLOSE转换为1-->
+    <!--顾名思义这个转换器将枚举实例的ordinal ‘属性’ 作为取值，即ComputerState.OPEN转换为0,ComputerState.CLOSE转换为1-->
     <typeHandlers>
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="com.zqb.main.entity.UserType"></typeHandler>
     </typeHandlers>

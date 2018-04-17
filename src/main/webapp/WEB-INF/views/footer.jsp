@@ -14,7 +14,6 @@
 %>
 <html>
 <head>
-    <title>优铺在线销售系统</title>
 </head>
 <body>
 <Footer class="layout-footer-center">
@@ -22,9 +21,9 @@
     2014-2018 &copy; software engineering
 </Footer>
 <script type="text/javascript" src="<%=basePath%>/static/js/jquery-2.0.0.min.js"></script>
-<script type="text/javascript" src="<%=basePath%>/static/vue/vue.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>/static/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>/static/iview/vue.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/iview/iview.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
-<script type="text/javascript" src="<%=basePath%>/static/js/header.js"></script>
 </body>
 </html>

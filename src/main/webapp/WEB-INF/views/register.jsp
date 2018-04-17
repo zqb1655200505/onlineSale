@@ -98,7 +98,7 @@
                             </Form-Item>
 
                             <Form-Item>
-                                <i-button type="primary" @click="handleSubmit()" long style="font-size: 17px;" :disabled="!checkProtocol">登录</i-button>
+                                <i-button type="primary" @click="handleSubmit()" long style="font-size: 17px;" :disabled="!checkProtocol">注册</i-button>
                             </Form-Item>
                         </i-form>
                     </i-col>
@@ -120,7 +120,7 @@
 </div>
 <script type="text/javascript" src="<%=basePath%>/static/js/jquery-2.0.0.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
-<script type="text/javascript" src="<%=basePath%>/static/vue/vue.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>/static/iview/vue.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/iview/iview.min.js"></script>
 <script type="text/javascript">
     //# sourceURL=register.js
@@ -179,8 +179,16 @@
                     userType:app.userInfo.userType
                 };
 
-                ajaxPost("/onlineSale/doRegister",user,function (data) {
-                    console.log(data);
+                ajaxPost("/onlineSale/doRegister",user,function (res) {
+                    if(res.code==="success")
+                        window.location.href="/onlineSale/login"
+                    else
+                    {
+                        app.userInfo.userName="";
+                        app.userInfo.userPassword="";
+                        app.userInfo.confirmPassword="";
+                        app.userInfo.userType="0";
+                    }
                 },null,false);
             }
             else

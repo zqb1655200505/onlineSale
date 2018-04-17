@@ -88,6 +88,7 @@ public class Comment extends BasicEntity{
                 ", commentTime=" + commentTime +
                 ", haveChildren=" + haveChildren +
                 ", level=" + level +
+                ", deleteFlag=" + getDeleteFlag() +
                 '}';
     }
 }

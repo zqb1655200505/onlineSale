@@ -64,7 +64,10 @@
     <div id="app">
         <div class="login-content">
             <Card style="padding: 8px 10px;">
-                <p slot="title" style="font-size: 18px;"><Icon type="log-in"></Icon> 登录</p>
+                <p slot="title" style="font-size: 18px;">
+                    <Icon type="log-in"></Icon> 登录
+                    <a style="float: right;" href="/onlineSale/index">前往主页</a>
+                </p>
                 <i-form ref="form" :model="userInfo" :rules="validate" style="margin-top: 20px;">
                     <Form-Item prop="userName">
                         <i-input type="text" v-model="userInfo.userName" placeholder="userName">
@@ -89,10 +92,11 @@
 
             </Card>
         </div>
+
     </div>
 </body>
 <script type="text/javascript" src="<%=basePath%>/static/js/jquery-2.0.0.min.js"></script>
-<script type="text/javascript" src="<%=basePath%>/static/vue/vue.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>/static/iview/vue.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/iview/iview.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
 <script type="text/javascript">
@@ -117,6 +121,7 @@
         }
     });
 
+
     function keyLogin() {
         if (event.keyCode==13)  //回车键的键值为13
         {
@@ -132,17 +137,13 @@
             {
                 console.log(app.userInfo);
 
-                $.ajax({
-                    type : 'post',
-                    url : "/onlineSale/doLogin",
-                    data:app.userInfo,
-                    success:function (data) {
-                        console.log(data);
-                    },
-                    error:function () {
-                        app.$Message.error('请求出错!');
+                ajaxPost("/onlineSale/doLogin",app.userInfo,function (data) {
+                    console.log(data);
+                    if(data.code==="success")
+                    {
+                        window.location.href="/onlineSale/index";
                     }
-                });
+                },null,false);
             }
             else
             {
