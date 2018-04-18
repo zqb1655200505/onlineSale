@@ -23,7 +23,7 @@
         <i-form ref="form" :model="goods" :rules="validate" :label-width="100">
             <div style="padding:20px;">
                 <Form-item label="商品名称：" prop="goodsName">
-                    <i-Input v-model="goods.goodsName" type="text"  maxlength="255"  ></i-Input>
+                    <i-Input v-model="goods.goodsName" type="text"  maxlength="255"></i-Input>
 
                 </Form-item>
 
@@ -42,8 +42,8 @@
                 </Form-item>
 
                 <Form-item label="商品数量：" prop="goodsNum">
-                    <%--<i-Input v-model="goods.goodsNum" type="number" min="0" ></i-Input>--%>
-                    <Input-Number v-model="goods.goodsNum" min="0"></Input-Number>
+                    <i-Input v-model="goods.goodsNum" type="number" min="0" ></i-Input>
+                    <%--<Input-Number v-model="goods.goodsNum" min="0"></Input-Number>--%>
                 </Form-item>
 
                 <Form-item label="商品单价：" prop="goodsPrice">
@@ -87,7 +87,9 @@
 
             // 验证规则
             validate: {
-
+                goodsName:[{required: true, message: '商品名称不能为空', trigger: 'blur' }],
+                goodsNum:[{required: true, message: '商品数量不能为空', trigger: 'blur' }],
+                goodsPrice:[{required: true, message: '商品价格不能为空', trigger: 'blur' }],
             }
 
         }
@@ -122,24 +124,46 @@
             if (!valid)
             {
                 app.$Message.error('请正确填写信息!');
-                return;
-            } else {
-                var formdata=new FormData();
-                if(this.photo.file!=null)
-                {
-                    formdata.append('uploadFile', this.photo.file);
-                }
-                formdata.append("goods",app.goods);
-                ajaxPost("",formdata,function (res) {
-
-                    if(res.code==="success")
-                    {
-                        parent.app.editModal.loading = false;
-                        setTimeout("parent.app.editModal.loading = true", 100);
-                    }
-                },null,false);
-
             }
+            else
+            {
+                var formdata=new FormData();
+                if(app.photo.file!=null)
+                {
+                    formdata.append('uploadFile', app.photo.file);
+                }
+                console.log(JSON.stringify(app.goods));
+                formdata.append("goods",JSON.stringify(app.goods));
+                console.log(formdata);
+                $.ajax({
+                    type : 'post',
+                    url : "/onlineSale/myStore/save",
+                    data : formdata,
+                    cache : false,
+                    processData : false, // 不处理发送的数据，因为data值是Formdata对象，不需要对数据做处理
+                    contentType : false, // 不设置Content-type请求头
+                    success : function(rep)
+                    {
+                        if(rep.code=="success")
+                        {
+                            parent.app.$Message.success(rep.message);
+                            parent.app.editModal.show = false;
+                        }
+                        else //显示错误信息
+                        {
+                            parent.app.$Message.error(rep.message);
+                            parent.app.editModal.loading = false;
+                            setTimeout("parent.app.editModal.loading = true", 100);
+                        }
+
+                    },
+                    error : function()
+                    {
+                        app.$Message.error("请求出错");
+                    }
+                });
+            }
+            parent.app.editModal.loading = false;
         });
 
     }

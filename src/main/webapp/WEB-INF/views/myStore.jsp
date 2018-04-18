@@ -71,7 +71,7 @@
 
             <Row>
                 <i-col span="3" offset="2">
-                    <i-menu theme="dark" active-name="1" style="width: 200px;">
+                    <i-menu theme="dark" active-name="1" style="width:100%;">
                         <Menu-Group title="我的店铺">
                         <a href="/onlineSale/myStore/index">
                             <Menu-Item name="1">
@@ -141,10 +141,8 @@
                                             <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
                                         </td>
 
-                                        <td>
-                                            <div style="width: 150px;padding: 10px;">
-                                                <img :src="item.goodsPic"/>
-                                            </div>
+                                        <td style="width: 90px;">
+                                            <img :src="'<%=basePath%>'+item.goodsPic" style="height: 100px;"/>
                                         </td>
                                         <td>{{item.goodsName}}</td>
                                         <td>{{item.goodsNum}}</td>
@@ -166,11 +164,9 @@
 
                             <Page :current="page.no" :total="page.total" :page-size="page.size"
                                   show-total show-sizer show-elevator style="text-align: right;" placement="top"
-                                  :page-size-opts="[10, 25, 50, 100]" @on-change="changePage($event)"
+                                  :page-size-opts="[ 4, 8, 16]" @on-change="changePage($event)"
                                   @on-page-size-change="changePageSize($event)">
                             </Page>
-
-
                         </div>
                     </div>
                 </i-col>
@@ -179,7 +175,7 @@
 
         <jsp:include page="footer.jsp"/>
 
-        <Modal :title="editModal.title" width="600"  v-model="editModal.show" :loading="editModal.loading" @on-ok="edit_ok()">
+        <Modal :title="editModal.title" width="600" :mask-closable="false"  v-model="editModal.show" :loading="editModal.loading" @on-ok="edit_ok()">
             <iframe id="editFrame" width="100%"  frameborder="0" :src="editModal.url"></iframe>
         </Modal>
     </Layout>
@@ -212,8 +208,8 @@
 
             page : {
                 no: 1,
-                total: 100,
-                size: parseInt(cookie("pageSize")) || 10,
+                total: 20,
+                size: parseInt(cookie("pageSize")) || 4,
             },
 
 
@@ -241,6 +237,7 @@
                 }
             }
         },null,false);
+        refresh();
     });
 
 
@@ -267,7 +264,11 @@
 
     function refresh()
     {
-
+        ajaxGet("/onlineSale/myStore/getMyGoods?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys)
+        ,function (res) {
+                app.viewModel.list = res.data.list;
+                app.page.total = res.data.total;
+            },null,false);
     }
 
 
@@ -286,7 +287,7 @@
             app.editModal.url = "/onlineSale/myStore/goodsForm";
         } else {
             app.editModal.title = "编辑商品信息";
-            app.editModal.url = "/science/industrySort/form?id=" + id;
+            app.editModal.url = "/onlineSale/myStore/goodsForm?id=" + id;
         }
         app.editModal.show = true;
 

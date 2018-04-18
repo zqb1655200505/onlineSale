@@ -1,3 +1,6 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/htiiot.admin">XFrame</a> All rights reserved.
+ */
 package com.zqb.main.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +15,8 @@ import java.util.regex.Pattern;
 
 /**
  * 分页类
+ * @author ThinkGem
+ * @version 2013-7-2
  * @param <T>
  */
 public class Page<T> {
@@ -23,14 +28,10 @@ public class Page<T> {
 
 	private int first;// 首页索引
 	private int last;// 尾页索引
-	private int prev;// 上一页索引
-	private int next;// 下一页索引
 
-	private boolean firstPage;//是否是第一页
-	private boolean lastPage;//是否是最后一页
+	private int start;
 
-	private int length = 8;// 显示页面长度
-	private int slider = 1;// 前后显示页面长度
+	private int end;
 
 	private List<T> list = new ArrayList<T>();
 
@@ -38,70 +39,8 @@ public class Page<T> {
 
 	private String funcName = "page"; // 设置点击页码调用的js函数名称，默认为page，在一页有多个分页对象时使用。
 
-	private String funcParam = ""; // 函数的附加参数，第三个参数值。
-
-	private String message = ""; // 设置提示消息，显示在“共n条”之后
-
 	public Page() {
 		this.pageSize = -1;
-	}
-
-	/**
-	 * 构造方法
-	 * @param request 传递 repage 参数，来记住页码
-	 * @param response 用于设置 Cookie，记住页码
-	 */
-	public Page(HttpServletRequest request, HttpServletResponse response){
-		this(request, response, -2);
-	}
-
-	/**
-	 * 构造方法
-	 * @param request 传递 repage 参数，来记住页码
-	 * @param response 用于设置 Cookie，记住页码
-	 * @param defaultPageSize 默认分页大小，如果传递 -1 则为不分页，返回所有数据
-	 */
-	public Page(HttpServletRequest request, HttpServletResponse response, int defaultPageSize){
-		// 设置页码参数（传递repage参数，来记住页码）
-		String no = request.getParameter("pageNo");
-		if (StringUtils.isNumeric(no)){
-			CookieUtils.setCookie(response, "pageNo", no);
-			this.setPageNo(Integer.parseInt(no));
-		}else if (request.getParameter("repage")!=null){
-			no = CookieUtils.getCookie(request, "pageNo");
-			if (StringUtils.isNumeric(no)){
-				this.setPageNo(Integer.parseInt(no));
-			}
-		}
-		// 设置页面大小参数（传递repage参数，来记住页码大小）
-		String size = request.getParameter("pageSize");
-		if (StringUtils.isNumeric(size)){
-			CookieUtils.setCookie(response, "pageSize", size);
-			this.setPageSize(Integer.parseInt(size));
-		}else if (request.getParameter("repage")!=null){
-			size = CookieUtils.getCookie(request, "pageSize");
-			if (StringUtils.isNumeric(size)){
-				this.setPageSize(Integer.parseInt(size));
-			}
-		}else if (defaultPageSize != -2){
-			this.pageSize = defaultPageSize;
-		}
-		// 设置页面分页函数
-		String funcName = request.getParameter("funcName");
-		if (StringUtils.isNotBlank(funcName)){
-			CookieUtils.setCookie(response, "funcName", funcName);
-			this.setFuncName(funcName);
-		}else if (request.getParameter("repage")!=null){
-			funcName = CookieUtils.getCookie(request, "funcName");
-			if (StringUtils.isNotBlank(funcName)){
-				this.setFuncName(funcName);
-			}
-		}
-		// 设置排序参数
-		String orderBy = request.getParameter("orderBy");
-		if (StringUtils.isNotBlank(orderBy)){
-			this.setOrderBy(orderBy);
-		}
 	}
 
 	/**
@@ -135,6 +74,8 @@ public class Page<T> {
 		this.setPageNo(pageNo);
 		this.pageSize = pageSize;
 		this.list = list;
+		this.start=pageSize*(pageNo-1);
+		this.end=pageSize*pageNo;
 	}
 
 	/**
@@ -157,27 +98,14 @@ public class Page<T> {
 
 		if (this.pageNo <= 1) {
 			this.pageNo = this.first;
-			this.firstPage=true;
+
 		}
 
 		if (this.pageNo >= this.last) {
 			this.pageNo = this.last;
-			this.lastPage=true;
+
 		}
 
-		if (this.pageNo < this.last - 1) {
-			this.next = this.pageNo + 1;
-		} else {
-			this.next = this.last;
-		}
-
-		if (this.pageNo > 1) {
-			this.prev = this.pageNo - 1;
-		} else {
-			this.prev = this.first;
-		}
-
-		//2
 		if (this.pageNo < this.first) {// 如果当前页小于首页
 			this.pageNo = this.first;
 		}
@@ -240,76 +168,6 @@ public class Page<T> {
 		this.pageSize = pageSize <= 0 ? 10 : pageSize;// > 500 ? 500 : pageSize;
 	}
 
-	/**
-	 * 首页索引
-	 * @return
-	 */
-	@JsonIgnore
-	public int getFirst() {
-		return first;
-	}
-
-	/**
-	 * 尾页索引
-	 * @return
-	 */
-	@JsonIgnore
-	public int getLast() {
-		return last;
-	}
-
-	/**
-	 * 获取页面总数
-	 * @return getLast();
-	 */
-	@JsonIgnore
-	public int getTotalPage() {
-		return getLast();
-	}
-
-	/**
-	 * 是否为第一页
-	 * @return
-	 */
-	@JsonIgnore
-	public boolean isFirstPage() {
-		return firstPage;
-	}
-
-	/**
-	 * 是否为最后一页
-	 * @return
-	 */
-	@JsonIgnore
-	public boolean isLastPage() {
-		return lastPage;
-	}
-
-	/**
-	 * 上一页索引值
-	 * @return
-	 */
-	@JsonIgnore
-	public int getPrev() {
-		if (isFirstPage()) {
-			return pageNo;
-		} else {
-			return pageNo - 1;
-		}
-	}
-
-	/**
-	 * 下一页索引值
-	 * @return
-	 */
-	@JsonIgnore
-	public int getNext() {
-		if (isLastPage()) {
-			return pageNo;
-		} else {
-			return pageNo + 1;
-		}
-	}
 
 	/**
 	 * 获取本页数据对象列表
@@ -370,30 +228,6 @@ public class Page<T> {
 		this.funcName = funcName;
 	}
 
-	/**
-	 * 获取分页函数的附加参数
-	 * @return
-	 */
-	@JsonIgnore
-	public String getFuncParam() {
-		return funcParam;
-	}
-
-	/**
-	 * 设置分页函数的附加参数
-	 * @return
-	 */
-	public void setFuncParam(String funcParam) {
-		this.funcParam = funcParam;
-	}
-
-	/**
-	 * 设置提示消息，显示在“共n条”之后
-	 * @param message
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 	/**
 	 * 分页是否有效
@@ -422,12 +256,6 @@ public class Page<T> {
 			firstResult = 0;
 		}
 		return firstResult;
-	}
-	/**
-	 * 获取 Hibernate MaxResults
-	 */
-	public int getMaxResults(){
-		return getPageSize();
 	}
 
 

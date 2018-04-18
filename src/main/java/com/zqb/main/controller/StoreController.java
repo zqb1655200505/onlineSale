@@ -1,5 +1,6 @@
 package com.zqb.main.controller;
 
+
 import com.zqb.main.dto.AjaxMessage;
 import com.zqb.main.dto.MsgType;
 import com.zqb.main.dto.Page;
@@ -12,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by zqb on 2018/4/16.
@@ -32,12 +36,12 @@ public class StoreController {
     @ModelAttribute
     public Goods get(@RequestParam(required=false) String id) {
         Goods entity = null;
-//        if (id != null){
-//            entity = industrySortDao.getByPrimaryKey(id);
-//        }
-//        if (entity == null){
-//            entity = new IndustrySort();
-//        }
+        if (id != null){
+            entity = goodsService.getGoodsByPrimaryKey(id);
+        }
+        if (entity == null){
+            entity = new Goods();
+        }
         return entity;
     }
 
@@ -51,8 +55,7 @@ public class StoreController {
 
     @RequestMapping(value = "/getMyGoods",method = RequestMethod.GET)
     @ResponseBody
-    public Object getMyGoods(Goods goods,
-                             HttpSession session,
+    public Object getMyGoods(HttpSession session,
                              @RequestParam("pageNo") int pageNo,
                              @RequestParam("pageSize") int pageSize,
                              @RequestParam("keys") String keys)
@@ -62,18 +65,33 @@ public class StoreController {
                 return new AjaxMessage().Set(MsgType.Error, "请勿输入非法字符！",null);
             }
         }
-
         Page<Goods> page = new Page<Goods>(pageNo, pageSize);
         page.setFuncName("changePage");
+        Goods goods=new Goods();
         goods.setPage(page);
 
         User user= (User) session.getAttribute("userSession");
         if(user!=null)
         {
-            return new AjaxMessage().Set(MsgType.Success,null,goodsService.getGoodsByUserId(user.getId()));
+            goods.setUser(user);
+            List<Goods> list=goodsService.getGoodsByUser(goods);
+            page.initialize();
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("list", list);
+            map.put("total", goodsService.getCountByUser(goods));
+            return new AjaxMessage().Set(MsgType.Success, map);
         }
         return null;
     }
+
+
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @ResponseBody
+    public Object save(HttpServletRequest request, Model model,HttpSession session) throws IOException {
+        return goodsService.saveGoods(session,request);
+    }
+
+
 
     @RequestMapping(value = "/myOrder")
     public String getSellerOrder(Model model,HttpSession session)
@@ -93,12 +111,15 @@ public class StoreController {
 
 
     @RequestMapping(value = "/goodsForm")
-    public String goodsForm(Model model,HttpSession session)
+    public String goodsForm(Goods goods,Model model,HttpSession session)
     {
-        model.addAttribute("goods", model);
+        model.addAttribute("goods", goods);
         if(userService.checkUserPermission(session))
             return "goodsForm";
         return "permissionDeny";
     }
+
+
+
 
 }

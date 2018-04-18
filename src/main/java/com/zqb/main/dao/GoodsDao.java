@@ -13,5 +13,13 @@ import java.util.List;
 @Repository
 public interface GoodsDao {
 
-    List<Goods> getGoodsByUserId(@Param("userId") String userId);
+    List<Goods> getGoodsByUser(Goods goods);
+
+    int updateByPrimaryKey(Goods goods);
+
+    int addGoods(Goods goods);
+
+    int getCountByUser(Goods goods);
+
+    Goods getGoodsByPrimaryKey(@Param("id") String id);
 }

@@ -7,7 +7,72 @@
         <association property="user" column="user_id" select="com.zqb.main.dao.UserDao.selectById"/>
     </resultMap>
 
-    <select id="getGoodsByUserId" resultMap="goodsMap">
-        SELECT * FROM t_goods WHERE user_id=#{userId}
+    <insert id="addGoods">
+        INSERT INTO t_goods(
+        id,
+        goods_name,
+        user_id,
+        goods_num,
+        goods_pic,
+        goods_price,
+        goods_description,
+        delete_flag
+        )VALUES (
+        #{id},
+        #{goodsName},
+        #{user.id},
+        #{goodsNum},
+        #{goodsPic},
+        #{goodsPrice},
+        #{goodsDescription},
+        #{deleteFlag}
+        )
+    </insert>
+
+
+    <select id="getCountByUser" resultType="java.lang.Integer">
+         SELECT COUNT(*) FROM t_goods WHERE user_id=#{user.id}
+    </select>
+
+
+    <select id="getGoodsByUser" resultMap="goodsMap">
+        SELECT * FROM t_goods
+        WHERE
+        user_id=#{user.id}
+        <choose>
+            <when test="page !=null">
+                limit #{page.start},#{page.end}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <update id="updateByPrimaryKey">
+        UPDATE t_goods SET
+        <if test="id != null">
+            id = #{id}
+        </if>
+        <if test="goodsName != null">
+            goods_name = #{goodsName}
+        </if>
+        <if test="goodsNum != null">
+            goods_num = #{goodsNum}
+        </if>
+        <if test="goodsPic != null">
+            goods_pic = #{goodsPic}
+        </if>
+        <if test="goodsDescription != null">
+            goods_description = #{goodsDescription}
+        </if>
+        <if test="goodsPrice != null">
+            goods_price = #{goodsPrice}
+        </if>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="getGoodsByPrimaryKey" resultMap="goodsMap">
+        SELECT * FROM t_goods WHERE id=#{id} limit 1
     </select>
 </mapper>

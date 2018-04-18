@@ -3,7 +3,7 @@ package com.zqb.main.entity;
 /**
  * Created by zqb on 2018/4/10.
  */
-public class Goods extends BasicEntity{
+public class Goods extends BasicEntity<Goods>{
 
     private String goodsName;
 

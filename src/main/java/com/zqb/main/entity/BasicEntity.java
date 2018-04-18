@@ -5,11 +5,12 @@ import com.zqb.main.dto.Page;
 import com.zqb.main.utils.IdGen;
 
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 
 /**
  * Created by zqb on 2018/4/10.
  */
-public class BasicEntity<T> {
+public class BasicEntity<T> implements Serializable {
     private String id;
 
     private boolean deleteFlag;
@@ -29,6 +30,7 @@ public class BasicEntity<T> {
     public void preInsert()
     {
         this.id= IdGen.uuid();
+        this.deleteFlag=true;
     }
 
     public boolean getDeleteFlag() {
