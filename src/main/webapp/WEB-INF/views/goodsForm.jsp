@@ -47,7 +47,7 @@
                 </Form-item>
 
                 <Form-item label="商品单价：" prop="goodsPrice">
-                    <i-Input v-model="goods.goodsPrice" type="text"  ></i-Input>
+                    <i-Input v-model="goods.goodsPrice" type="number"></i-Input>
                 </Form-item>
 
                 <Form-item label="商品信息：" prop="goodsDescription">
@@ -71,17 +71,17 @@
 
         data: {
             goods: {
-                id: "",
-                goodsName: "",
-                goodsPic:"",
-                goodsNum: "",
-                goodsDescription:"",
-                goodsPrice:""
+                id: "${goods.id}",
+                goodsName: "${goods.goodsName}",
+                goodsPic:"${goods.goodsPic}",
+                goodsNum: "${goods.goodsNum}",
+                goodsDescription:"${goods.goodsDescription}",
+                goodsPrice:"${goods.goodsPrice}"
             },
 
-            hasPic:false,
+            hasPic:parent.app.hasPic,
             photo:{
-                src:"",
+                src:"${goods.goodsPic}",
                 file:null,
             },
 
@@ -94,6 +94,7 @@
 
         }
     });
+
 
 
     //此函数放在app内部无作用，原因不明
@@ -121,20 +122,14 @@
     function submit() {
 
         app.$refs["form"].validate(function (valid) {
-            if (!valid)
-            {
-                app.$Message.error('请正确填写信息!');
-            }
-            else
+            if (valid)
             {
                 var formdata=new FormData();
                 if(app.photo.file!=null)
                 {
                     formdata.append('uploadFile', app.photo.file);
                 }
-                console.log(JSON.stringify(app.goods));
                 formdata.append("goods",JSON.stringify(app.goods));
-                console.log(formdata);
                 $.ajax({
                     type : 'post',
                     url : "/onlineSale/myStore/save",
@@ -146,22 +141,36 @@
                     {
                         if(rep.code=="success")
                         {
+                            if ("${goods.id}" == "")
+                            {
+                                app.goods.goodsName="";
+                                app.goods.goodsDescription="";
+                                app.goods.goodsNum="";
+                                app.goods.goodsPic="";
+                                app.goods.goodsPrice="";
+                            }
                             parent.app.$Message.success(rep.message);
-                            parent.app.editModal.show = false;
+                            parent.changePage(1);
                         }
                         else //显示错误信息
                         {
                             parent.app.$Message.error(rep.message);
-                            parent.app.editModal.loading = false;
-                            setTimeout("parent.app.editModal.loading = true", 100);
                         }
-
+                        parent.app.editModal.show = false;
                     },
                     error : function()
                     {
                         app.$Message.error("请求出错");
                     }
                 });
+            }
+            else
+            {
+                //假装提交
+                parent.app.editModal.loading = false;
+                setTimeout("parent.app.editModal.loading = true", 100);
+
+                app.$Message.error('请正确填写信息!');
             }
             parent.app.editModal.loading = false;
         });

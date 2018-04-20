@@ -1,11 +1,12 @@
 package com.zqb.main.entity;
 
+
 import java.util.Date;
 
 /**
  * Created by zqb on 2018/4/10.
  */
-public class Order extends BasicEntity{
+public class Order extends BasicEntity<Order>{
     private User buyer;
 
     private int goodsNum;

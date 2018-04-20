@@ -1,12 +1,15 @@
 package com.zqb.main.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.zqb.main.dto.AjaxMessage;
 import com.zqb.main.dto.MsgType;
 import com.zqb.main.dto.Page;
 import com.zqb.main.entity.Goods;
+import com.zqb.main.entity.Seckill;
 import com.zqb.main.entity.User;
 import com.zqb.main.service.GoodsService;
+import com.zqb.main.service.SecKillService;
 import com.zqb.main.service.UserService;
 import com.zqb.main.utils.CheckSQLStrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class StoreController {
     @Autowired
     private GoodsService goodsService;
 
+
+    @Autowired
+    private SecKillService secKillService;
 
     @ModelAttribute
     public Goods get(@RequestParam(required=false) String id) {
@@ -120,6 +126,57 @@ public class StoreController {
     }
 
 
+    @RequestMapping(value = "/setSecKillForm")
+    public String setSecKillForm(Goods goods,Model model,HttpSession session)
+    {
+        model.addAttribute("goods", goods);
+        if(userService.checkUserPermission(session))
+            return "setSecKillInfo";
+        return "permissionDeny";
+    }
 
 
+    @RequestMapping(value = "/setSecKill",method = RequestMethod.POST)
+    @ResponseBody
+    public Object setSecKill(HttpServletRequest request)
+    {
+        String jsonStr=request.getParameter("seckill");
+        JSONObject obj = JSONObject.parseObject(jsonStr);
+        Seckill seckill=JSONObject.toJavaObject(obj,Seckill.class);
+        return secKillService.add(seckill);
+    }
+
+
+
+    @RequestMapping(value = "/getMySecKillGoods",method = RequestMethod.GET)
+    @ResponseBody
+    public Object getMySecKillGoods(HttpSession session,
+                             @RequestParam("pageNo") int pageNo,
+                             @RequestParam("pageSize") int pageSize,
+                             @RequestParam("keys") String keys)
+    {
+        if(keys != null && !keys.equals("")){
+            if(CheckSQLStrUtils.sql_inj(keys)){
+                return new AjaxMessage().Set(MsgType.Error, "请勿输入非法字符！",null);
+            }
+        }
+        Page<Seckill> page = new Page<Seckill>(pageNo, pageSize);
+        page.setFuncName("changePage");
+        Seckill seckill=new Seckill();
+        seckill.setPage(page);
+        User user= (User) session.getAttribute("userSession");
+        if(user!=null)
+        {
+            Goods goods=new Goods();
+            goods.setUser(user);
+            seckill.setGoods(goods);
+            List<Seckill>list=secKillService.getMySecKillGoods(seckill);
+            page.initialize();
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("list", list);
+            map.put("total", secKillService.getMySecKillGoodsCount(seckill));
+            return new AjaxMessage().Set(MsgType.Success, map);
+        }
+        return null;
+    }
 }

@@ -67,15 +67,15 @@ public class Goods extends BasicEntity<Goods>{
 
     @Override
     public String toString() {
-        return "Goods{" +
-                "id='" + getId() + '\'' +
-                "goodsName='" + goodsName + '\'' +
-                ", user=" + user +
-                ", goodsNum=" + goodsNum +
-                ", goodsPic='" + goodsPic + '\'' +
-                ", goodsDescription='" + goodsDescription + '\'' +
-                ", goodsPrice=" + goodsPrice +
-                ", deleteFlag=" + getDeleteFlag() +
+        return "{" +
+                "id:'" + getId() + '\'' +
+                ",goodsName:'" + goodsName + '\'' +
+                ", user:" + user +
+                ", goodsNum:" + goodsNum +
+                ", goodsPic:'" + goodsPic + '\'' +
+                ", goodsDescription:'" + goodsDescription + '\'' +
+                ", goodsPrice:" + goodsPrice +
+                ", deleteFlag:" + getDeleteFlag() +
                 '}';
     }
 }

@@ -15,6 +15,7 @@
 <html>
 <head>
     <title>优铺在线销售系统-秒杀商品</title>
+    <link href="<%=basePath%>/static/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>/static/css/header.css" rel="stylesheet" type="text/css"/>
 
@@ -66,7 +67,7 @@
 
             <Row>
                 <i-col span="3" offset="2">
-                    <i-menu theme="dark" active-name="3" style="width: 200px;">
+                    <i-menu theme="dark" active-name="3" style="width: 90%;">
                         <Menu-Group title="我的店铺">
                             <a href="/onlineSale/myStore/index">
                                 <Menu-Item name="1">
@@ -86,24 +87,66 @@
                                     秒杀管理
                                 </Menu-Item>
                             </a>
-                            <a href="#4">
-                                <Menu-Item name="4">
-                                    <Icon type="heart-broken"></Icon>
-                                    流失用户
-                                </Menu-Item>
-                            </a>
+
                         </Menu-Group>
                     </i-menu>
                 </i-col>
 
-                <i-col offset="1" span="16" style="height: 100px;background-color: #2baee9;">
+                <i-col offset="1" span="16" style="min-height: 700px;">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="text-align: left;font-size: 14px;font-weight: bold;">秒杀商品列表</div>
 
+                        <div class="wrapper-sm" style="padding: 10px 15px;">
+                            <div style="margin-bottom:10px;margin-top: 5px;float: left;">
+                                <i-button @click="edit()" type="success" icon="plus">上架商品</i-button>
+                                <i-button @click="del()" type="error" icon="minus">下架商品</i-button>
+                            </div>
+                            <div style="float: right; margin-bottom: 10px;margin-top: 5px;">
+                                <i-input placeholder="请输入查询条件" v-model="viewModel.keys" style="width: 250px"
+                                         @on-enter="refresh()">
+                                    <i-button slot="append" icon="search" @click="refresh()"></i-button>
+                                </i-input>
+                            </div>
+
+
+                            <table class="table table-hover table-bordered table-condensed" style="margin-top: 10px;" >
+                                <!--<table id="contentTable" class="table table-striped table-bordered table-condensed">-->
+                                <thead>
+                                <tr style="font-size: 15px;">
+                                    <th style="width: 50px;">
+                                        <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;">
+                                        </Checkbox>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="item in viewModel.list">
+                                    <td>
+                                        <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <Page :current="page.no" :total="page.total" :page-size="page.size"
+                                  show-total show-sizer show-elevator style="text-align: right;" placement="top"
+                                  :page-size-opts="[ 4, 8, 16]" @on-change="changePage($event)"
+                                  @on-page-size-change="changePageSize($event)">
+                            </Page>
+                        </div>
+                    </div>
                 </i-col>
             </Row>
 
         </Content>
 
         <jsp:include page="footer.jsp"/>
+
+
+        <Modal :title="editModal.title" width="600" :mask-closable="false"  v-model="editModal.show" :loading="editModal.loading" @on-ok="edit_ok('editFrame')">
+            <iframe id="editFrame" width="100%"  frameborder="0" :src="editModal.url"></iframe>
+        </Modal>
     </Layout>
 </div>
 
@@ -117,6 +160,29 @@
             username:"",
             haveLogin:false,
             isSeller:false,
+
+
+            //视图对象
+            viewModel:{
+                keys:"",
+                allChecked:false,
+                list:[],
+            },
+
+
+            page : {
+                no: 1,
+                total: 20,
+                size: parseInt(cookie("pageSize")) || 4,
+            },
+
+            // 编辑模态框
+            editModal: {
+                title: "",
+                url: "",
+                loading: true,
+                show: false
+            },
         }
     });
 
@@ -134,7 +200,61 @@
                 }
             }
         },null,false);
+        refresh();
     });
+
+    //改变每页数量
+    function changePageSize(pageSize) {
+        cookie("pageSize", pageSize);
+        app.page.size=pageSize;
+        refresh();
+    };
+
+
+    //切换页面
+    function changePage(pageNo) {
+        if(pageNo != null)
+            app.page.no = pageNo;
+        refresh();
+    };
+
+    //全选事件
+    function checkAll() {
+        app.viewModel.list.forEach(function (item) {
+            item.checked = app.viewModel.allChecked;
+        });
+    };
+
+
+    function refresh()
+    {
+        ajaxGet("/onlineSale/myStore/getMySecKillGoods?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys)
+            ,function (res) {
+            app.viewModel.list = res.data.list;
+            app.page.total = res.data.total;
+        },null,false);
+    }
+
+
+    //编辑
+    function edit(id) {
+
+        app.editModal= {
+            title: "",
+            url: "",
+            loading: true,
+            show: false
+        };
+
+        if (id == null) {
+            app.editModal.title = "添加商品";
+            app.editModal.url = "/onlineSale/myStore/goodsForm";
+        } else {
+            app.editModal.title = "编辑商品信息";
+            app.editModal.url = "/onlineSale/myStore/goodsForm?id=" + id;
+        }
+        app.editModal.show = true;
+    };
 </script>
 </body>
 </html>

@@ -31,9 +31,17 @@
             color: white;
         }
         #editFrame{
-            height: 400px;
+            height: 50%;
         }
 
+
+        #secKillFrame{
+            height: 40%;
+        }
+
+        th,td{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +79,7 @@
 
             <Row>
                 <i-col span="3" offset="2">
-                    <i-menu theme="dark" active-name="1" style="width:100%;">
+                    <i-menu theme="dark" active-name="1" style="width:90%;">
                         <Menu-Group title="我的店铺">
                         <a href="/onlineSale/myStore/index">
                             <Menu-Item name="1">
@@ -85,18 +93,14 @@
                                 订单管理
                             </Menu-Item>
                         </a>
+
                         <a href="/onlineSale/myStore/mySecKillGoods">
                             <Menu-Item name="3">
                                 <Icon type="heart"></Icon>
                                 秒杀管理
                             </Menu-Item>
                         </a>
-                        <a href="#4">
-                            <Menu-Item name="4">
-                                <Icon type="heart-broken"></Icon>
-                                流失用户
-                            </Menu-Item>
-                        </a>
+
                         </Menu-Group>
                     </i-menu>
                 </i-col>
@@ -123,10 +127,10 @@
                                 <thead>
                                     <tr style="font-size: 15px;">
                                         <th style="width: 50px;">
-                                            <Checkbox @on-change="checkAll()">
+                                            <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;">
                                             </Checkbox>
                                         </th>
-                                        <th>商品图片</th>
+                                        <th align="center">商品图片</th>
                                         <th>商品名称</th>
                                         <th>商品余量</th>
                                         <th>商品价格</th>
@@ -141,8 +145,8 @@
                                             <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
                                         </td>
 
-                                        <td style="width: 90px;">
-                                            <img :src="'<%=basePath%>'+item.goodsPic" style="height: 100px;"/>
+                                        <td>
+                                            <img :src="'<%=basePath%>'+item.goodsPic" style="width: 100px;"/>
                                         </td>
                                         <td>{{item.goodsName}}</td>
                                         <td>{{item.goodsNum}}</td>
@@ -151,11 +155,15 @@
                                         <td>{{item.goodsDescription}}</td>
                                         <td>
                                             <a @click="edit(item.id)">
-                                                <i class="fa fa-pencil-square-o"></i> 编辑
+                                                <Icon type="edit"></Icon> 编辑
+                                            </a>
+                                            &nbsp;
+                                            <a @click="setSecKill(item.id)">
+                                                <Icon type="settings"></Icon> 设置秒杀
                                             </a>
                                             &nbsp;
                                             <a @click="del(item.id)">
-                                                <i class="fa fa-times"></i> 删除
+                                                <Icon type="android-delete"></Icon> 删除
                                             </a>
                                         </td>
                                     </tr>
@@ -175,8 +183,12 @@
 
         <jsp:include page="footer.jsp"/>
 
-        <Modal :title="editModal.title" width="600" :mask-closable="false"  v-model="editModal.show" :loading="editModal.loading" @on-ok="edit_ok()">
+        <Modal :title="editModal.title" width="600" :mask-closable="false"  v-model="editModal.show" :loading="editModal.loading" @on-ok="edit_ok('editFrame')">
             <iframe id="editFrame" width="100%"  frameborder="0" :src="editModal.url"></iframe>
+        </Modal>
+
+        <Modal :title="secKillModal.title" width="600" :mask-closable="false"  v-model="secKillModal.show" :loading="secKillModal.loading" @on-ok="edit_ok('secKillFrame')">
+            <iframe id="secKillFrame" width="100%"  frameborder="0" :src="secKillModal.url"></iframe>
         </Modal>
     </Layout>
 </div>
@@ -199,23 +211,24 @@
                 list:[],
             },
 
-            //视图对象
-            viewModel:{
-                keys:"",
-                allChecked:false,
-                list:[],
-            },
 
             page : {
                 no: 1,
                 total: 20,
                 size: parseInt(cookie("pageSize")) || 4,
             },
-
+            hasPic:false,
 
             // 编辑模态框
             editModal: {
                 title: "",
+                url: "",
+                loading: true,
+                show: false
+            },
+
+            secKillModal: {
+                title: "设置商品秒杀信息",
                 url: "",
                 loading: true,
                 show: false
@@ -258,7 +271,9 @@
 
     //全选事件
     function checkAll() {
-
+        app.viewModel.list.forEach(function (item) {
+            item.checked = app.viewModel.allChecked;
+        });
     };
 
 
@@ -283,9 +298,11 @@
         };
 
         if (id == null) {
+            app.hasPic=false;
             app.editModal.title = "添加商品";
             app.editModal.url = "/onlineSale/myStore/goodsForm";
         } else {
+            app.hasPic=true;
             app.editModal.title = "编辑商品信息";
             app.editModal.url = "/onlineSale/myStore/goodsForm?id=" + id;
         }
@@ -294,10 +311,14 @@
     };
 
 
+    function setSecKill(id) {
+        app.secKillModal.url = "/onlineSale/myStore/setSecKillForm?id=" + id;
+        app.secKillModal.show = true;
+    }
 
     // 编辑用户（确定）
-    function edit_ok() {
-        document.getElementById("editFrame").contentWindow.submit();
+    function edit_ok(id) {
+        document.getElementById(id).contentWindow.submit();
     }
 </script>
 </body>

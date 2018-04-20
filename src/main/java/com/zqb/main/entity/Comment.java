@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by zqb on 2018/4/10.
  */
-public class Comment extends BasicEntity{
+public class Comment extends BasicEntity<Comment>{
 
     private Goods goods;
 

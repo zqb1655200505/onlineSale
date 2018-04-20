@@ -3,7 +3,7 @@ package com.zqb.main.entity;
 /**
  * Created by zqb on 2018/4/10.
  */
-public class OrderGoods extends BasicEntity {
+public class OrderGoods extends BasicEntity<OrderGoods> {
     private Order order;
 
     private Goods goods;

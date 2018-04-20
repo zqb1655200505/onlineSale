@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by zqb on 2018/4/10.
  */
-public class Seckill extends BasicEntity{
+public class Seckill extends BasicEntity<Seckill>{
 
     private Goods goods;
 

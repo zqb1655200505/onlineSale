@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by zqb on 2018/4/10.
  */
-public class Message extends BasicEntity {
+public class Message extends BasicEntity<Message> {
     private User sendUser;
 
     private User receiveUser;

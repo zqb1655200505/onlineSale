@@ -43,42 +43,45 @@ public class GoodsService {
         String param=request.getParameter("goods");
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile file=multipartRequest.getFile("uploadFile");
-        String directory="/upload/goods/"+user.getId()+"/";
-        String fileName=FileUtils.writeToServer(request,directory,file);
-        if(fileName!=null)
+        String fileName="/upload/goods/default.jpg";
+        if(file!=null)
         {
-            JSONObject obj= JSONObject.parseObject(param);
-            Goods goods=JSONObject.toJavaObject(obj,Goods.class);
-            goods.setGoodsPic(fileName);
-            if(goods.getId()!=null&&!goods.getId().equals(""))//修改商品
+            String directory="/upload/goods/"+user.getId()+"/";
+            fileName=FileUtils.writeToServer(request,directory,file);
+        }
+
+        JSONObject obj= JSONObject.parseObject(param);
+        Goods goods=JSONObject.toJavaObject(obj,Goods.class);
+
+        if(goods.getId()!=null&&!goods.getId().equals(""))//修改商品
+        {
+            if(file!=null)
             {
                 FileUtils.deleteFile(request.getSession().getServletContext().getRealPath("/")+goods.getGoodsPic());
-                if(goodsDao.updateByPrimaryKey(goods)>0)
-                {
-                    return new AjaxMessage().Set(MsgType.Success,"商品信息修改成功",null);
-                }
-                else
-                {
-                    return new AjaxMessage().Set(MsgType.Success, "商品信息修改失败", null);
-                }
+                goods.setGoodsPic(fileName);
             }
-            else//新增商品
+            if(goodsDao.updateByPrimaryKey(goods)>0)
             {
-                goods.setUser(user);
-                goods.preInsert();
-                if(goodsDao.addGoods(goods)>0)
-                {
-                    return new AjaxMessage().Set(MsgType.Success,"添加成功！",null);
-                }
-                else
-                {
-                    return new AjaxMessage().Set(MsgType.Error, "添加失败", null);
-                }
+                return new AjaxMessage().Set(MsgType.Success,"商品信息修改成功",null);
+            }
+            else
+            {
+                return new AjaxMessage().Set(MsgType.Success, "商品信息修改失败", null);
             }
         }
-        else
+        else//新增商品
         {
-            return new AjaxMessage().Set(MsgType.Error,"保存商品出错，商品图片保存错误！",null);
+            goods.setGoodsPic(fileName);
+            goods.setUser(user);
+            goods.preInsert();
+            if(goodsDao.addGoods(goods)>0)
+            {
+                return new AjaxMessage().Set(MsgType.Success,"添加成功！",null);
+            }
+            else
+            {
+                return new AjaxMessage().Set(MsgType.Error, "添加失败", null);
+            }
         }
 
     }
