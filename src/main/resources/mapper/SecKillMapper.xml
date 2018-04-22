@@ -57,4 +57,9 @@
         delete_flag=1
     </select>
 
+
+    <delete id="deleteByGoodsId">
+        DELETE FROM t_seckill WHERE goods_id=#{goodsId}
+    </delete>
+
 </mapper>

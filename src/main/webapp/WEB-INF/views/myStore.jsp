@@ -112,7 +112,7 @@
                         <div class="wrapper-sm" style="padding: 10px 15px;">
                             <div style="margin-bottom:10px;margin-top: 5px;float: left;">
                                 <i-button @click="edit()" type="success" icon="plus">上架商品</i-button>
-                                <i-button @click="del()" type="error" icon="minus">下架商品</i-button>
+                                <i-button @click="remove()" type="error" icon="minus">下架商品</i-button>
                             </div>
                             <div style="float: right; margin-bottom: 10px;margin-top: 5px;">
                                 <i-input placeholder="请输入查询条件" v-model="viewModel.keys" style="width: 250px"
@@ -151,8 +151,8 @@
                                         <td>{{item.goodsName}}</td>
                                         <td>{{item.goodsNum}}</td>
                                         <td>{{item.goodsPrice}}</td>
-                                        <td><i-switch v-model="item.deleteFlag" @on-change="changeStatus(item.deleteFlag)"></i-switch></td>
-                                        <td>{{item.goodsDescription}}</td>
+                                        <td><i-switch v-model="item.deleteFlag" @on-change="changeStatus(item.deleteFlag,item.id)"></i-switch></td>
+                                        <td style="width: 25%;">{{item.goodsDescription}}</td>
                                         <td>
                                             <a @click="edit(item.id)">
                                                 <Icon type="edit"></Icon> 编辑
@@ -310,6 +310,47 @@
 
     };
 
+    function remove() {
+
+        var list = [];
+        app.viewModel.list.forEach(function (item) {
+            if (item.checked) list.push(item.id);
+        });
+
+        if (list.length == 0) {
+            app.$Message.error('请选择下架商品');
+            return;
+        }
+
+        alert(list);
+        app.$Modal.confirm({
+            title: '提示信息',
+            content: '确定要下架所选商品吗？',
+            loading: true,
+            onOk: function () {
+                ajaxPostJSON("/onlineSale/myStore/removeGoods", list, function () {
+                    app.viewModel.allChecked = false;
+                    refresh();
+                    app.$Modal.remove();
+                });
+            }
+        });
+    }
+
+    function del(id) {
+        app.$Modal.confirm({
+            title: '提示信息',
+            content: '确定要删除该商品吗？',
+            loading: true,
+            onOk: function () {
+                ajaxGet("/onlineSale/myStore/deleteGoods?id="+id,function (res) {
+                    refresh();
+                    app.$Modal.remove();
+                },null,false);
+            }
+        });
+
+    }
 
     function setSecKill(id) {
         app.secKillModal.url = "/onlineSale/myStore/setSecKillForm?id=" + id;
@@ -321,8 +362,12 @@
         document.getElementById(id).contentWindow.submit();
     }
 
-    function changeStatus(status) {
-        alert(status);
+    function changeStatus(status,id)
+    {
+        alert(status+" "+id);
+        ajaxGet("/onlineSale/myStore/changeStatus?id="+id+"&status="+status,function (res) {
+
+        },null,false);
     }
 </script>
 </body>

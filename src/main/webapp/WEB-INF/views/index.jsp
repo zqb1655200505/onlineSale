@@ -22,16 +22,15 @@
         .goods-item-img
         {
             width: 100%;
-            height: auto;
         }
 
         .goods-item-description
         {
-            background-color: #2baee9;
-            font-size: 17px;
+            font-size: 18px;
             padding: 10px;
             width: 100%;
             height: 100px;
+            text-align: left;
         }
 
         .sk_hd_lk{
@@ -155,17 +154,19 @@
             <Row :gutter="64">
                 <i-col v-for="(item,index) in goodsList" v-if="index%4==0" span="5" offset="2" style="margin-top: 30px;">
                     <Card>
-                        <a :href="item.link"><img :src="'<%=basePath%>'+item.image" class="goods-item-img"></a>
+                        <a><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
                         <div class="goods-item-description">
-                            <span>{{item.description}}{{index}}</span>
+                            <p style="color: red;font-size: 22px;">￥{{item.goodsPrice}}</p>
+                            <a>{{item.goodsName}}</a>
                         </div>
                     </Card>
                 </i-col>
                 <i-col v-else span="5" style="margin-top: 30px;">
                     <Card>
-                        <a :href="item.link"><img :src="'<%=basePath%>'+item.image" class="goods-item-img"></a>
+                        <a><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
                         <div class="goods-item-description">
-                            <span>{{item.description}}{{index}}</span>
+                            <p style="color: red;font-size: 22px;">￥{{item.goodsPrice}}</p>
+                            <a>{{item.goodsName}}</a>
                         </div>
                     </Card>
                 </i-col>

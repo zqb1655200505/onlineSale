@@ -24,4 +24,13 @@ public interface GoodsDao {
     Goods getGoodsByPrimaryKey(@Param("id") String id);
 
     List<Goods> getAllGoods(Goods goods);
+
+    int getGoodsCount();
+
+    int deleteByPrimaryKey(@Param("id") String id);
+
+    int removeByIdList(List<String> idList);
+
+    int changeStatus(@Param("goodsId") String goodsId,
+                     @Param("status") boolean status);
 }

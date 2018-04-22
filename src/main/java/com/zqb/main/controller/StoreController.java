@@ -179,4 +179,42 @@ public class StoreController {
         }
         return null;
     }
+
+
+    /**
+     * 删除商品，包括秒杀商品
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/deleteGoods",method = RequestMethod.GET)
+    @ResponseBody
+    public Object deleteGoods(@RequestParam("id") String id)
+    {
+        return goodsService.deleteGoods(id);
+    }
+
+
+    /**
+     * 下架商品而不删除
+     * @param idList
+     * @return
+     */
+    @RequestMapping(value = "removeGoods",method = RequestMethod.POST)
+    @ResponseBody
+    public Object removeGoods(@RequestBody List<String> idList)
+    {
+        if (idList == null)
+            return new AjaxMessage().Set(MsgType.Error,"未选择数据！",null);
+        goodsService.removeByIdList(idList);
+        return new AjaxMessage().Set(MsgType.Success,"删除成功！",null);
+    }
+
+
+    @RequestMapping(value = "changeStatus",method = RequestMethod.GET)
+    @ResponseBody
+    public Object changeStatus(@RequestParam("id") String id,
+                               @RequestParam("status") boolean status)
+    {
+        return goodsService.changeStatus(id,status);
+    }
 }

@@ -53,7 +53,7 @@ public class ConsumerController {
         page.initialize();
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("list", list);
-        map.put("total", goodsService.getCountByUser(goods));
+        map.put("total", goodsService.getGoodsCount());
         return new AjaxMessage().Set(MsgType.Success, map);
     }
 }

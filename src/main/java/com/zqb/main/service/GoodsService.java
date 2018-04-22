@@ -2,6 +2,7 @@ package com.zqb.main.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zqb.main.dao.GoodsDao;
+import com.zqb.main.dao.SecKillDao;
 import com.zqb.main.dto.AjaxMessage;
 import com.zqb.main.dto.MsgType;
 import com.zqb.main.entity.Goods;
@@ -25,19 +26,16 @@ public class GoodsService {
     @Autowired
     private GoodsDao goodsDao;
 
+
+    @Autowired
+    private SecKillDao secKillDao;
+
     public List<Goods> getGoodsByUser(Goods goods)
     {
         return goodsDao.getGoodsByUser(goods);
     }
 
 
-    /**
-     * 添加或修改商品信息
-     * @param session
-     * @param request
-     * @return
-     * @throws IOException
-     */
     public Object saveGoods(HttpSession session, HttpServletRequest request) throws IOException {
         User user= (User) session.getAttribute("userSession");
         String param=request.getParameter("goods");
@@ -100,12 +98,43 @@ public class GoodsService {
     }
 
 
-    /**
-     * @param goods
-     * @return
-     */
     public List<Goods> getAllGoods(Goods goods)
     {
         return goodsDao.getAllGoods(goods);
+    }
+
+
+
+    public int getGoodsCount()
+    {
+        return goodsDao.getGoodsCount();
+    }
+
+    public Object deleteGoods(String goodsId)
+    {
+
+        if(secKillDao.deleteByGoodsId(goodsId)>0)
+        {
+            if(goodsDao.deleteByPrimaryKey(goodsId)>0)
+            {
+                return new AjaxMessage().Set(MsgType.Success,"删除商品成功",null);
+            }
+        }
+        return new AjaxMessage().Set(MsgType.Error,"删除商品失败",null);
+    }
+
+    public int removeByIdList(List<String> idList)
+    {
+        return goodsDao.removeByIdList(idList);
+    }
+
+
+    public Object changeStatus(String id,boolean status)
+    {
+        if(goodsDao.changeStatus(id,status)>0)
+        {
+            return new AjaxMessage().Set(MsgType.Success,"商品状态修改成功",null);
+        }
+        return new AjaxMessage().Set(MsgType.Error,"商品状态修改失败",null);
     }
 }

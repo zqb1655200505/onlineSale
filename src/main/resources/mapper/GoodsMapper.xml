@@ -38,7 +38,7 @@
     <select id="getGoodsByUser" resultMap="goodsMap">
         SELECT * FROM t_goods
         WHERE
-        user_id=#{user.id} AND delete_flag=1
+        user_id=#{user.id}
         <choose>
             <when test="page !=null">
                 limit #{page.start},#{page.end}
@@ -50,20 +50,17 @@
 
     <update id="updateByPrimaryKey">
         UPDATE t_goods SET
-        <if test="id != null">
-            id = #{id}
-        </if>
         <if test="goodsName != null">
-            goods_name = #{goodsName}
+            goods_name = #{goodsName},
         </if>
         <if test="goodsNum != null">
-            goods_num = #{goodsNum}
+            goods_num = #{goodsNum},
         </if>
         <if test="goodsPic != null">
-            goods_pic = #{goodsPic}
+            goods_pic = #{goodsPic},
         </if>
         <if test="goodsDescription != null">
-            goods_description = #{goodsDescription}
+            goods_description = #{goodsDescription},
         </if>
         <if test="goodsPrice != null">
             goods_price = #{goodsPrice}
@@ -89,4 +86,19 @@
             </otherwise>
         </choose>
     </select>
+
+
+    <select id="getGoodsCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM t_goods WHERE delete_flag=1
+    </select>
+
+
+    <update id="removeByIdList" parameterType="java.util.List">
+        UPDATE t_goods SET delete_flag=FALSE
+        WHERE id in
+        <foreach collection="list" item="itemId" index="index"
+                 open="(" close=")" separator=",">
+            #{itemId}
+        </foreach>
+    </update>
 </mapper>
