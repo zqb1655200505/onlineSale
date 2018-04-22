@@ -199,6 +199,7 @@
             haveLogin:false,
             isSeller:false,
 
+            keys:"",
             seckillList:[],
             goodsList:[],
             // 分页对象
@@ -207,6 +208,8 @@
                 total: 30,
                 size: parseInt(cookie("pageSize")) || 10,
             },
+
+
         }
     });
 
@@ -228,9 +231,10 @@
     function refresh() {
 
 
-        ajaxGet("/onlineSale/consumer/getGoods?pageNo="+app.page.no+"&pageSize="+app.page.size
+        ajaxGet("/onlineSale/consumer/getGoods?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.keys)
             ,function (res) {
-
+                app.goodsList=res.data.list;
+                app.page.total = res.data.total;
             },null,false);
 //        app.goodsList.splice(0,app.goodsList.length);
 //        for(var i=0;i<app.page.size;i++)
