@@ -1,5 +1,5 @@
 import com.zqb.main.dto.KafkaMsg;
-import com.zqb.main.utils.ConsumerUtils;
+import com.zqb.main.utils.KafkaConsumerUtils;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class KafkaConsumerTest extends Thread{
     {
         while (true)
         {
-           List<KafkaMsg> list= ConsumerUtils.getRowMessage("mytest");
+           List<KafkaMsg> list= KafkaConsumerUtils.getRowMessage("mytest");
         }
     }
 }

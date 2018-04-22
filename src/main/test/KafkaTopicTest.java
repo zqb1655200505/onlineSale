@@ -1,4 +1,4 @@
-import com.zqb.main.utils.TopicUtils;
+import com.zqb.main.utils.KafkaTopicUtils;
 
 /**
  * Created by zqb on 2018/4/12.
@@ -8,8 +8,8 @@ public class KafkaTopicTest {
 
     public static void main(String[] args)
     {
-        //TopicUtils.queryTopic(zookeeper_connect,"test");
-        TopicUtils.createTopic("test",1,3);
-        //TopicUtils.deleteTopic(zookeeper_connect,"test");
+        //KafkaTopicUtils.queryTopic(zookeeper_connect,"test");
+        KafkaTopicUtils.createTopic("test",1,3);
+        //KafkaTopicUtils.deleteTopic(zookeeper_connect,"test");
     }
 }

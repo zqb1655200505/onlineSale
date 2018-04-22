@@ -22,4 +22,6 @@ public interface GoodsDao {
     int getCountByUser(Goods goods);
 
     Goods getGoodsByPrimaryKey(@Param("id") String id);
+
+    List<Goods> getAllGoods(Goods goods);
 }

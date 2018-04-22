@@ -18,7 +18,7 @@ import java.util.Properties;
 /**
  * Created by zqb on 2018/4/12.
  */
-public class ConsumerUtils {
+public class KafkaConsumerUtils {
 
     private static final String bootstrap_servers="140.143.6.130:9092,123.207.165.243:9092,123.207.171.22:9092";
     private static KafkaConsumer<String, String> consumer;
@@ -83,10 +83,10 @@ public class ConsumerUtils {
             msg.setTopic(record.topic());
             list.add(msg);
 
-            //测试
-            JSONObject jsonObject=JSON.parseObject(msg.toString());
-            KafkaMsg kafkaMsg=JSONObject.toJavaObject(jsonObject,KafkaMsg.class);
-            System.out.println("zqb:"+kafkaMsg.toString());
+            //测试JSONObject是否可用
+//            JSONObject jsonObject=JSON.parseObject(msg.toString());
+//            KafkaMsg kafkaMsg=JSONObject.toJavaObject(jsonObject,KafkaMsg.class);
+//            System.out.println("zqb:"+kafkaMsg.toString());
         }
         return list;
     }

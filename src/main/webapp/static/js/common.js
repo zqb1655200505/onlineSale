@@ -206,7 +206,7 @@ function ajaxPostJSON(url, data, successCallback,errorCallback,showMsg) {
 // 例子：
 // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
 // (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
-Date.prototype.Format = function (fmt) { //author: meizz
+Date.prototype.Format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1, //月份
         "d+": this.getDate(), //日
@@ -461,4 +461,64 @@ function isPositiveNum(s){
 
 function testCommon() {
     alert("能引入");
+}
+
+
+
+function datetimeFormatFromLong(longTypeDate){
+    var datetimeType = "";
+    var date = new Date();
+    date.setTime(longTypeDate);
+    datetimeType+= date.getFullYear();   //年
+    datetimeType+= "-" + getMonth(date); //月
+    datetimeType += "-" + getDay(date);   //日
+    datetimeType+= "  " + getHours(date);   //时
+    datetimeType+= ":" + getMinutes(date);      //分
+    datetimeType+= ":" + getSeconds(date);      //分
+    return datetimeType;
+}
+//返回 01-12 的月份值
+function getMonth(date){
+    var month = "";
+    month = date.getMonth() + 1; //getMonth()得到的月份是0-11
+    if(month<10){
+        month = "0" + month;
+    }
+    return month;
+}
+//返回01-30的日期
+function getDay(date){
+    var day = "";
+    day = date.getDate();
+    if(day<10){
+        day = "0" + day;
+    }
+    return day;
+}
+//返回小时
+function getHours(date){
+    var hours = "";
+    hours = date.getHours();
+    if(hours<10){
+        hours = "0" + hours;
+    }
+    return hours;
+}
+//返回分
+function getMinutes(date){
+    var minute = "";
+    minute = date.getMinutes();
+    if(minute<10){
+        minute = "0" + minute;
+    }
+    return minute;
+}
+//返回秒
+function getSeconds(date){
+    var second = "";
+    second = date.getSeconds();
+    if(second<10){
+        second = "0" + second;
+    }
+    return second;
 }

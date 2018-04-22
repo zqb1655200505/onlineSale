@@ -151,7 +151,7 @@
                                         <td>{{item.goodsName}}</td>
                                         <td>{{item.goodsNum}}</td>
                                         <td>{{item.goodsPrice}}</td>
-                                        <td>{{item.deleteFlag}}</td>
+                                        <td><i-switch v-model="item.deleteFlag" @on-change="changeStatus(item.deleteFlag)"></i-switch></td>
                                         <td>{{item.goodsDescription}}</td>
                                         <td>
                                             <a @click="edit(item.id)">
@@ -172,7 +172,7 @@
 
                             <Page :current="page.no" :total="page.total" :page-size="page.size"
                                   show-total show-sizer show-elevator style="text-align: right;" placement="top"
-                                  :page-size-opts="[ 4, 8, 16]" @on-change="changePage($event)"
+                                  :page-size-opts="[4,8,16,32]" @on-change="changePage($event)"
                                   @on-page-size-change="changePageSize($event)">
                             </Page>
                         </div>
@@ -319,6 +319,10 @@
     // 编辑用户（确定）
     function edit_ok(id) {
         document.getElementById(id).contentWindow.submit();
+    }
+
+    function changeStatus(status) {
+        alert(status);
     }
 </script>
 </body>

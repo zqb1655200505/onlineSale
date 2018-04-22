@@ -204,7 +204,7 @@
             // 分页对象
             page : {
                 no: 1,
-                total: 100,
+                total: 30,
                 size: parseInt(cookie("pageSize")) || 10,
             },
         }
@@ -226,16 +226,22 @@
     };
 
     function refresh() {
-        app.goodsList.splice(0,app.goodsList.length);
-        for(var i=0;i<app.page.size;i++)
-        {
-            var item={
-                description:"aas搭嘎第三方八十多分",
-                image:"/upload/image/test.jpg",
-                link:"#"+i,
-            };
-            app.goodsList.push(item);
-        }
+
+
+        ajaxGet("/onlineSale/consumer/getGoods?pageNo="+app.page.no+"&pageSize="+app.page.size
+            ,function (res) {
+
+            },null,false);
+//        app.goodsList.splice(0,app.goodsList.length);
+//        for(var i=0;i<app.page.size;i++)
+//        {
+//            var item={
+//                description:"aas搭嘎第三方八十多分",
+//                image:"/upload/image/test.jpg",
+//                link:"#"+i,
+//            };
+//            app.goodsList.push(item);
+//        }
         app.seckillList.splice(0,app.seckillList.length);
 
         for(var i=0;i<app.page.size;i++)

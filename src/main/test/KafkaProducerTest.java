@@ -1,7 +1,5 @@
-import com.zqb.main.dto.KafkaMsg;
-import com.zqb.main.utils.ProducerUtils;
+import com.zqb.main.utils.KafkaProducerUtils;
 
-import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -15,7 +13,7 @@ public class KafkaProducerTest {
         String line = scanner.nextLine();
         while(!line.equals("exit"))
         {
-            ProducerUtils.senMsg("mytest",line);
+            KafkaProducerUtils.senMsg("mytest",line);
             line = scanner.nextLine();
         }
     }

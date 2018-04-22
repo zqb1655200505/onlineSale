@@ -38,7 +38,7 @@
     <select id="getGoodsByUser" resultMap="goodsMap">
         SELECT * FROM t_goods
         WHERE
-        user_id=#{user.id}
+        user_id=#{user.id} AND delete_flag=1
         <choose>
             <when test="page !=null">
                 limit #{page.start},#{page.end}
@@ -74,5 +74,19 @@
 
     <select id="getGoodsByPrimaryKey" resultMap="goodsMap">
         SELECT * FROM t_goods WHERE id=#{id} limit 1
+    </select>
+
+
+    <select id="getAllGoods" resultMap="goodsMap">
+        SELECT * FROM t_goods
+        WHERE
+        delete_flag=1
+        <choose>
+            <when test="page !=null">
+                limit #{page.start},#{page.end}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
     </select>
 </mapper>

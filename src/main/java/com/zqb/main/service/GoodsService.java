@@ -98,4 +98,14 @@ public class GoodsService {
     {
         return goodsDao.getGoodsByPrimaryKey(id);
     }
+
+
+    /**
+     * @param goods
+     * @return
+     */
+    public List<Goods> getAllGoods(Goods goods)
+    {
+        return goodsDao.getAllGoods(goods);
+    }
 }

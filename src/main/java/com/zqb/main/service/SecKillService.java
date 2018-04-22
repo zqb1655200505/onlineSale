@@ -4,7 +4,6 @@ import com.zqb.main.dao.SecKillDao;
 import com.zqb.main.dto.AjaxMessage;
 import com.zqb.main.dto.MsgType;
 import com.zqb.main.entity.Seckill;
-import com.zqb.main.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -9,7 +9,7 @@ import java.util.Properties;
 /**
  * Created by zqb on 2018/4/12.
  */
-public class ProducerUtils{
+public class KafkaProducerUtils {
 
     private static final String bootstrap_servers="140.143.6.130:9092,123.207.165.243:9092,123.207.171.22:9092";
     private static KafkaProducer producer;

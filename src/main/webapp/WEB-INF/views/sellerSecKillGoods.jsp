@@ -29,7 +29,9 @@
             text-align: left;
             font-size: 16px;
         }
-
+        th,td{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -110,13 +112,18 @@
 
 
                             <table class="table table-hover table-bordered table-condensed" style="margin-top: 10px;" >
-                                <!--<table id="contentTable" class="table table-striped table-bordered table-condensed">-->
                                 <thead>
                                 <tr style="font-size: 15px;">
                                     <th style="width: 50px;">
                                         <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;">
                                         </Checkbox>
                                     </th>
+                                    <th>商品名称</th>
+                                    <th>秒杀数量</th>
+                                    <th>秒杀价格</th>
+                                    <th>商品原价</th>
+                                    <th>开始秒杀时间</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -124,14 +131,27 @@
                                     <td>
                                         <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
                                     </td>
-
+                                    <td>{{item.goods.goodsName}}</td>
+                                    <td>{{item.restNum}}</td>
+                                    <td>{{item.seckillPrice}}</td>
+                                    <td>{{item.goods.goodsPrice}}</td>
+                                    <td>{{datetimeFormatFromLong(item.seckillBeginTime)}}</td>
+                                    <td>
+                                        <a @click="edit(item.id)">
+                                            <Icon type="edit"></Icon> 编辑
+                                        </a>
+                                        &nbsp;
+                                        <a @click="del(item.id)">
+                                            <Icon type="android-delete"></Icon> 删除
+                                        </a>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
 
                             <Page :current="page.no" :total="page.total" :page-size="page.size"
                                   show-total show-sizer show-elevator style="text-align: right;" placement="top"
-                                  :page-size-opts="[ 4, 8, 16]" @on-change="changePage($event)"
+                                  :page-size-opts="[10, 25, 50]" @on-change="changePage($event)"
                                   @on-page-size-change="changePageSize($event)">
                             </Page>
                         </div>
@@ -230,6 +250,7 @@
     {
         ajaxGet("/onlineSale/myStore/getMySecKillGoods?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys)
             ,function (res) {
+            console.log(res.data.list);
             app.viewModel.list = res.data.list;
             app.page.total = res.data.total;
         },null,false);
