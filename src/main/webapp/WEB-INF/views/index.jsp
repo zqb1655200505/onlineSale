@@ -4,6 +4,7 @@
     String basePath = request.getScheme() + "://"
             + request.getServerName() + ":" + request.getServerPort()
             + path;
+    String baseUrl="/onlineSale/consumer/goodsDetail?id=";
 %>
 <html>
 <head>
@@ -26,7 +27,7 @@
 
         .goods-item-description
         {
-            font-size: 18px;
+            font-size: 15px;
             padding: 10px;
             width: 100%;
             height: 100px;
@@ -154,19 +155,19 @@
             <Row :gutter="64">
                 <i-col v-for="(item,index) in goodsList" v-if="index%4==0" span="5" offset="2" style="margin-top: 30px;">
                     <Card>
-                        <a><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
+                        <a :href="'<%=baseUrl%>'+item.id" target="_blank"><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
                         <div class="goods-item-description">
                             <p style="color: red;font-size: 22px;">￥{{item.goodsPrice}}</p>
-                            <a>{{item.goodsName}}</a>
+                            <a :href="'<%=baseUrl%>'+item.id" target="_blank">{{item.goodsName}}</a>
                         </div>
                     </Card>
                 </i-col>
                 <i-col v-else span="5" style="margin-top: 30px;">
                     <Card>
-                        <a><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
+                        <a :href="'<%=baseUrl%>'+item.id" target="_blank"><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
                         <div class="goods-item-description">
                             <p style="color: red;font-size: 22px;">￥{{item.goodsPrice}}</p>
-                            <a>{{item.goodsName}}</a>
+                            <a :href="'<%=baseUrl%>'+item.id" target="_blank">{{item.goodsName}}</a>
                         </div>
                     </Card>
                 </i-col>
@@ -176,7 +177,7 @@
                 <i-col offset="4" span="16">
                     <Page :current="page.no" :total="page.total" :page-size="page.size"
                           show-total show-sizer show-elevator style="text-align: right;" placement="top"
-                          :page-size-opts="[10, 25, 50, 100]" @on-change="changePage($event)"
+                          :page-size-opts="[8, 16, 32, 64]" @on-change="changePage($event)"
                           @on-page-size-change="changePageSize($event)">
                     </Page>
                 </i-col>
@@ -207,7 +208,7 @@
             page : {
                 no: 1,
                 total: 30,
-                size: parseInt(cookie("pageSize")) || 10,
+                size: parseInt(cookie("pageSize")) || 8,
             },
 
 
@@ -237,18 +238,10 @@
                 app.goodsList=res.data.list;
                 app.page.total = res.data.total;
             },null,false);
-//        app.goodsList.splice(0,app.goodsList.length);
-//        for(var i=0;i<app.page.size;i++)
-//        {
-//            var item={
-//                description:"aas搭嘎第三方八十多分",
-//                image:"/upload/image/test.jpg",
-//                link:"#"+i,
-//            };
-//            app.goodsList.push(item);
-//        }
-        app.seckillList.splice(0,app.seckillList.length);
 
+
+
+        app.seckillList.splice(0,app.seckillList.length);
         for(var i=0;i<app.page.size;i++)
         {
             var item={
@@ -258,6 +251,7 @@
             };
             app.seckillList.push(item);
         }
+
     }
 
     $(document).ready(function () {

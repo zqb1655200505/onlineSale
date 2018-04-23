@@ -19,4 +19,9 @@ public interface SecKillDao {
     int getMySecKillGoodsCount(Seckill seckill);
 
     int deleteByGoodsId(@Param("goodsId") String goodsId);
+
+
+    Seckill getSecKillByPrimaryKey(@Param("id") String id);
+
+    int updateByPrimaryKey(Seckill seckill);
 }

@@ -9,10 +9,8 @@ import com.zqb.main.service.SecKillService;
 import com.zqb.main.utils.CheckSQLStrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -31,6 +29,19 @@ public class ConsumerController {
 
     @Autowired
     private SecKillService secKillService;
+
+
+    @ModelAttribute
+    public Goods get(@RequestParam(required=false) String id) {
+        Goods entity = null;
+        if (id != null){
+            entity = goodsService.getGoodsByPrimaryKey(id);
+        }
+        if (entity == null){
+            entity = new Goods();
+        }
+        return entity;
+    }
 
 
     @RequestMapping(value = "/getGoods",method = RequestMethod.GET)
@@ -55,5 +66,13 @@ public class ConsumerController {
         map.put("list", list);
         map.put("total", goodsService.getGoodsCount());
         return new AjaxMessage().Set(MsgType.Success, map);
+    }
+
+
+    @RequestMapping(value = "/goodsDetail")
+    public String goodsDetail(Goods goods,Model model)
+    {
+        model.addAttribute("goods",goods);
+        return "goodsDetail";
     }
 }

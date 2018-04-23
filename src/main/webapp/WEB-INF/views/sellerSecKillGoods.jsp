@@ -32,6 +32,9 @@
         th,td{
             text-align: center;
         }
+        #editFrame{
+            height: 40%;
+        }
     </style>
 </head>
 <body>
@@ -100,8 +103,7 @@
 
                         <div class="wrapper-sm" style="padding: 10px 15px;">
                             <div style="margin-bottom:10px;margin-top: 5px;float: left;">
-                                <i-button @click="edit()" type="success" icon="plus">上架商品</i-button>
-                                <i-button @click="del()" type="error" icon="minus">下架商品</i-button>
+                                <i-button @click="del()" type="error" icon="minus">批量删除秒杀商品</i-button>
                             </div>
                             <div style="float: right; margin-bottom: 10px;margin-top: 5px;">
                                 <i-input placeholder="请输入查询条件" v-model="viewModel.keys" style="width: 250px"
@@ -120,8 +122,8 @@
                                     </th>
                                     <th>商品名称</th>
                                     <th>秒杀数量</th>
-                                    <th>秒杀价格</th>
-                                    <th>商品原价</th>
+                                    <th>秒杀价格(元)</th>
+                                    <th>商品原价(元)</th>
                                     <th>开始秒杀时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -193,7 +195,7 @@
             page : {
                 no: 1,
                 total: 20,
-                size: parseInt(cookie("pageSize")) || 4,
+                size: parseInt(cookie("pageSize")) || 10,
             },
 
             // 编辑模态框
@@ -266,16 +268,14 @@
             loading: true,
             show: false
         };
-
-        if (id == null) {
-            app.editModal.title = "添加商品";
-            app.editModal.url = "/onlineSale/myStore/goodsForm";
-        } else {
-            app.editModal.title = "编辑商品信息";
-            app.editModal.url = "/onlineSale/myStore/goodsForm?id=" + id;
-        }
+        app.editModal.title = "编辑秒杀商品信息";
+        app.editModal.url = "/onlineSale/myStore/secKillForm?secKillId=" + id;
         app.editModal.show = true;
-    };
+    }
+
+    function edit_ok(id) {
+        document.getElementById(id).contentWindow.submit();
+    }
 </script>
 </body>
 </html>

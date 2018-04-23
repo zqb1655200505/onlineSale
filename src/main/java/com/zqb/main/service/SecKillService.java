@@ -41,4 +41,23 @@ public class SecKillService {
     {
         return secKillDao.getMySecKillGoodsCount(seckill);
     }
+
+
+    public Seckill getSeckillByPrimaryKey(String secKillId)
+    {
+        return secKillDao.getSecKillByPrimaryKey(secKillId);
+    }
+
+
+    public Object updateByPrimaryKey(Seckill seckill)
+    {
+        if(secKillDao.updateByPrimaryKey(seckill)>0)
+        {
+            return new AjaxMessage().Set(MsgType.Success,"修改秒杀商品成功",null);
+        }
+        else
+        {
+            return new AjaxMessage().Set(MsgType.Error,"修改秒杀商品失败",null);
+        }
+    }
 }

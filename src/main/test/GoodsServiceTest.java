@@ -40,4 +40,10 @@ public class GoodsServiceTest {
         goods.setUser(user);
         System.out.println(goodsService.getCountByUser(goods));
     }
+
+    @Test
+    public void changeStatus()
+    {
+        System.out.println(goodsService.changeStatus("3ada14e323ca43f0891d5e2d05976cc5",true));
+    }
 }

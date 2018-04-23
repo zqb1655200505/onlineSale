@@ -143,7 +143,14 @@ public class StoreController {
         String jsonStr=request.getParameter("seckill");
         JSONObject obj = JSONObject.parseObject(jsonStr);
         Seckill seckill=JSONObject.toJavaObject(obj,Seckill.class);
-        return secKillService.add(seckill);
+        if(seckill.getId()!=null&&seckill.getId().length()>0)
+        {
+            return secKillService.updateByPrimaryKey(seckill);
+        }
+        else
+        {
+            return secKillService.add(seckill);
+        }
     }
 
 
@@ -216,5 +223,20 @@ public class StoreController {
                                @RequestParam("status") boolean status)
     {
         return goodsService.changeStatus(id,status);
+    }
+
+
+    @RequestMapping(value = "/secKillForm")
+    public String secKillForm(Model model,HttpSession session,HttpServletRequest request)
+    {
+        String secKillId=request.getParameter("secKillId");
+        if(secKillId!=null&&secKillId.length()>0)
+        {
+            Seckill seckill=secKillService.getSeckillByPrimaryKey(secKillId);
+            model.addAttribute("seckill", seckill);
+            if(userService.checkUserPermission(session))
+                return "secKillForm";
+        }
+        return "permissionDeny";
     }
 }

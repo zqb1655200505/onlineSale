@@ -62,4 +62,27 @@
         DELETE FROM t_seckill WHERE goods_id=#{goodsId}
     </delete>
 
+
+    <select id="getSecKillByPrimaryKey" resultMap="secKillMap">
+        SELECT * FROM t_seckill WHERE id=#{id} limit 1
+    </select>
+
+
+    <update id="updateByPrimaryKey">
+        UPDATE t_seckill SET
+        <if test="id != null">
+
+            id = #{id}
+        </if>
+        <if test="restNum != null">
+            ,rest_num = #{restNum}
+        </if>
+        <if test="seckillPrice != null">
+            ,seckill_price = #{seckillPrice}
+        </if>
+        <if test="seckillBeginTime != null">
+            ,seckill_begin_time = #{seckillBeginTime}
+        </if>
+        WHERE id = #{id}
+    </update>
 </mapper>

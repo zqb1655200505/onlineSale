@@ -50,20 +50,23 @@
 
     <update id="updateByPrimaryKey">
         UPDATE t_goods SET
+        <if test="id != null">
+            id = #{id}
+        </if>
         <if test="goodsName != null">
-            goods_name = #{goodsName},
+            ,goods_name = #{goodsName}
         </if>
         <if test="goodsNum != null">
-            goods_num = #{goodsNum},
+            ,goods_num = #{goodsNum}
         </if>
         <if test="goodsPic != null">
-            goods_pic = #{goodsPic},
+            ,goods_pic = #{goodsPic}
         </if>
         <if test="goodsDescription != null">
-            goods_description = #{goodsDescription},
+            ,goods_description = #{goodsDescription}
         </if>
         <if test="goodsPrice != null">
-            goods_price = #{goodsPrice}
+            ,goods_price = #{goodsPrice}
         </if>
         WHERE id = #{id}
     </update>
@@ -100,5 +103,10 @@
                  open="(" close=")" separator=",">
             #{itemId}
         </foreach>
+    </update>
+
+
+    <update id="changeStatus">
+        UPDATE t_goods SET delete_flag=#{status} WHERE id=#{goodsId}
     </update>
 </mapper>

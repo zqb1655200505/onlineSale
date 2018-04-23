@@ -148,17 +148,17 @@
                                         <td>
                                             <img :src="'<%=basePath%>'+item.goodsPic" style="width: 100px;"/>
                                         </td>
-                                        <td>{{item.goodsName}}</td>
+                                        <td style="width: 12%;">{{item.goodsName}}</td>
                                         <td>{{item.goodsNum}}</td>
                                         <td>{{item.goodsPrice}}</td>
                                         <td><i-switch v-model="item.deleteFlag" @on-change="changeStatus(item.deleteFlag,item.id)"></i-switch></td>
-                                        <td style="width: 25%;">{{item.goodsDescription}}</td>
+                                        <td style="width: 23%;">{{item.goodsDescription}}</td>
                                         <td>
                                             <a @click="edit(item.id)">
                                                 <Icon type="edit"></Icon> 编辑
                                             </a>
                                             &nbsp;
-                                            <a @click="setSecKill(item.id)">
+                                            <a @click="setSecKill(item.id)" v-if="item.deleteFlag">
                                                 <Icon type="settings"></Icon> 设置秒杀
                                             </a>
                                             &nbsp;
@@ -357,14 +357,13 @@
         app.secKillModal.show = true;
     }
 
-    // 编辑用户（确定）
+    //（确定）
     function edit_ok(id) {
         document.getElementById(id).contentWindow.submit();
     }
 
     function changeStatus(status,id)
     {
-        alert(status+" "+id);
         ajaxGet("/onlineSale/myStore/changeStatus?id="+id+"&status="+status,function (res) {
 
         },null,false);

@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: zqb
-  Date: 2018/4/20
-  Time: 10:47
+  Date: 2018/4/23
+  Time: 10:57
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -14,7 +14,7 @@
 %>
 <html>
 <head>
-    <title>设置商品秒杀信息</title>
+    <title>编辑商品秒杀信息</title>
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>/static/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="<%=basePath%>/static/css/header.css" rel="stylesheet" type="text/css"/>
@@ -59,15 +59,11 @@
 
             <Form-item label="秒杀数目：" prop="restNum">
                 <i-Input v-model="seckill.restNum" type="number" ></i-Input>
-                <%--使用Input-Number表单无法验证--%>
-                <%--<Input-Number :min="1" v-model="seckill.restNum"></Input-Number>--%>
             </Form-item>
 
             <Form-item label="开始秒杀时间：" prop="seckillBeginTime">
                 <Date-Picker type="datetime" format="yyyy-MM-dd HH:mm:ss" v-model="seckill.seckillBeginTime" placement="bottom"></Date-Picker>
             </Form-item>
-
-
         </div>
     </i-form>
 </div>
@@ -77,24 +73,25 @@
 <script type="text/javascript" src="<%=basePath%>/static/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
 <script type="text/javascript">
-    //# sourceURL=setSecKillInfo.js
+    //# sourceURL=secKillForm.js
 
     var app = new Vue({
         el: "#app",
 
         data: {
             seckill: {
-                id: "",
+                id: "${seckill.id}",
                 goods: {
-                    id: "${goods.id}",
-                    goodsName: "${goods.goodsName}",
-                    goodsPrice: "${goods.goodsPrice}",
-                    goodsNum: "${goods.goodsNum}",
+                    id: "${seckill.goods.id}",
+                    goodsName: "${seckill.goods.goodsName}",
+                    goodsPrice: "${seckill.goods.goodsPrice}",
+                    goodsNum: "${seckill.goods.goodsNum}",
                 },
-                restNum:"",
-                seckillPrice:"",
-                seckillBeginTime:"",
+                restNum:"${seckill.restNum}",
+                seckillPrice:"${seckill.seckillPrice}",
+                seckillBeginTime:getDateTime('${seckill.seckillBeginTime}'),
             },
+
             const: validateRestNumCheck = function (rule, value, callback) {
 
                 if (value === '') {
@@ -144,20 +141,29 @@
                     "seckill":JSON.stringify(app.seckill)
                 };
                 ajaxPost("/onlineSale/myStore/setSecKill",data,function (res) {
-                    parent.app.secKillModal.show=false;
+                    parent.app.editModal.show=false;
                     parent.changePage();
                 },null,false);
             }
             else
             {
                 //假装提交
-                parent.app.secKillModal.loading = false;
-                setTimeout("parent.app.secKillModal.loading = true", 100);
+                parent.app.editModal.loading = false;
+                setTimeout("parent.app.editModal.loading = true", 100);
                 parent.app.$Message.error('请正确填写信息!');
             }
-            parent.app.secKillModal.loading = false;
+            parent.app.editModal.loading = false;
         });
 
+    }
+
+    //cst转换有问题
+    function getDateTime(time) {
+        var d=new Date(time);
+        var year=d.getFullYear();
+        var month=d.getMonth();
+        var arr=time.split(" ");
+        return year+"-"+month+"-"+arr[2]+" "+arr[3];
     }
 </script>
 </body>

@@ -155,7 +155,7 @@
                     { type: 'string', min: 6, message: '密码长度不能少于6位', trigger: 'blur' }
                 ],
                 confirmPassword:[
-                    {validator: validatePwdCheck}
+                    {required: true,validator: validatePwdCheck}
                 ]
             }
         }
