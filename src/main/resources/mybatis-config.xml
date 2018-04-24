@@ -14,6 +14,7 @@
         <typeAlias type="com.zqb.main.entity.Message" alias="message"></typeAlias>
         <typeAlias type="com.zqb.main.entity.Goods" alias="goods"></typeAlias>
         <typeAlias type="com.zqb.main.entity.Seckill" alias="secKill"></typeAlias>
+        <typeAlias type="com.zqb.main.entity.Cart" alias="cart"></typeAlias>
     </typeAliases>
 
     <!--通常我们希望将表示状态的数值存入数据库，即ComputerState.OPEN存入数据库取值为0或1。-->

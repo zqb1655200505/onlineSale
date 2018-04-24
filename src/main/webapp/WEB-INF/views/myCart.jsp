@@ -54,13 +54,15 @@
                         </a>
                     </Menu-Item>
 
-                    <Menu-Item name="MyCart">
-                        <a href="/onlineSale/myCart/">
-                            <Icon type="ios-cart"></Icon>
-                            购物车
-                        </a>
+                    <%--<Menu-Item name="MyCart">--%>
+                        <%--<Badge :count="cartNum">--%>
+                            <%--<a href="/onlineSale/myCart/">--%>
+                                <%--<Icon type="ios-cart"></Icon>--%>
+                                <%--购物车--%>
+                            <%--</a>--%>
+                        <%--</Badge>--%>
+                    <%--</Menu-Item>--%>
 
-                    </Menu-Item>
                     <Menu-Item name="MyOrder">
                         <a href="/onlineSale/myOrder/">
                             <Icon type="bag"></Icon>
@@ -88,7 +90,78 @@
         </Header>
 
         <Content class="layout-content-center">
-            购物车
+            <Row>
+                <i-col span="16" offset="4">
+                    <Row>
+                        <div style="margin-bottom:10px;margin-top: 5px;float: left;">
+                            <i-button @click="remove()" type="error" icon="minus">从购物车移除</i-button>
+                        </div>
+                        <div style="float: right; margin-bottom: 10px;margin-top: 5px;">
+                            <i-input placeholder="请输入查询条件" v-model="viewModel.keys" style="width: 250px"
+                                     @on-enter="refresh()">
+                                <i-button slot="append" icon="search" @click="refresh()"></i-button>
+                            </i-input>
+                        </div>
+                    </Row>
+
+                    <Row style="font-size: 15px;margin-top: 20px;background-color: #eeeeee;line-height: 45px;">
+                        <i-col span="1" style="padding-top: 15px;">
+                            <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;">
+                            </Checkbox>
+                        </i-col>
+                        <i-col span="11">
+                            商品
+                        </i-col>
+
+                        <i-col span="3">
+                            单价
+                        </i-col>
+
+                        <i-col span="3">
+                            数量
+                        </i-col>
+
+                        <i-col span="3">
+                            小计
+                        </i-col>
+
+                        <i-col span="3">
+                            操作
+                        </i-col>
+                    </Row>
+
+                    <Row v-for="item in viewModel.list" style="font-size: 15px;margin-top: 10px;background-color: #eeeeee;line-height: 45px;">
+                        <i-col span="1" style="padding-top: 15px;">
+                            <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
+                        </i-col>
+                        <i-col span="11">
+                            <i-col span="4">
+                                <img style="height: 100px;" src="#"/>
+                            </i-col>
+                            <i-col span="20">
+
+                            </i-col>
+                        </i-col>
+
+                        <i-col span="3">
+                            单价
+                        </i-col>
+
+                        <i-col span="3">
+                            数量
+                        </i-col>
+
+                        <i-col span="3">
+                            小计
+                        </i-col>
+
+                        <i-col span="3">
+                            操作
+                        </i-col>
+                    </Row>
+                </i-col>
+            </Row>
+
         </Content>
 
         <jsp:include page="footer.jsp"/>
@@ -105,8 +178,59 @@
             username:"",
             haveLogin:false,
             isSeller:false,
+            cartNum:cookie("cartGoodsNum")||0,
+
+            //视图对象
+            viewModel:{
+                keys:"",
+                allChecked:false,
+                list:[],
+            },
         }
     });
+
+
+    //全选事件
+    function checkAll() {
+        app.viewModel.list.forEach(function (item) {
+            item.checked = app.viewModel.allChecked;
+        });
+    };
+
+
+    function remove() {
+        var list = [];
+        app.viewModel.list.forEach(function (item) {
+            if (item.checked) list.push(item.id);
+        });
+
+        if (list.length == 0) {
+            app.$Message.error('请选择下架商品');
+            return;
+        }
+
+        app.$Modal.confirm({
+            title: '提示信息',
+            content: '确定要下架所选商品吗？',
+            loading: true,
+            onOk: function () {
+
+            }
+        });
+    }
+
+    function refresh()
+    {
+        var cartGoodsIdList=cookie("cartGoodsIdList")||"";
+        if(cartGoodsIdList!="")
+        {
+            console.log(cartGoodsIdList);
+            ajaxGet("/onlineSale/myCart/getCartGoods?idList="+cartGoodsIdList,function (res) {
+                app.viewModel.list=res.data;
+                console.log(app.viewModel.list);
+            },null,false);
+        }
+    }
 
     $(document).ready(function () {
         ajaxGet("/onlineSale/getLoginUserInfo",function (res) {
@@ -121,6 +245,14 @@
                 }
             }
         },null,false);
+
+        refresh();
+//        var option={
+//            path:"/onlineSale",
+//            expires:7,
+//
+//        };
+//        cookie("cartGoodsNum",0,option);
     });
 </script>
 </body>

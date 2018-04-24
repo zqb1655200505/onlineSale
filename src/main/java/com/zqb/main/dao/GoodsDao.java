@@ -33,4 +33,6 @@ public interface GoodsDao {
 
     int changeStatus(@Param("goodsId") String goodsId,
                      @Param("status") boolean status);
+
+    List<Goods> getGoodsByIdList(List<String> idList);
 }

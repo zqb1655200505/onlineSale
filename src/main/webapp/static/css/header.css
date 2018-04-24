@@ -75,6 +75,12 @@ body{
     width:100%;
 }
 
+.ivu-badge
+{
+    display: initial !important;
+    line-height: inherit !important;
+}
+
 [v-cloak] {
     display: none !important;
 }

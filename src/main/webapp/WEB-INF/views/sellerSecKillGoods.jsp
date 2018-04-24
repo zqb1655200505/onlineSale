@@ -182,7 +182,7 @@
             username:"",
             haveLogin:false,
             isSeller:false,
-
+            cartNum:cookie("cartGoodsNum")||0,
 
             //视图对象
             viewModel:{

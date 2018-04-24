@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqb.main.dao.CartDao">
+    <resultMap id="cartMap" type="cart">
+        <association property="user" column="user_id" select="com.zqb.main.dao.UserDao.selectById"/>
+        <association property="goods" column="goods_id" select="com.zqb.main.dao.GoodsDao.getGoodsByPrimaryKey"/>
+    </resultMap>
+
+    <insert id="add">
+        INSERT INTO t_cart(
+        id,
+        goods_id,
+        user_id,
+        goods_num,
+        delete_flag
+        )
+        VALUES (
+        #{id},
+        #{goods.id},
+        #{user.id},
+        #{goodsNum},
+        #{deleteFlag}
+        )
+    </insert>
+
+    <select id="getCartByUser" resultMap="cartMap">
+        SELECT * FROM t_cart WHERE user_id=#{id}
+    </select>
+</mapper>

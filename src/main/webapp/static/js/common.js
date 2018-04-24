@@ -339,8 +339,9 @@ function promptx(title, lable, href, closed){
 }
 
 
-// cookie操作
-function cookie(name, value, options) {
+// cookie操作！！！若不设置第3个参数的path属性，则该cookie仅在当前页面有效
+function cookie(name, value, options)
+{
     if (typeof value != 'undefined') { // name and value given, set cookie
         options = options || {};
         if (value === null) {

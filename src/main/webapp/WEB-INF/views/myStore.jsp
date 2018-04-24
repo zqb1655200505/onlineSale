@@ -322,7 +322,6 @@
             return;
         }
 
-        alert(list);
         app.$Modal.confirm({
             title: '提示信息',
             content: '确定要下架所选商品吗？',

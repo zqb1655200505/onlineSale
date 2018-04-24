@@ -109,4 +109,13 @@
     <update id="changeStatus">
         UPDATE t_goods SET delete_flag=#{status} WHERE id=#{goodsId}
     </update>
+
+    <select id="getGoodsByIdList" parameterType="java.util.List" resultMap="goodsMap">
+        SELECT * FROM t_goods
+        WHERE id in
+        <foreach collection="list" item="itemId" index="index"
+                 open="(" close=")" separator=",">
+            #{itemId}
+        </foreach>
+    </select>
 </mapper>

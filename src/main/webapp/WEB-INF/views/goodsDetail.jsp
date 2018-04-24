@@ -16,16 +16,22 @@
 <head>
     <title>优铺在线销售系统-商品详情</title>
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
-    <link href="<%=basePath%>/static/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="<%=basePath%>/static/css/header.css" rel="stylesheet" type="text/css"/>
-    <link href="<%=basePath%>/static/zoom/base.css" rel="stylesheet" type="text/css"/>\
-
-    <style>
-        .jqZoomPup
+    <style rel="stylesheet">
+        .ivu-input-number-input,ivu-input-number-handler-wrap
         {
-            width: 150px;
-            height: 150px;
+            height: 45px;
         }
+        .ivu-input-number-handler
+        {
+            height: 22px;
+        }
+        .ivu-input-number-handler-down-inner, .ivu-input-number-handler-up-inner
+        {
+            line-height: 22px;
+            font-size: 16px;
+        }
+
     </style>
 </head>
 <body>
@@ -65,11 +71,12 @@
                     </Menu-Item>
 
                     <Menu-Item name="MyCart">
-                        <a href="/onlineSale/myCart/">
-                            <Icon type="ios-cart"></Icon>
-                            购物车
-                        </a>
-
+                        <Badge :count="cartNum">
+                            <a href="/onlineSale/myCart/">
+                                <Icon type="ios-cart"></Icon>
+                                购物车
+                            </a>
+                        </Badge>
                     </Menu-Item>
                     <Menu-Item name="MyOrder">
                         <a href="/onlineSale/myOrder/">
@@ -99,31 +106,66 @@
 
         <Content class="layout-content-center">
             <Row>
-                <i-col span="16" offset="4" style="min-height: 700px;background-color: #b2b2b2">
+                <i-col span="16" offset="4" style="min-height: 700px;">
                     <Row>
                         <i-col span="8">
-                            <div class="right-extra">
-                                <div id="preview" class="spec-preview" style="width: 100%;">
-                                    <span class="jqzoom">
-                                        <img jqimg="<%=basePath%>${goods.goodsPic}" src="<%=basePath%>${goods.goodsPic}" style="width: 100%;"/>
-                                    </span>
-                                </div>
-                            </div>
-
+                            <img src="<%=basePath%>${goods.goodsPic}" style="width: 100%;cursor:pointer;"/>
                         </i-col>
-                        <i-col span="15" offset="1">
+                        <i-col span="15" offset="1" style="text-align: left;">
+                            <Row style="padding: 5px 15px;margin-top: 12px;">
+                                <h1>${goods.goodsName}</h1>
+                            </Row>
+                            <Row style="background-color: #eeeeee;padding: 10px 15px;">
+                                <h2 style="color: red;">￥${goods.goodsPrice}</h2>
+                                <p style="font-size: 16px;">${goods.goodsDescription}</p>
+                                <p style="font-size: 16px;">商品余量 ：${goods.goodsNum}</p>
+                            </Row>
 
+                            <hr style="margin-top: 20px;border-bottom: dotted; border-bottom-color: #b2b2b2;border-bottom-width: thin;"/>
+                            <Row style="text-align: center;font-size: 16px;line-height: 22px;margin-top: 10px;">
+                                <i-col span="7">
+                                    <label>月销量 </label><span style="color: red;font-weight: bolder;"> 123</span>
+                                </i-col>
+
+                                <i-col span="1" style="color: #b2b2b2">|</i-col>
+
+                                <i-col span="7">
+                                    <label>累计销量 </label><span style="color: red;font-weight: bolder;"> 1234</span>
+                                </i-col>
+
+                                <i-col span="1" style="color: #b2b2b2;">|</i-col>
+
+                                <i-col span="7">
+                                    <label>累计评价 </label><span style="color: red;font-weight: bolder;"> 125</span>
+                                </i-col>
+                            </Row>
+                            <hr style="margin-top: 10px;border-bottom: dotted; border-bottom-color: #b2b2b2;border-bottom-width: thin;"/>
+
+                            <Row style="margin-top: 20px;">
+                                <i-col span="5">
+                                    <Input-Number :max="${goods.goodsNum}" :min="1" v-model="purchaseNum" style="height: 45px;"></Input-Number>
+                                </i-col>
+
+                                <i-col span="5" offset="1">
+                                    <i-button type="error" style="height: 45px;width: 100%;" @click="addToCart">加入购物车</i-button>
+                                </i-col>
+                            </Row>
                         </i-col>
                     </Row>
                 </i-col>
             </Row>
         </Content>
 
-        <jsp:include page="footer.jsp"/>
+        <Footer class="layout-footer-center">
+            <hr style="margin-bottom: 10px;"/>
+            2014-2018 &copy; software engineering
+        </Footer>
+        <script type="text/javascript" src="<%=basePath%>/static/js/jquery-2.0.0.min.js"></script>
+        <script type="text/javascript" src="<%=basePath%>/static/iview/vue.min.js"></script>
+        <script type="text/javascript" src="<%=basePath%>/static/iview/iview.min.js"></script>
+        <script type="text/javascript" src="<%=basePath%>/static/js/common.js"></script>
     </Layout>
 </div>
-<script type="text/javascript" src="<%=basePath%>/static/zoom/jquery.jqzoom.js"></script>
-<script type="text/javascript" src="<%=basePath%>/static/zoom/base.js"></script>
 <script type="text/javascript">
     //# sourceURL=goodsDetail.js
     var app = new Vue({
@@ -134,6 +176,8 @@
             username:"",
             haveLogin:false,
             isSeller:false,
+            cartNum:cookie("cartGoodsNum")||0,
+            purchaseNum:1,
         }
     });
 
@@ -151,11 +195,29 @@
                 }
             }
         },null,false);
-
-        console.log("${goods}");
     });
 
 
+    function addToCart()
+    {
+        var option={
+            path:"/onlineSale",
+            expires:7,
+        };
+        var num=cookie("cartGoodsNum")||0;
+        cookie("cartGoodsNum",Number(num)+1,option);
+        app.cartNum=cookie("cartGoodsNum");
+        var cartGoodsIdList=cookie("cartGoodsIdList")||"";
+        if(cartGoodsIdList=="")
+        {
+            cartGoodsIdList="${goods.id}";
+        }
+        else
+        {
+            cartGoodsIdList=cartGoodsIdList+";"+"${goods.id}";
+        }
+        cookie("cartGoodsIdList",cartGoodsIdList,option);
+    }
 
 </script>
 </body>

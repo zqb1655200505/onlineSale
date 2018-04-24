@@ -96,11 +96,12 @@
                     </Menu-Item>
 
                     <Menu-Item name="MyCart">
-                        <a href="/onlineSale/myCart/">
-                            <Icon type="ios-cart"></Icon>
-                            购物车
-                        </a>
-
+                        <Badge :count="cartNum">
+                            <a href="/onlineSale/myCart/">
+                                <Icon type="ios-cart"></Icon>
+                                购物车
+                            </a>
+                        </Badge>
                     </Menu-Item>
                     <Menu-Item name="MyOrder">
                         <a href="/onlineSale/myOrder/">
@@ -200,6 +201,7 @@
             username:"",
             haveLogin:false,
             isSeller:false,
+            cartNum:cookie("cartGoodsNum")||0,
 
             keys:"",
             seckillList:[],

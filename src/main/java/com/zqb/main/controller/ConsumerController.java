@@ -4,6 +4,7 @@ import com.zqb.main.dto.AjaxMessage;
 import com.zqb.main.dto.MsgType;
 import com.zqb.main.dto.Page;
 import com.zqb.main.entity.Goods;
+import com.zqb.main.service.CartService;
 import com.zqb.main.service.GoodsService;
 import com.zqb.main.service.SecKillService;
 import com.zqb.main.utils.CheckSQLStrUtils;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,9 @@ public class ConsumerController {
     @Autowired
     private SecKillService secKillService;
 
+
+    @Autowired
+    private CartService cartService;
 
     @ModelAttribute
     public Goods get(@RequestParam(required=false) String id) {
@@ -75,4 +80,12 @@ public class ConsumerController {
         model.addAttribute("goods",goods);
         return "goodsDetail";
     }
+
+    @RequestMapping(value = "/addToCart",method = RequestMethod.GET)
+    @ResponseBody
+    public Object addToCart(HttpServletRequest request,HttpSession session)
+    {
+        return cartService.addToCart(request,session);
+    }
+
 }
