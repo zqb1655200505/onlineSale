@@ -189,6 +189,7 @@
         <jsp:include page="footer.jsp"/>
     </Layout>
 </div>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
 
 <script type="text/javascript">
     //# sourceURL=index.js
@@ -233,8 +234,7 @@
     };
 
     function refresh() {
-
-
+        //alert(returnCitySN["cip"]);//222.130.135.84
         ajaxGet("/onlineSale/consumer/getGoods?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.keys)
             ,function (res) {
                 app.goodsList=res.data.list;
@@ -275,6 +275,8 @@
     function gotoSeckill(id) {
         alert(id);
     }
+
+
 </script>
 </body>
 </html>
