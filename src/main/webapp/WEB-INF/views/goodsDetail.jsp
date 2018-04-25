@@ -106,7 +106,7 @@
 
         <Content class="layout-content-center">
             <Row>
-                <i-col span="16" offset="4" style="min-height: 700px;">
+                <i-col span="16" offset="4" style="min-height: 650px;">
                     <Row>
                         <i-col span="8">
                             <img src="<%=basePath%>${goods.goodsPic}" style="width: 100%;cursor:pointer;"/>
@@ -204,19 +204,50 @@
             path:"/onlineSale",
             expires:7,
         };
-        var num=cookie("cartGoodsNum")||0;
-        cookie("cartGoodsNum",Number(num)+1,option);
-        app.cartNum=cookie("cartGoodsNum");
+        var count=cookie("cartGoodsNum")||0;
+        cookie("cartGoodsNum",Number(count)+app.purchaseNum,option);
+        app.cartNum=Number(count)+app.purchaseNum;
+
+        var itemNumList=cookie("itemNumList")||"";
         var cartGoodsIdList=cookie("cartGoodsIdList")||"";
+
         if(cartGoodsIdList=="")
         {
             cartGoodsIdList="${goods.id}";
+            itemNumList=app.purchaseNum+"";
         }
         else
         {
-            cartGoodsIdList=cartGoodsIdList+";"+"${goods.id}";
+            var index=-1;
+            var idList=cartGoodsIdList.split(";");
+            for(var i=0;i<idList.length;i++)
+            {
+                if(idList[i]=="${goods.id}")
+                {
+                    index=i;
+                    break;
+                }
+            }
+            if(index==-1)
+            {
+                cartGoodsIdList=cartGoodsIdList+";"+"${goods.id}";
+                itemNumList=itemNumList+";"+app.purchaseNum;
+            }
+            else
+            {
+                var itemNum=itemNumList.split(";");
+                itemNum[index]=Number(itemNum[index])+app.purchaseNum;
+                itemNumList="";
+                for(var i=0;i<itemNum.length-1;i++)
+                {
+                    itemNumList=itemNumList+itemNum[i]+";";
+                }
+                itemNumList=itemNumList+itemNum[itemNum.length-1];
+            }
         }
         cookie("cartGoodsIdList",cartGoodsIdList,option);
+        cookie("itemNumList",itemNumList,option);
+
     }
 
 </script>

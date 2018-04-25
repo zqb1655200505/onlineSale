@@ -105,7 +105,7 @@
                     </i-menu>
                 </i-col>
 
-                <i-col offset="1" span="16" style="min-height: 700px;">
+                <i-col offset="1" span="16" style="min-height: 650px;">
                     <div class="panel panel-default">
                         <div class="panel-heading" style="text-align: left;font-size: 14px;font-weight: bold;">店铺商品列表</div>
 
@@ -131,12 +131,12 @@
                                             </Checkbox>
                                         </th>
                                         <th align="center">商品图片</th>
-                                        <th>商品名称</th>
+                                        <th style="width: 12%;">商品名称</th>
                                         <th>商品余量</th>
                                         <th>商品价格</th>
                                         <th>商品状态</th>
-                                        <th>商品信息</th>
-                                        <th>操作</th>
+                                        <th style="width: 23%;">商品信息</th>
+                                        <th style="width: 20%;">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -148,11 +148,11 @@
                                         <td>
                                             <img :src="'<%=basePath%>'+item.goodsPic" style="width: 100px;"/>
                                         </td>
-                                        <td style="width: 12%;">{{item.goodsName}}</td>
+                                        <td >{{item.goodsName}}</td>
                                         <td>{{item.goodsNum}}</td>
                                         <td>{{item.goodsPrice}}</td>
                                         <td><i-switch v-model="item.deleteFlag" @on-change="changeStatus(item.deleteFlag,item.id)"></i-switch></td>
-                                        <td style="width: 23%;">{{item.goodsDescription}}</td>
+                                        <td >{{item.goodsDescription}}</td>
                                         <td>
                                             <a @click="edit(item.id)">
                                                 <Icon type="edit"></Icon> 编辑
@@ -172,7 +172,7 @@
 
                             <Page :current="page.no" :total="page.total" :page-size="page.size"
                                   show-total show-sizer show-elevator style="text-align: right;" placement="top"
-                                  :page-size-opts="[4,8,16,32]" @on-change="changePage($event)"
+                                  :page-size-opts="[5,10,20,50]" @on-change="changePage($event)"
                                   @on-page-size-change="changePageSize($event)">
                             </Page>
                         </div>

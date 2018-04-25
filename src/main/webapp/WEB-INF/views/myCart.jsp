@@ -17,6 +17,22 @@
     <title>优铺在线销售系统-购物车</title>
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>/static/css/header.css" rel="stylesheet" type="text/css"/>
+    <style rel="stylesheet">
+        .ivu-input-number-input,ivu-input-number-handler-wrap
+        {
+            height: 38px;
+        }
+        .ivu-input-number-handler
+        {
+            height: 18px;
+        }
+        .ivu-input-number-handler-down-inner, .ivu-input-number-handler-up-inner
+        {
+            line-height: 18px;
+            font-size: 15px;
+        }
+
+    </style>
 </head>
 <body>
 <div class="layout" v-cloak id="app">
@@ -91,10 +107,10 @@
 
         <Content class="layout-content-center">
             <Row>
-                <i-col span="16" offset="4">
+                <i-col span="16" offset="4" style="min-height: 650px;">
                     <Row>
                         <div style="margin-bottom:10px;margin-top: 5px;float: left;">
-                            <i-button @click="remove()" type="error" icon="minus">从购物车移除</i-button>
+                            <i-button @click="remove()" type="warning" icon="minus">从购物车移除</i-button>
                         </div>
                         <div style="float: right; margin-bottom: 10px;margin-top: 5px;">
                             <i-input placeholder="请输入查询条件" v-model="viewModel.keys" style="width: 250px"
@@ -130,33 +146,57 @@
                         </i-col>
                     </Row>
 
-                    <Row v-for="item in viewModel.list" style="font-size: 15px;margin-top: 10px;background-color: #eeeeee;line-height: 45px;">
+
+                    <Row v-for="item in viewModel.list" style="font-size: 15px;margin-top: 10px;background-color: #d8ebee;">
                         <i-col span="1" style="padding-top: 15px;">
                             <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
                         </i-col>
                         <i-col span="11">
-                            <i-col span="4">
-                                <img style="height: 100px;" src="#"/>
+                            <i-col span="6">
+                                <a><img style="height: 100px;" :src="item.goodsPic"/></a>
                             </i-col>
-                            <i-col span="20">
-
+                            <i-col offset="1" span="17" style="padding-top: 20px;line-height: 25px;text-align: left;">
+                                <a>{{item.goodsName}}</a>
                             </i-col>
                         </i-col>
 
-                        <i-col span="3">
-                            单价
+                        <i-col span="3" style="padding-top: 20px;">
+                            <span>￥{{item.goodsPrice}}</span>
                         </i-col>
 
-                        <i-col span="3">
-                            数量
+                        <i-col span="3" style="padding-top: 10px;">
+                            <Input-Number :max="item.goodsNum" :min="1" v-model="getGoodsNumber(item.id)" style="height: 38px;" @on-change="itemNumChange($event,item)"></Input-Number>
+                            <p style="line-height: 40px;">库存：<span style="color: red;">{{item.goodsNum}}</span></p>
                         </i-col>
 
-                        <i-col span="3">
-                            小计
+                        <i-col span="3" style="padding-top: 20px;">
+                            <span :id="'price_'+item.id">￥{{getGoodsNumber(item.id)*item.goodsPrice}}</span>
+                        </i-col>
+                        <%--getItemCountPrice(item)--%>
+                        <i-col span="3" style="padding-top: 20px;">
+                            <a @click="removeFromCookie(item.id)">
+                                <Icon type="android-delete"></Icon> 删除
+                            </a>
+                        </i-col>
+                    </Row>
+
+                    <Row style="height: 50px;margin-top: 15px;border: 1px solid #d2d2d2;font-size: 14px;">
+                        <i-col span="2">
+                            <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;margin-top: 18px;">
+                                &nbsp;&nbsp;全选
+                            </Checkbox>
                         </i-col>
 
-                        <i-col span="3">
-                            操作
+                        <i-col span="4" offset="11">
+                            <p style="line-height: 50px;">共选择<span style="color: red;font-weight: bolder;"> {{chooseNum}} </span>件商品</p>
+                        </i-col>
+
+                        <i-col span="4">
+                            <p style="line-height: 50px;">总价<span style="color: red;font-size: 16px;font-weight: bolder;"> ￥{{totalPrice}} </span></p>
+                        </i-col>
+
+                        <i-col span="3" style="height: 100%;">
+                            <i-button type="error" style="width: 100%;height: 100%;font-size: 22px;">去结算</i-button>
                         </i-col>
                     </Row>
                 </i-col>
@@ -186,6 +226,10 @@
                 allChecked:false,
                 list:[],
             },
+
+            chooseNum:2,
+
+            totalPrice:12345.00,
         }
     });
 
@@ -205,13 +249,13 @@
         });
 
         if (list.length == 0) {
-            app.$Message.error('请选择下架商品');
+            app.$Message.error('请选择需移除商品！');
             return;
         }
 
         app.$Modal.confirm({
             title: '提示信息',
-            content: '确定要下架所选商品吗？',
+            content: '确定要将所选商品从购物车移除吗？',
             loading: true,
             onOk: function () {
 
@@ -222,12 +266,11 @@
     function refresh()
     {
         var cartGoodsIdList=cookie("cartGoodsIdList")||"";
+        var itemNumList=cookie("itemNumList")||"";
         if(cartGoodsIdList!="")
         {
-            console.log(cartGoodsIdList);
             ajaxGet("/onlineSale/myCart/getCartGoods?idList="+cartGoodsIdList,function (res) {
                 app.viewModel.list=res.data;
-                console.log(app.viewModel.list);
             },null,false);
         }
     }
@@ -243,17 +286,109 @@
                 {
                     app.isSeller=true;
                 }
+
+                //登录成功，将cookie中的购物车记录加入数据库
+
             }
         },null,false);
 
         refresh();
-//        var option={
-//            path:"/onlineSale",
-//            expires:7,
-//
-//        };
-//        cookie("cartGoodsNum",0,option);
     });
+
+
+    function getGoodsNumber(id) {
+        var cartGoodsIdList=cookie("cartGoodsIdList")||"";
+        var itemNumList=cookie("itemNumList")||"";
+        var numList=itemNumList.split(";");
+        var index=-1;
+        var idList=cartGoodsIdList.split(";");
+        for(var i=0;i<idList.length;i++)
+        {
+            if(idList[i]==id)
+            {
+                index=i;
+                break;
+            }
+        }
+        return numList[index];
+    }
+
+    function itemNumChange(value,item)
+    {
+        //更新cookie
+        var cartGoodsIdList=cookie("cartGoodsIdList")||"";
+        var itemNumList=cookie("itemNumList")||"";
+        var index=-1;
+        var idList=cartGoodsIdList.split(";");
+        for(var i=0;i<idList.length;i++)
+        {
+            if(idList[i]==item.id)
+            {
+                index=i;
+                break;
+            }
+        }
+        var numList=itemNumList.split(";");
+        numList[index]=value;
+
+        itemNumList="";
+        var count=0;
+        for(var i=0;i<numList.length-1;i++)
+        {
+            count=count+Number(numList[i]);
+            itemNumList=itemNumList+numList[i]+";";
+        }
+        itemNumList=itemNumList+numList[numList.length-1];
+        count=count+Number(numList[numList.length-1]);
+
+        var option={
+            path:"/onlineSale",
+            expires:7,
+        };
+        cookie("cartGoodsNum",count,option);
+        cookie("itemNumList",itemNumList,option);
+
+        //动态改变小计
+        var id="price_"+item.id;
+        document.getElementById(id).innerText="￥"+Number(value)*Number(item.goodsPrice);
+    }
+
+
+    function removeFromCookie(id) {
+        var cartGoodsIdList=cookie("cartGoodsIdList")||"";
+        var itemNumList=cookie("itemNumList")||"";
+        var cartGoodsNum=cookie("cartGoodsNum")||0;
+
+        var numList=itemNumList.split(";");
+        var idList=cartGoodsIdList.split(";");
+        cartGoodsIdList="";
+        itemNumList="";
+        for(var i=0;i<idList.length;i++)
+        {
+            if(idList[i]!=id)
+            {
+                cartGoodsIdList+=idList[i]+";";
+                itemNumList+=numList[i]+";";
+            }
+            else
+            {
+                cartGoodsNum=cartGoodsNum-Number(numList[i]);
+            }
+        }
+        cartGoodsIdList=cartGoodsIdList.substr(0,cartGoodsIdList.length-1);
+        itemNumList=itemNumList.substr(0,itemNumList.length-1);
+
+        var option={
+            path:"/onlineSale",
+            expires:7,
+        };
+        cookie("cartGoodsNum",cartGoodsNum,option);
+        cookie("cartGoodsIdList",cartGoodsIdList,option);
+        cookie("itemNumList",itemNumList,option);
+
+        refresh();
+    }
+
 </script>
 </body>
 </html>

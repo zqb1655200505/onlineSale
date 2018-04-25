@@ -97,7 +97,7 @@
                     </i-menu>
                 </i-col>
 
-                <i-col offset="1" span="16" style="min-height: 700px;">
+                <i-col offset="1" span="16" style="min-height: 650px;">
                     <div class="panel panel-default">
                         <div class="panel-heading" style="text-align: left;font-size: 14px;font-weight: bold;">秒杀商品列表</div>
 
