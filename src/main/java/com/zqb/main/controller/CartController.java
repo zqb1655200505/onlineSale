@@ -38,4 +38,13 @@ public class CartController {
         return new AjaxMessage().Set(MsgType.Success,cartService.getGoodsByIdList(request));
     }
 
+
+    @RequestMapping(value = "/gotoLogin",method = RequestMethod.POST)
+    public String gotoLogin(HttpServletRequest request,HttpSession session)
+    {
+        String path=request.getParameter("redirectUrl");
+        session.setAttribute("redirectUrl", path);//把url放到session
+        return "login";
+    }
+
 }

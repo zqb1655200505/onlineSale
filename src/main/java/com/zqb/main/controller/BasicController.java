@@ -37,7 +37,7 @@ public class BasicController {
 
 
     @RequestMapping(value = "/login")
-    public String login(HttpSession session)
+    public String login(HttpSession session,HttpServletRequest request)
     {
         if(session.getAttribute("userSession")!=null)//防止重新登录
             return "redirect:index";
@@ -60,7 +60,12 @@ public class BasicController {
         if(user1!=null)
         {
             session.setAttribute("userSession",user1);
-            return new AjaxMessage().Set(MsgType.Success,"登录成功",user1);
+            String url = (String) session.getAttribute("redirectUrl");
+            if(url!=null&&url.length()>0)
+            {
+                return new AjaxMessage().Set(MsgType.Success,"登录成功",url);
+            }
+            return new AjaxMessage().Set(MsgType.Success,"登录成功",null);
         }
         return new AjaxMessage().Set(MsgType.Error,"用户名或密码错误",null);
     }
@@ -110,6 +115,7 @@ public class BasicController {
     public String logout(HttpSession session)
     {
         session.removeAttribute("userSession");
+        session.removeAttribute("redirectUrl");//把url清理
         return "login";//退出后返回登录页
     }
 }

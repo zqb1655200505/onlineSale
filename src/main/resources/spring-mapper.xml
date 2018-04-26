@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName">
@@ -21,19 +21,27 @@
     </bean>
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"></property>
-        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
-        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
 
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
-        <constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.zqb.main.dao"></property>
-        <property name="annotationClass" value="org.springframework.stereotype.Repository"></property>
+        <property name="basePackage" value="com.zqb.main.dao"/>
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
     </bean>
 
-
+    <!--事务管理-->
+    <!--MyBatis自动参与到spring事务管理中，无需额外配置，只要org.mybatis.spring.SqlSessionFactoryBean引用的
+            数据源与DataSourceTransactionManager引用的数据源一致即可，否则事务管理会不起作用。-->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- 开启事务控制的注解支持。 如果配置的事务管理器的id就是transactionManager，这里是可以省略transaction-manager-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>

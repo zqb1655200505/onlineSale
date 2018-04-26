@@ -149,7 +149,7 @@
 
                     <Row v-for="item in viewModel.list" style="font-size: 15px;margin-top: 10px;background-color: #d8ebee;">
                         <i-col span="1" style="padding-top: 15px;">
-                            <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
+                            <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id" @on-change="itemStatusChange($event,item)"></Checkbox>
                         </i-col>
                         <i-col span="11">
                             <i-col span="6">
@@ -174,7 +174,7 @@
                         </i-col>
                         <%--getItemCountPrice(item)--%>
                         <i-col span="3" style="padding-top: 20px;">
-                            <a @click="removeFromCookie(item.id)">
+                            <a @click="removeConfirm(item)">
                                 <Icon type="android-delete"></Icon> 删除
                             </a>
                         </i-col>
@@ -196,7 +196,7 @@
                         </i-col>
 
                         <i-col span="3" style="height: 100%;">
-                            <i-button type="error" style="width: 100%;height: 100%;font-size: 22px;">去结算</i-button>
+                            <i-button type="error" style="width: 100%;height: 100%;font-size: 22px;" @click="gotoSettlement">去结算</i-button>
                         </i-col>
                     </Row>
                 </i-col>
@@ -227,25 +227,39 @@
                 list:[],
             },
 
-            chooseNum:2,
+            chooseNum:0,
 
-            totalPrice:12345.00,
+            totalPrice:0,
+
+            purchaseModal:"",
         }
     });
 
 
     //全选事件
     function checkAll() {
-        app.viewModel.list.forEach(function (item) {
-            item.checked = app.viewModel.allChecked;
-        });
+        app.totalPrice=0;
+        if(app.viewModel.allChecked)
+        {
+            app.viewModel.list.forEach(function (item) {
+                item.checked = app.viewModel.allChecked;
+                app.totalPrice=app.totalPrice+getGoodsNumber(item.id)*item.goodsPrice;
+            });
+        }
+        else
+        {
+            app.viewModel.list.forEach(function (item) {
+                item.checked = app.viewModel.allChecked;
+            });
+        }
     };
 
 
     function remove() {
         var list = [];
         app.viewModel.list.forEach(function (item) {
-            if (item.checked) list.push(item.id);
+            if (item.checked)
+                list.push(item);
         });
 
         if (list.length == 0) {
@@ -258,7 +272,10 @@
             content: '确定要将所选商品从购物车移除吗？',
             loading: true,
             onOk: function () {
-
+                for(var i=0;i<list.length;i++)
+                {
+                    removeFromCookie(list[i]);
+                }
             }
         });
     }
@@ -351,10 +368,31 @@
         //动态改变小计
         var id="price_"+item.id;
         document.getElementById(id).innerText="￥"+Number(value)*Number(item.goodsPrice);
+
+        if(item.checked)
+        {
+            app.totalPrice=0;
+            app.viewModel.list.forEach(function (subItem) {
+                if(subItem.checked)
+                    app.totalPrice=app.totalPrice+getGoodsNumber(subItem.id)*subItem.goodsPrice;
+            });
+        }
     }
 
 
-    function removeFromCookie(id) {
+    function itemStatusChange(status,item) {
+        if(status)
+        {
+            app.totalPrice=app.totalPrice+getGoodsNumber(item.id)*item.goodsPrice;
+        }
+        else
+        {
+            app.totalPrice=app.totalPrice-getGoodsNumber(item.id)*item.goodsPrice;
+        }
+    }
+
+    function removeFromCookie(item) {
+
         var cartGoodsIdList=cookie("cartGoodsIdList")||"";
         var itemNumList=cookie("itemNumList")||"";
         var cartGoodsNum=cookie("cartGoodsNum")||0;
@@ -365,7 +403,7 @@
         itemNumList="";
         for(var i=0;i<idList.length;i++)
         {
-            if(idList[i]!=id)
+            if(idList[i]!=item.id)
             {
                 cartGoodsIdList+=idList[i]+";";
                 itemNumList+=numList[i]+";";
@@ -385,10 +423,79 @@
         cookie("cartGoodsNum",cartGoodsNum,option);
         cookie("cartGoodsIdList",cartGoodsIdList,option);
         cookie("itemNumList",itemNumList,option);
-
+        app.$Modal.remove();
         refresh();
+
     }
 
+
+    function removeConfirm(item) {
+        app.$Modal.confirm({
+
+            content: "<div style='margin-top: -16px;'><h2>删除商品</h2><br><p>确认将商品 <span style='color: red;'>"+item.goodsName+"</span> 从购物车移除吗？</p><div>",
+            loading: true,
+            closable:true,
+            onOk: function () {
+                removeFromCookie(item);
+            }
+        });
+    }
+
+    function gotoSettlement() {
+        var flag = false;
+        var idList=[];
+        var numList=[];
+        app.purchaseModal="<h2 style='margin-top: -15px;'>您确认购买以下商品吗？</h2><br><ul style='list-style-type: none;font-size: 15px;'>";
+        app.viewModel.list.forEach(function (item) {
+            if (item.checked)
+            {
+                flag=true;
+                idList.push(item.id);
+                var num=getGoodsNumber(item.id);
+                numList.push(num);
+                app.purchaseModal+="<li style='line-height: 30px;'>"+item.goodsName+"  ，数目：<span style='color: red;'>"+num+"</span></li>";
+            }
+
+        });
+        app.purchaseModal+="</ul>";
+        if (!flag) {
+            app.$Message.error('请选择需购买商品！');
+            return;
+        }
+        if(app.haveLogin)
+        {
+            app.purchaseModal+="<br><h3>商品总价为：<span style='color: red;font-size: 20px;'> ￥"+app.totalPrice+" </span> </h3>";
+
+            var list={
+                idList:idList,
+                numList:numList
+            };
+            app.$Modal.confirm({
+                content: app.purchaseModal,
+                loading: true,
+                onOk: function () {
+                    ajaxPostJSON("/onlineSale/myOrder/addOrder",list,function (res) {
+                        console.log(res);
+                        app.$Modal.remove();
+                        app.$Message.success("购买成功");
+                    },null,false);
+                }
+            });
+        }
+        else//通过后端跳转到登录页面，因为登录后还得返回当前页
+        {
+            var form=document.createElement("form");//定义一个form表单
+            form.action = "/onlineSale/myCart/gotoLogin";
+            form.method = "post";
+            form.style.display = "none";
+            var opt = document.createElement("input");
+            opt.name = "redirectUrl";
+            opt.value = window.location;//"/onlineSale/myCart/";
+            form.appendChild(opt);
+            document.body.appendChild(form);//将表单放置在web中
+            form.submit();//表单提交
+        }
+    }
 </script>
 </body>
 </html>

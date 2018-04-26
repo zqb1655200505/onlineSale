@@ -34,10 +34,12 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 
     /**
      * @name configureDefaultServletHandling
-     * @description 要求DispatcherServlet将静态请求转发到servlet默认的servlet上，
+     * @description 要求DispatcherServlet将静态资源请求转发到servlet默认的servlet上，
      *              而不是使用DispatcherServlet本身来处理。
      *              例如前端直接请求a.txt，我们会将其定位到服务器的路径上，
      *              而不是使用DispatcherServlet类来处理
+     *              等同于配置 <mvc:default-servlet-handler />
+     *              或 指定目录<mvc:resources mapping="/static/**" location="/WEB-INF/static/" />
      * @param  configurer
      * @return
      */
@@ -48,11 +50,16 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        InterceptorRegistration interceptorRegistration =  registry.addInterceptor(new SpringMVCInterceptor());
+        InterceptorRegistration interceptorRegistration =  registry.addInterceptor(new LoginInterceptor());
         //在所有handler操作前进行拦截检查，拦截后后执行SpringMVCInterceptor的preHandle操作
         //interceptorRegistration.addPathPatterns("/onlineSale/myCart/*");
         interceptorRegistration.addPathPatterns("/onlineSale/myOrder/*");
         interceptorRegistration.addPathPatterns("/onlineSale/myStore/*");
+        interceptorRegistration.addPathPatterns("/onlineSale/myCart/gotoSettlement");
+
+        //还可以配置其他拦截器，当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法
+
+
 
         //排除特定handler不需要拦截检查
 //        interceptorRegistration.excludePathPatterns("/onlineSale/register");

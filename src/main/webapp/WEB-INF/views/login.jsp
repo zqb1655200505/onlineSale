@@ -68,15 +68,15 @@
                     <Icon type="log-in"></Icon> 登录
                     <a style="float: right;" href="/onlineSale/index">前往主页</a>
                 </p>
-                <i-form ref="form" :model="userInfo" :rules="validate" style="margin-top: 20px;">
+                <i-form id="form" ref="form" :model="userInfo" :rules="validate" style="margin-top: 20px;">
                     <Form-Item prop="userName">
-                        <i-input type="text" v-model="userInfo.userName" placeholder="userName">
+                        <i-input type="text" v-model="userInfo.userName" placeholder="userName" name="userName">
                             <Icon type="ios-person" slot="prepend" size="18"></Icon>
                         </i-input>
                     </Form-Item>
 
                     <Form-Item prop="userPassword">
-                        <i-input type="password" v-model="userInfo.userPassword" placeholder="Password">
+                        <i-input type="password" v-model="userInfo.userPassword" placeholder="Password" name="userPassword">
                             <Icon type="ios-locked" slot="prepend"></Icon>
                         </i-input>
                     </Form-Item>
@@ -135,15 +135,16 @@
         app.$refs['form'].validate( function (valid) {
             if (valid)
             {
-                console.log(app.userInfo);
-
-                ajaxPost("/onlineSale/doLogin",app.userInfo,function (data) {
-                    console.log(data);
-                    if(data.code==="success")
+                ajaxPost("/onlineSale/doLogin",app.userInfo,function (res) {
+                    if(res.code==="success")
                     {
-                        window.location.href="/onlineSale/index";
+                        if(res.data==null)
+                            window.location.href="/onlineSale/index";
+                        else
+                            window.location.href=res.data;
                     }
                 },null,false);
+
             }
             else
             {
