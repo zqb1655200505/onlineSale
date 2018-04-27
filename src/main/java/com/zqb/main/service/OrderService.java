@@ -1,12 +1,18 @@
 package com.zqb.main.service;
 
-import com.zqb.main.entity.Order;
-import com.zqb.main.entity.OrderGoods;
-import com.zqb.main.entity.User;
+import com.zqb.main.dao.GoodsDao;
+import com.zqb.main.dao.OrderDao;
+import com.zqb.main.dao.OrderGoodsDao;
+import com.zqb.main.dao.SecKillDao;
+import com.zqb.main.dto.AjaxMessage;
+import com.zqb.main.dto.MsgType;
+import com.zqb.main.entity.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zqb on 2018/4/26.
@@ -27,24 +33,98 @@ import java.util.Date;
 @Component
 public class OrderService {
 
+    @Autowired
+    private GoodsDao goodsDao;
+
+
+    @Autowired
+    private OrderDao orderDao;
+
+
+    @Autowired
+    private OrderGoodsDao orderGoodsDao;
+
+    @Autowired
+    private SecKillDao secKillDao;
+
     /**
-     * @param idList 商品id列表
+     * @param idList 此次订单商品id列表
      * @param numList 与商品对应的商品数目
      * @param buyer 购买者
      * @return
      */
     @Transactional
-    public Object addOrder(String[] idList, Integer[] numList, User buyer)
-    {
-        OrderGoods orderGoods=new OrderGoods();
+    public Object addOrder(List<String> idList, List<Integer> numList, User buyer, boolean isSeckill) throws Exception {
+
         Order order=new Order();
         order.setBuyer(buyer);
         order.setOrderTime(new Date());
-        for(int i=0;i<idList.length;i++)
+        int totalNum=0;
+        double totalPrice=0;
+        for(int i=0;i<numList.size();i++)
         {
-            String goodsId=idList[i];
-            int goodsNum=numList[i];
+            totalNum+=numList.get(i);
+            String goodsId=idList.get(i);
+            if(isSeckill)//获取秒杀价格
+            {
+                double price=secKillDao.getSecKillGoodsPrice(goodsId);
+                totalPrice+=price;
+            }
+            else
+            {
+                Goods goods=goodsDao.getGoodsByPrimaryKey(goodsId);
+                totalPrice+=goods.getGoodsPrice();
+            }
+
         }
-        return null;
+        order.setGoodsNum(totalNum);
+        order.setOrderPrice(totalPrice);
+        order.preInsert();
+        if(orderDao.addOrder(order)>0)
+        {
+            for(int i=0;i<numList.size();++i)
+            {
+                OrderGoods orderGoods=new OrderGoods();
+                String goodsId=idList.get(i);
+                int goodsNum=numList.get(i);
+                Goods goods=goodsDao.getGoodsByPrimaryKey(goodsId);
+                //减库存
+                if(goods.getGoodsNum()<goodsNum)
+                {
+                    return new AjaxMessage().Set(MsgType.Error,"超库存",null);
+                }
+                goods.setGoodsNum(goods.getGoodsNum()-goodsNum);
+                if(goodsDao.updateByPrimaryKey(goods)>0)
+                {
+                    //生成订单详情
+                    orderGoods.setGoods(goods);
+                    orderGoods.setGoodsNum(goodsNum);
+                    orderGoods.setSeckill(false);
+                    orderGoods.setOrder(order);
+                    orderGoods.preInsert();
+                    orderGoods.setSeckill(isSeckill);
+                    if(orderGoodsDao.add(orderGoods)<=0)//通过抛异常回滚
+                    {
+                        throw new Exception("has exception and begin rollBack!!!");
+                    }
+                }
+                else
+                {
+                    throw new Exception("has exception and begin rollBack!!!");
+                }
+            }
+            return new AjaxMessage().Set(MsgType.Success,"购买商品成功",null);
+        }
+        else//通过抛异常回滚
+        {
+            throw new Exception("has exception and begin rollBack!!!");
+        }
     }
+
+
+    public List<Order> getConsumerOrder(User user)
+    {
+        return orderDao.getOrderByBuyer(user.getId());
+    }
+
 }

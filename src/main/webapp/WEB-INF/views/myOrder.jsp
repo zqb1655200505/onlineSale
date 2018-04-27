@@ -15,6 +15,7 @@
 <html>
 <head>
     <title>优铺在线销售系统-订单</title>
+    <link href="<%=basePath%>/static/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>/static/css/header.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -62,12 +63,6 @@
                             </a>
                         </Badge>
                     </Menu-Item>
-                    <Menu-Item name="MyOrder">
-                        <a href="/onlineSale/myOrder/">
-                            <Icon type="bag"></Icon>
-                            我的订单
-                        </a>
-                    </Menu-Item>
 
                     <Menu-Item name="MyOrder" v-if="haveLogin && isSeller">
                         <a href="/onlineSale/myStore/">
@@ -89,7 +84,83 @@
         </Header>
 
         <Content class="layout-content-center">
-            订单
+            <Row>
+                <i-col span="16" offset="4" style="min-height: 650px;">
+
+                    <div class="panel panel-default" style="padding: 15px;">
+                        <div class="panel-heading" style="text-align: left;font-size: 14px;font-weight: bold;">订单列表</div>
+                        <Row >
+                            <div style="margin-bottom:10px;float: left;margin-top: 10px;">
+                                <i-button @click="remove()" type="warning" icon="minus">删除记录</i-button>
+                            </div>
+                            <div style="float: right; margin-bottom: 10px;margin-top: 10px;">
+                                <i-input placeholder="请输入查询条件" v-model="viewModel.keys" style="width: 250px"
+                                         @on-enter="refresh()">
+                                    <i-button slot="append" icon="search" @click="refresh()"></i-button>
+                                </i-input>
+                            </div>
+                        </Row>
+
+                        <Row style="margin-top: -15px;">
+                            <table class="table table-hover table-bordered table-condensed"  >
+                                <%--<thead>--%>
+                                    <%--<tr style="font-size: 15px;">--%>
+                                        <%--<th style="width: 50px;">--%>
+                                            <%--<Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;">--%>
+                                            <%--</Checkbox>--%>
+                                        <%--</th>--%>
+                                        <%--<th>商品数目</th>--%>
+                                        <%--<th>商品总价</th>--%>
+                                        <%--<th>购买时间</th>--%>
+                                        <%--<th>操作</th>--%>
+                                    <%--</tr>--%>
+                                <%--</thead>--%>
+
+                                <Row style="font-size: 15px;margin-top: 20px;background-color: #eeeeee;line-height: 45px;">
+                                    <i-col span="2" style="padding-top: 15px;">
+                                        <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;">
+                                        </Checkbox>
+                                    </i-col>
+                                    <i-col span="4">
+                                        商品数目
+                                    </i-col>
+
+                                    <i-col span="4">
+                                        商品总价
+                                    </i-col>
+
+                                    <i-col span="7">
+                                        购买时间
+                                    </i-col>
+
+                                    <i-col span="7">
+                                        操作
+                                    </i-col>
+                                </Row>
+                                <tbody>
+                                    <tr v-for="item in viewModel.list" style="height: 40px;">
+                                        <td style="width:8%;padding-top: 13px;">
+                                            <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
+                                        </td>
+                                        <td style="width:17%;line-height: 40px;">{{item.goodsNum}}</td>
+                                        <td style="width:17%;line-height: 40px;">{{item.orderPrice}}</td>
+                                        <td style="width:29%;line-height: 40px;">{{datetimeFormatFromLong(item.orderTime)}}</td>
+                                        <td style="width:29%;line-height: 40px;">
+                                            <a @click="edit(item.id)">
+                                                <Icon type="edit"></Icon> 订单详情
+                                            </a>
+                                            &nbsp;
+                                            <a @click="remove(item)">
+                                                <Icon type="android-delete"></Icon> 删除
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </Row>
+                    </div>
+                </i-col>
+            </Row>
         </Content>
 
         <jsp:include page="footer.jsp"/>
@@ -107,6 +178,13 @@
             haveLogin:false,
             isSeller:false,
             cartNum:cookie("cartGoodsNum")||0,
+
+            //视图对象
+            viewModel:{
+                keys:"",
+                allChecked:false,
+                list:[],
+            },
         }
     });
 
@@ -124,7 +202,46 @@
                 }
             }
         },null,false);
+        refresh();
     });
+
+
+    //全选事件
+    function checkAll() {
+        app.viewModel.list.forEach(function (item) {
+            item.checked = app.viewModel.allChecked;
+        });
+    };
+
+
+    function remove() {
+        var list = [];
+        app.viewModel.list.forEach(function (item) {
+            if (item.checked)
+                list.push(item);
+        });
+
+        if (list.length == 0) {
+            app.$Message.error('请选择需移除商品！');
+            return;
+        }
+
+        app.$Modal.confirm({
+            title: '提示信息',
+            content: '确定要将所选商品从购物车移除吗？',
+            loading: true,
+            onOk: function () {
+
+            }
+        });
+    }
+    
+    function refresh() {
+        ajaxGet("/onlineSale/myOrder/getMyOrder",function (res) {
+            console.log(res);
+            app.viewModel.list=res.data;
+        },null,false);
+    }
 </script>
 </body>
 </html>

@@ -80,6 +80,10 @@ body{
     display: initial !important;
     line-height: inherit !important;
 }
+th,td{
+    text-align: center;
+}
+
 
 [v-cloak] {
     display: none !important;

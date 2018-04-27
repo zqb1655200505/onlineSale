@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSessionListener;
 public class SessionListener implements HttpSessionListener{
     @Override
     public void sessionCreated(HttpSessionEvent event) {
-        event.getSession().setMaxInactiveInterval(30*60);//设置session过期时间为30min
+        event.getSession().setMaxInactiveInterval(60*60);//设置session过期时间为30min
     }
 
     @Override

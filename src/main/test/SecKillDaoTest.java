@@ -35,4 +35,10 @@ public class SecKillDaoTest {
         System.out.println(secKillDao.getMySecKillGoods(seckill));
     }
 
+    @Test
+    public void getSecKillGoodsPrice()
+    {
+        System.out.println(secKillDao.getSecKillGoodsPrice("437f12bfcf0e4943a409692c857857f2"));
+    }
+
 }

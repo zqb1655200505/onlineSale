@@ -85,4 +85,8 @@
         </if>
         WHERE id = #{id}
     </update>
+
+    <select id="getSecKillGoodsPrice" resultType="java.lang.Double">
+        SELECT seckill_price FROM t_seckill WHERE goods_id=#{goodsId} AND delete_flag=1 limit 1
+    </select>
 </mapper>

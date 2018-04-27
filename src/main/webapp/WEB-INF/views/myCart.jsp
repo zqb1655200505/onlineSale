@@ -413,30 +413,31 @@
                 cartGoodsNum=cartGoodsNum-Number(numList[i]);
             }
         }
-        cartGoodsIdList=cartGoodsIdList.substr(0,cartGoodsIdList.length-1);
-        itemNumList=itemNumList.substr(0,itemNumList.length-1);
-
+        if(cartGoodsIdList.length>0)
+        {
+            cartGoodsIdList=cartGoodsIdList.substr(0,cartGoodsIdList.length-1);
+            itemNumList=itemNumList.substr(0,itemNumList.length-1);
+        }
         var option={
             path:"/onlineSale",
             expires:7,
         };
+
         cookie("cartGoodsNum",cartGoodsNum,option);
         cookie("cartGoodsIdList",cartGoodsIdList,option);
         cookie("itemNumList",itemNumList,option);
-        app.$Modal.remove();
-        refresh();
-
     }
 
 
     function removeConfirm(item) {
         app.$Modal.confirm({
-
             content: "<div style='margin-top: -16px;'><h2>删除商品</h2><br><p>确认将商品 <span style='color: red;'>"+item.goodsName+"</span> 从购物车移除吗？</p><div>",
             loading: true,
             closable:true,
             onOk: function () {
                 removeFromCookie(item);
+                app.$Modal.remove();
+                app.viewModel.list=removeFromArray(app.viewModel.list,item);
             }
         });
     }
@@ -475,9 +476,20 @@
                 loading: true,
                 onOk: function () {
                     ajaxPostJSON("/onlineSale/myOrder/addOrder",list,function (res) {
-                        console.log(res);
-                        app.$Modal.remove();
-                        app.$Message.success("购买成功");
+                        if(res.code=="success")
+                        {
+                            app.viewModel.list.forEach(function (item) {
+                                if (item.checked)
+                                {
+                                    removeFromCookie(item);
+                                }
+                            });
+                            app.$Modal.remove();
+                            setTimeout(function () {
+                                refresh();
+                            },100);
+                        }
+
                     },null,false);
                 }
             });

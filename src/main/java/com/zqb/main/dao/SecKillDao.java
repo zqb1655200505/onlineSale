@@ -24,4 +24,6 @@ public interface SecKillDao {
     Seckill getSecKillByPrimaryKey(@Param("id") String id);
 
     int updateByPrimaryKey(Seckill seckill);
+
+    double getSecKillGoodsPrice(@Param("goodsId") String goodsId);
 }

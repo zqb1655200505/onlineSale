@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqb.main.dao.OrderGoodsDao">
+
+    <resultMap id="orderGoodsMap" type="orderGoods">
+        <association property="order" column="order_id" select="com.zqb.main.dao.OrderDao.getByPrimaryKey"/>
+        <association property="goods" column="goods_id" select="com.zqb.main.dao.GoodsDao.getGoodsByPrimaryKey"/>
+    </resultMap>
+
+    <insert id="add">
+        INSERT INTO t_order_goods(
+        id,
+        order_id,
+        goods_id,
+        goods_num,
+        is_seckill,
+        delete_flag
+        )VALUES (
+        #{id},
+        #{order.id},
+        #{goods.id},
+        #{goodsNum},
+        #{isSeckill},
+        #{deleteFlag}
+        )
+    </insert>
+</mapper>

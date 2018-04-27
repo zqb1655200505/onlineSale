@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqb.main.dao.OrderDao">
+
+    <resultMap id="orderMap" type="order">
+        <association property="buyer" column="buyer" select="com.zqb.main.dao.UserDao.selectById"/>
+    </resultMap>
+
+    <insert id="addOrder">
+        INSERT INTO t_order(
+        id,
+        buyer,
+        goods_num,
+        order_price,
+        order_time,
+        delete_flag
+        )VALUES (
+        #{id},
+        #{buyer.id},
+        #{goodsNum},
+        #{orderPrice},
+        #{orderTime},
+        #{deleteFlag}
+        )
+    </insert>
+
+
+    <select id="getByPrimaryKey" resultMap="orderMap">
+        SELECT * FROM t_order WHERE id=#{id} limit 1
+    </select>
+
+    <select id="getOrderByBuyer" resultMap="orderMap">
+        SELECT * FROM t_order WHERE buyer=#{userId}
+    </select>
+
+    <select id="getSellerOrder" resultMap="orderMap">
+      SELECT * FROM t_order WHERE id in(
+        SELECT order_id FROM t_order_goods WHERE goods_id IN (
+        SELECT id FROM t_goods WHERE user_id=#{userId})
+            )
+    </select>
+</mapper>
