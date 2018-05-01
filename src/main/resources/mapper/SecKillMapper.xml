@@ -98,6 +98,6 @@
     </select>
 
     <update id="updateSecKillStatusToRemove">
-        UPDATE UPDATE t_seckill SET delete_flag=0 WHERE id=#{id}
+        UPDATE t_seckill SET delete_flag=0 WHERE id=#{id}
     </update>
 </mapper>
