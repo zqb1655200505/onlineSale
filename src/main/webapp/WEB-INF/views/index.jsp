@@ -130,7 +130,7 @@
         </Header>
 
         <Content class="layout-content-center">
-            <Row>
+            <Row v-if="hasSecKillGoods">
                 <i-col offset="3" span="5">
                     <div style="height: 400px;background-color: #444965;">
                         <a class="sk_hd_lk" >
@@ -141,11 +141,11 @@
                     </div>
                 </i-col>
 
-                <i-col offset="1" span="12">
+                <i-col offset="2" span="11">
                     <Carousel autoplay autoplay-speed="3000" loop>
                         <Carousel-item v-for="(item,index) in seckillList">
-                            <div class="demo-carousel" @click="gotoSeckill(index)">
-                                <img :src="'<%=basePath%>'+item.image" style="width: 100%;height: 100%;">
+                            <div class="demo-carousel" @click="gotoSeckill(item)">
+                                <img :src="'<%=basePath%>'+item.goods.goodsPic" style="width: 100%;height: 100%;">
                             </div>
                         </Carousel-item>
 
@@ -189,6 +189,8 @@
         <jsp:include page="footer.jsp"/>
     </Layout>
 </div>
+
+<%--获取本机ip，存储在returnCitySN对象中--%>
 <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
 
 <script type="text/javascript">
@@ -215,6 +217,7 @@
             },
 
 
+            hasSecKillGoods:true,
         }
     });
 
@@ -242,17 +245,14 @@
             },null,false);
 
 
-
-        app.seckillList.splice(0,app.seckillList.length);
-        for(var i=0;i<app.page.size;i++)
-        {
-            var item={
-                description:"aas搭嘎第三方八十多分",
-                link:"#"+1,
-                image:"/upload/image/test.jpg"
-            };
-            app.seckillList.push(item);
-        }
+        ajaxGet("/onlineSale/secKill/getSecKillGoods"
+            ,function (res) {
+                app.seckillList=res.data;
+                if(app.seckillList.length==null||app.seckillList.length==0)
+                {
+                    app.hasSecKillGoods=false;
+                }
+            },null,false);
 
     }
 
@@ -273,7 +273,7 @@
     });
 
     function gotoSeckill(id) {
-        alert(id);
+
     }
 
 

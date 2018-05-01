@@ -32,13 +32,23 @@
     </select>
 
     <select id="getOrderByBuyer" resultMap="orderMap">
-        SELECT * FROM t_order WHERE buyer=#{userId}
+        SELECT * FROM t_order
+        WHERE buyer=#{buyer.id}
+        ORDER BY order_time DESC,id
+        <choose>
+            <when test="page !=null">
+                limit #{page.start},#{page.end}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+
     </select>
 
     <select id="getSellerOrder" resultMap="orderMap">
       SELECT * FROM t_order WHERE id in(
         SELECT order_id FROM t_order_goods WHERE goods_id IN (
         SELECT id FROM t_goods WHERE user_id=#{userId})
-            )
+            ) ORDER BY order_time DESC
     </select>
 </mapper>

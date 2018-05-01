@@ -19,6 +19,12 @@ public class KafkaConsumerTest extends Thread{
         while (true)
         {
            List<KafkaMsg> list= KafkaConsumerUtils.getRowMessage("mytest");
+           if(list.size()>0)
+           {
+               System.out.println("收到消息");
+               System.out.println(list);
+           }
+
         }
     }
 }

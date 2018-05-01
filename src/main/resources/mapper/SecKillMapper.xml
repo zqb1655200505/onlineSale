@@ -83,10 +83,21 @@
         <if test="seckillBeginTime != null">
             ,seckill_begin_time = #{seckillBeginTime}
         </if>
+        <if test="seckillEndTime != null">
+            ,seckill_end_time = #{seckillEndTime}
+        </if>
         WHERE id = #{id}
     </update>
 
     <select id="getSecKillGoodsPrice" resultType="java.lang.Double">
         SELECT seckill_price FROM t_seckill WHERE goods_id=#{goodsId} AND delete_flag=1 limit 1
     </select>
+
+    <select id="getCurrentSecKill" resultMap="secKillMap">
+        SELECT * FROM t_seckill WHERE seckill_begin_time &lt; #{now} AND seckill_end_time &gt; #{now} AND delete_flag=1
+    </select>
+
+    <update id="updateSecKillStatusToRemove">
+        UPDATE UPDATE t_seckill SET delete_flag=0 WHERE id=#{id}
+    </update>
 </mapper>

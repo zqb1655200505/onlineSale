@@ -4,6 +4,7 @@ import com.zqb.main.entity.Seckill;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,4 +27,8 @@ public interface SecKillDao {
     int updateByPrimaryKey(Seckill seckill);
 
     double getSecKillGoodsPrice(@Param("goodsId") String goodsId);
+
+    List<Seckill> getCurrentSecKill(Date now);
+
+    int updateSecKillStatusToRemove(Seckill seckill);
 }

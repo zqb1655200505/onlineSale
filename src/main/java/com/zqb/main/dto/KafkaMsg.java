@@ -5,6 +5,7 @@ package com.zqb.main.dto;
  */
 public class KafkaMsg {
 
+
     private long offset;
 
     private int partition;

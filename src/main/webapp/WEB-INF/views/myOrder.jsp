@@ -18,6 +18,14 @@
     <link href="<%=basePath%>/static/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="<%=basePath%>/static/iview/styles/iview.css" rel="stylesheet" type="text/css"/>
     <link href="<%=basePath%>/static/css/header.css" rel="stylesheet" type="text/css"/>
+    <style>
+        h4{
+            font-weight: bolder;
+        }
+        p{
+            font-size: 15px;
+        }
+    </style>
 </head>
 <body>
 <div class="layout" v-cloak id="app">
@@ -122,11 +130,11 @@
                                         </Checkbox>
                                     </i-col>
                                     <i-col span="4">
-                                        商品数目
+                                        商品数目(个)
                                     </i-col>
 
                                     <i-col span="4">
-                                        商品总价
+                                        商品总价(元)
                                     </i-col>
 
                                     <i-col span="7">
@@ -146,11 +154,11 @@
                                         <td style="width:17%;line-height: 40px;">{{item.orderPrice}}</td>
                                         <td style="width:29%;line-height: 40px;">{{datetimeFormatFromLong(item.orderTime)}}</td>
                                         <td style="width:29%;line-height: 40px;">
-                                            <a @click="edit(item.id)">
+                                            <a @click="showDetail(item.id)">
                                                 <Icon type="edit"></Icon> 订单详情
                                             </a>
                                             &nbsp;
-                                            <a @click="remove(item)">
+                                            <a @click="del(item.id)">
                                                 <Icon type="android-delete"></Icon> 删除
                                             </a>
                                         </td>
@@ -158,6 +166,12 @@
                                 </tbody>
                             </table>
                         </Row>
+
+                        <Page :current="page.no" :total="page.total" :page-size="page.size"
+                              show-total show-sizer show-elevator style="text-align: right;" placement="top"
+                              :page-size-opts="[10,25,50]" @on-change="changePage($event)"
+                              @on-page-size-change="changePageSize($event)">
+                        </Page>
                     </div>
                 </i-col>
             </Row>
@@ -185,6 +199,12 @@
                 allChecked:false,
                 list:[],
             },
+
+            page : {
+                no: 1,
+                total: 10,
+                size: parseInt(cookie("pageSize")) || 10,
+            },
         }
     });
 
@@ -206,6 +226,23 @@
     });
 
 
+    //改变每页数量
+    function changePageSize(pageSize) {
+        cookie("pageSize", pageSize);
+        app.page.size=pageSize;
+        refresh();
+    }
+
+
+    //切换页面
+    function changePage(pageNo) {
+        if(pageNo != null)
+            app.page.no = pageNo;
+        refresh();
+    }
+
+
+
     //全选事件
     function checkAll() {
         app.viewModel.list.forEach(function (item) {
@@ -222,25 +259,39 @@
         });
 
         if (list.length == 0) {
-            app.$Message.error('请选择需移除商品！');
+            app.$Message.error('请选择需移除的购买记录！');
             return;
         }
 
         app.$Modal.confirm({
-            title: '提示信息',
-            content: '确定要将所选商品从购物车移除吗？',
+            content: "<div style='margin-top: -16px;'><h4>移除记录</h4></div><br><p>确定要将所选购买记录移除？</p>",
             loading: true,
             onOk: function () {
-
+                app.$Modal.remove();
             }
         });
     }
     
     function refresh() {
-        ajaxGet("/onlineSale/myOrder/getMyOrder",function (res) {
-            console.log(res);
-            app.viewModel.list=res.data;
+        ajaxGet("/onlineSale/myOrder/getMyOrder?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys),
+            function (res) {
+                app.viewModel.list=res.data;
         },null,false);
+    }
+
+    function showDetail(id) {
+        ajaxGet("/onlineSale/myOrder/getOrderDetail?orderId="+id,function (res) {
+
+        },null,false);
+    }
+    function del(id) {
+        app.$Modal.confirm({
+            content: "<div style='margin-top: -16px;'><h4>移除记录</h4></div><br><p>确定要将该购买记录移除？</p>",
+            loading: true,
+            onOk: function () {
+                app.$Modal.remove();
+            }
+        });
     }
 </script>
 </body>
