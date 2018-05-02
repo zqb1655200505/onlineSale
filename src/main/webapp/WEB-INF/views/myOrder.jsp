@@ -102,7 +102,7 @@
                         </Row>
 
                         <Row style="margin-top: -15px;">
-                            <table class="table table-hover table-bordered table-condensed"  >
+                            <table class="table table-hover table-bordered table-condensed" >
                                 <%--<thead>--%>
                                     <%--<tr style="font-size: 15px;">--%>
                                         <%--<th style="width: 50px;">--%>
