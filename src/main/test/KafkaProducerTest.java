@@ -13,7 +13,7 @@ public class KafkaProducerTest {
         String line = scanner.nextLine();
         while(!line.equals("exit"))
         {
-            KafkaProducerUtils.senMsg("mytest",line);
+            KafkaProducerUtils.senStrMsg("mytest",line);
             line = scanner.nextLine();
         }
     }

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
+
 import static org.junit.Assert.*;
 
 /**
@@ -39,6 +41,12 @@ public class SecKillDaoTest {
     public void getSecKillGoodsPrice()
     {
         System.out.println(secKillDao.getSecKillGoodsPrice("437f12bfcf0e4943a409692c857857f2"));
+    }
+
+    @Test
+    public void getCurrentSecKill()
+    {
+        System.out.println(secKillDao.getCurrentSecKill(new Date()));
     }
 
 }

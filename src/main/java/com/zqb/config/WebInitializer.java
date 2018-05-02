@@ -1,5 +1,7 @@
 package com.zqb.config;
 
+
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.ServletContext;
@@ -31,5 +33,6 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
         servletContext.addListener(new SessionListener());
+        servletContext.addListener(RequestContextListener.class);
     }
 }

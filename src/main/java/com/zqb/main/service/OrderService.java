@@ -122,9 +122,15 @@ public class OrderService {
     }
 
 
-    public List<Order> getConsumerOrder(User user)
+    public List<Order> getConsumerOrder(Order order)
     {
-        return orderDao.getOrderByBuyer(user.getId());
+        return orderDao.getOrderByBuyer(order);
+    }
+
+
+    public List<OrderGoods> getOrderDetail(String orderId)
+    {
+        return orderGoodsDao.getListByOrderId(orderId);
     }
 
 }

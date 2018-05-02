@@ -4,17 +4,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zqb.main.dto.AjaxMessage;
 import com.zqb.main.dto.MsgType;
+import com.zqb.main.dto.Page;
 import com.zqb.main.entity.Order;
 import com.zqb.main.entity.OrderGoods;
 import com.zqb.main.entity.User;
 import com.zqb.main.service.OrderService;
+import com.zqb.main.utils.CheckSQLStrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -62,9 +61,30 @@ public class OrderController {
 
     @RequestMapping(value = "/getMyOrder",method = RequestMethod.GET)
     @ResponseBody
-    public Object getMyOrder(HttpServletRequest request,HttpSession session)
+    public Object getMyOrder(HttpServletRequest request,
+                             HttpSession session,
+                             @RequestParam("pageNo") int pageNo,
+                             @RequestParam("pageSize") int pageSize,
+                             @RequestParam("keys") String keys)
     {
+        if(keys != null && !keys.equals("")){
+            if(CheckSQLStrUtils.sql_inj(keys)){
+                return new AjaxMessage().Set(MsgType.Error, "请勿输入非法字符！",null);
+            }
+        }
+        Page<Order> page = new Page<Order>(pageNo, pageSize);
+        page.setFuncName("changePage");
         User user= (User) session.getAttribute("userSession");
-        return new AjaxMessage().Set(MsgType.Success,orderService.getConsumerOrder(user));
+        Order order=new Order();
+        order.setBuyer(user);
+        order.setPage(page);
+        return new AjaxMessage().Set(MsgType.Success,orderService.getConsumerOrder(order));
+    }
+
+    @RequestMapping(value = "/getOrderDetail",method = RequestMethod.GET)
+    @ResponseBody
+    public Object getOrderDetail(@RequestParam("orderId") String orderId)
+    {
+        return new AjaxMessage().Set(MsgType.Success,orderService.getOrderDetail(orderId));
     }
 }

@@ -29,7 +29,7 @@ public class KafkaProducerUtils {
 
 
     //不要key，key的作用是选择分区时hash(key)%partitionNum选择分区，未设置则按顺序选择分区，平均分发到所有分区
-    public static void senMsg(String topic,String msg)
+    public static void senStrMsg(String topic,String msg)
     {
         ProducerRecord<String, String> rec = new ProducerRecord<String, String>(topic,msg);
         producer.send(rec, new Callback() {
@@ -39,6 +39,14 @@ public class KafkaProducerUtils {
             }
         });
     }
+
+    public static void senObjMsg(String topic,Object msg)
+    {
+        ProducerRecord<String, Object> rec = new ProducerRecord<String, Object>(topic,msg);
+        producer.send(rec);
+    }
+
+
 
     public static void close()
     {

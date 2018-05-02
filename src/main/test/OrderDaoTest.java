@@ -21,7 +21,7 @@ public class OrderDaoTest {
 
     @Test
     public void getOrderByBuyer() throws Exception {
-        System.out.println(orderDao.getOrderByBuyer("c1409d9c3b794b91867144e2aba05304"));
+        //System.out.println(orderDao.getOrderByBuyer("c1409d9c3b794b91867144e2aba05304"));
     }
 
     @Test

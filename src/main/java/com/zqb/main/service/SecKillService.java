@@ -7,6 +7,8 @@ import com.zqb.main.entity.Seckill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +23,14 @@ public class SecKillService {
     public Object add(Seckill seckill)
     {
         seckill.preInsert();
+
+        //默认秒杀时长为1小时
+        Date end=seckill.getSeckillBeginTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(end);
+        cal.add(Calendar.HOUR, 1);// 24小时制
+        end = cal.getTime();
+        seckill.setSeckillEndTime(end);
         if(secKillDao.add(seckill)>0)
         {
             return new AjaxMessage().Set(MsgType.Success,"添加秒杀商品成功",null);
@@ -51,6 +61,14 @@ public class SecKillService {
 
     public Object updateByPrimaryKey(Seckill seckill)
     {
+        //默认秒杀时长为1小时
+        Date end=seckill.getSeckillBeginTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(end);
+        cal.add(Calendar.HOUR, 1);// 24小时制
+        end = cal.getTime();
+        seckill.setSeckillEndTime(end);
+
         if(secKillDao.updateByPrimaryKey(seckill)>0)
         {
             return new AjaxMessage().Set(MsgType.Success,"修改秒杀商品成功",null);
@@ -60,4 +78,7 @@ public class SecKillService {
             return new AjaxMessage().Set(MsgType.Error,"修改秒杀商品失败",null);
         }
     }
+
+
+
 }

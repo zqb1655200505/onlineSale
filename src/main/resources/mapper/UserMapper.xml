@@ -27,4 +27,9 @@
     <select id="getUserByNameAndPwd" resultType="user">
         SELECT * FROM t_user WHERE user_name=#{userName} AND user_password=#{userPassword}
     </select>
+
+
+    <select id="getByPrimaryKey" resultType="user">
+        SELECT * FROM t_user WHERE id=#{userId} limit 1
+    </select>
 </mapper>

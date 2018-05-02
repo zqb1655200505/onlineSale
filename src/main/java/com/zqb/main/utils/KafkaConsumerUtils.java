@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.protocol.types.Field;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class KafkaConsumerUtils {
     public static List<KafkaMsg> getRowMessage(String topic)
     {
         consumer.subscribe(Arrays.asList(topic));
-        return consume();
+        return consumeStrVal();
     }
 
     public static List<KafkaMsg> getRowMessage(String topic,long offset)
@@ -63,18 +64,17 @@ public class KafkaConsumerUtils {
         //consumer.seekToBeginning(Arrays.asList(new TopicPartition(topic, 0)));//不改变当前offset
         consumer.seek(new TopicPartition(topic,0),offset);
         //consumer.commitSync();
-        return consume();
+        return consumeStrVal();
 
     }
 
 
-    private static List<KafkaMsg> consume()
+    private static List<KafkaMsg> consumeStrVal()
     {
         List<KafkaMsg> list=new ArrayList<KafkaMsg>();
         ConsumerRecords<String, String> records = consumer.poll(100);
         for (ConsumerRecord<String, String> record : records)
         {
-            System.out.println(record.toString());
             KafkaMsg msg=new KafkaMsg();
             msg.setTimestamp(record.timestamp());
             msg.setOffset(record.offset());
@@ -90,6 +90,8 @@ public class KafkaConsumerUtils {
         }
         return list;
     }
+
+
     public static void close()
     {
         consumer.close();

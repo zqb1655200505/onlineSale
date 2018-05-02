@@ -26,4 +26,8 @@
         #{deleteFlag}
         )
     </insert>
+
+    <select id="getListByOrderId" resultMap="orderGoodsMap">
+        SELECT * FROM t_order_goods WHERE order_id=#{orderId}
+    </select>
 </mapper>

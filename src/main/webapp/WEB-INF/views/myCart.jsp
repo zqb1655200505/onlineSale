@@ -180,7 +180,8 @@
                         </i-col>
                     </Row>
 
-                    <Row style="height: 50px;margin-top: 15px;border: 1px solid #d2d2d2;font-size: 14px;">
+
+                    <Row style="height: 50px;margin-top: 10px;border: 1px solid #d2d2d2;font-size: 14px;">
                         <i-col span="2">
                             <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;margin-top: 18px;">
                                 &nbsp;&nbsp;全选
@@ -227,6 +228,12 @@
                 list:[],
             },
 
+            page : {
+                no: 1,
+                total: 20,
+                size: parseInt(cookie("pageSize")) || 5,
+            },
+
             chooseNum:0,
 
             totalPrice:0,
@@ -268,8 +275,7 @@
         }
 
         app.$Modal.confirm({
-            title: '提示信息',
-            content: '确定要将所选商品从购物车移除吗？',
+            content: "<div style='margin-top: -16px;'><h2>移除商品</h2></div><br><p>确认将所选商品从购物车移除？</p>",
             loading: true,
             onOk: function () {
                 for(var i=0;i<list.length;i++)
@@ -286,7 +292,8 @@
         var itemNumList=cookie("itemNumList")||"";
         if(cartGoodsIdList!="")
         {
-            ajaxGet("/onlineSale/myCart/getCartGoods?idList="+cartGoodsIdList,function (res) {
+            ajaxGet("/onlineSale/myCart/getCartGoods?idList="+cartGoodsIdList+"&pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys),
+                function (res) {
                 app.viewModel.list=res.data;
             },null,false);
         }
@@ -313,6 +320,7 @@
     });
 
 
+    //从cookie获取该商品数目
     function getGoodsNumber(id) {
         var cartGoodsIdList=cookie("cartGoodsIdList")||"";
         var itemNumList=cookie("itemNumList")||"";
@@ -330,6 +338,7 @@
         return numList[index];
     }
 
+    //商品项发生变化时触发
     function itemNumChange(value,item)
     {
         //更新cookie
@@ -380,6 +389,7 @@
     }
 
 
+    //复选框勾选状态发生改变时触发
     function itemStatusChange(status,item) {
         if(status)
         {
@@ -390,6 +400,7 @@
             app.totalPrice=app.totalPrice-getGoodsNumber(item.id)*item.goodsPrice;
         }
     }
+
 
     function removeFromCookie(item) {
 
@@ -431,7 +442,7 @@
 
     function removeConfirm(item) {
         app.$Modal.confirm({
-            content: "<div style='margin-top: -16px;'><h2>删除商品</h2><br><p>确认将商品 <span style='color: red;'>"+item.goodsName+"</span> 从购物车移除吗？</p><div>",
+            content: "<div style='margin-top: -16px;'><h3>移除商品</h3><br><p>确认将商品 <span style='color: red;'>"+item.goodsName+"</span> 从购物车移除吗？</p><div>",
             loading: true,
             closable:true,
             onOk: function () {
@@ -442,6 +453,8 @@
         });
     }
 
+
+    //去结算
     function gotoSettlement() {
         var flag = false;
         var idList=[];
@@ -486,8 +499,9 @@
                             });
                             app.$Modal.remove();
                             setTimeout(function () {
-                                refresh();
-                            },100);
+                                window.location.href="/onlineSale/myOrder/";
+                            },1000);
+
                         }
 
                     },null,false);
@@ -508,6 +522,25 @@
             form.submit();//表单提交
         }
     }
+
+
+
+    //改变每页数量
+    function changePageSize(pageSize) {
+        cookie("pageSize", pageSize);
+        app.page.size=pageSize;
+        refresh();
+    }
+
+
+    //切换页面
+    function changePage(pageNo) {
+        if(pageNo != null)
+            app.page.no = pageNo;
+        refresh();
+    }
+
+
 </script>
 </body>
 </html>

@@ -63,4 +63,10 @@ public class UserService {
         User user= (User) session.getAttribute("userSession");
         return user;
     }
+
+
+    public User getByPrimaryKey(String userId)
+    {
+        return userDao.getByPrimaryKey(userId);
+    }
 }

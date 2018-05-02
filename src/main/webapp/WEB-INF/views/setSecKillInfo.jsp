@@ -100,11 +100,11 @@
                 if (value === '') {
                     callback(new Error('秒杀数目不能为空'));
                 }
-                else if(value<0)
+                else if(Number(value)<0)
                 {
                     callback(new Error('秒杀数目不能小于0!'));
                 }
-                else if (value > app.seckill.goods.goodsNum) {
+                else if (Number(value) > Number(app.seckill.goods.goodsNum)) {
                     callback(new Error('秒杀数目不能高于商品余量!'));
                 } else {
                     callback();

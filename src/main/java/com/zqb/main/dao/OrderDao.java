@@ -17,7 +17,7 @@ public interface OrderDao {
 
     Order getByPrimaryKey(@Param("id") String id);
 
-    List<Order> getOrderByBuyer(@Param("userId") String userId);
+    List<Order> getOrderByBuyer(Order order);
 
     List<Order> getSellerOrder(@Param("userId") String userId);
 }

@@ -23,4 +23,6 @@ public interface UserDao {
 
     User getUserByNameAndPwd(@Param("userName") String userName,
                              @Param("userPassword") String userPassword);
+
+    User getByPrimaryKey(@Param("userId") String userId);
 }
