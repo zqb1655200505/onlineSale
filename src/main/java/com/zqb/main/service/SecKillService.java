@@ -80,5 +80,13 @@ public class SecKillService {
     }
 
 
+    public Object changeStatus(String id,boolean status)
+    {
+        if(secKillDao.changeStatus(id,status)>0)
+        {
+            return new AjaxMessage().Set(MsgType.Success,"秒杀商品状态修改成功",null);
+        }
+        return new AjaxMessage().Set(MsgType.Error,"秒杀商品状态修改失败",null);
+    }
 
 }

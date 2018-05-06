@@ -14,7 +14,7 @@
     <style type="text/css">
         .demo-carousel
         {
-            height: 400px;
+            height: 500px;
             text-align: center;
             color: #fff;
             font-size: 20px;
@@ -132,7 +132,7 @@
         <Content class="layout-content-center">
             <Row v-if="hasSecKillGoods">
                 <i-col offset="3" span="5">
-                    <div style="height: 400px;background-color: #444965;">
+                    <div style="height: 500px;background-color: #444965;">
                         <a class="sk_hd_lk" >
                             <div class="sk_tit">秒杀进行中ing</div>
                             <div class="sk_subtit">FLASH DEALS</div>

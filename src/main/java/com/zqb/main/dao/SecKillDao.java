@@ -31,4 +31,7 @@ public interface SecKillDao {
     List<Seckill> getCurrentSecKill(Date now);
 
     int updateSecKillStatusToRemove(Seckill seckill);
+
+    int changeStatus(@Param("secKillId") String secKillId,
+                     @Param("status") boolean status);
 }

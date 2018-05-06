@@ -226,6 +226,14 @@ public class StoreController {
     }
 
 
+    @RequestMapping(value = "changeSecKillGoodsStatus",method = RequestMethod.GET)
+    @ResponseBody
+    public Object changeSecKillGoodsStatus(@RequestParam("id") String id,
+                                           @RequestParam("status") boolean status)
+    {
+        return secKillService.changeStatus(id,status);
+    }
+
     @RequestMapping(value = "/secKillForm")
     public String secKillForm(Model model,HttpSession session,HttpServletRequest request)
     {

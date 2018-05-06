@@ -113,32 +113,36 @@
                             </div>
 
 
-                            <table class="table table-hover table-bordered table-condensed" style="margin-top: 10px;" >
+                            <table class="table table-hover table-bordered table-condensed" style="margin-top: 10px;line-height: 35px;" >
                                 <thead>
                                 <tr style="font-size: 15px;">
                                     <th style="width: 50px;">
-                                        <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;">
+                                        <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;margin-top: -5px;">
                                         </Checkbox>
                                     </th>
-                                    <th>商品名称</th>
-                                    <th>秒杀数量</th>
-                                    <th>秒杀价格(元)</th>
-                                    <th>商品原价(元)</th>
-                                    <th>开始秒杀时间</th>
-                                    <th>操作</th>
+                                    <th style="line-height: 40px;">商品名称</th>
+                                    <th style="line-height: 40px;">秒杀数量</th>
+                                    <th style="line-height: 40px;">秒杀价格(元)</th>
+                                    <th style="line-height: 40px;">商品原价(元)</th>
+                                    <th style="line-height: 40px;">开始秒杀时间</th>
+                                    <th style="line-height: 40px;">秒杀状态</th>
+                                    <th style="line-height: 40px;">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr v-for="item in viewModel.list">
                                     <td>
-                                        <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
+                                        <Checkbox v-model="item.checked" style="margin-left: 8px;margin-top: 10px;" :key="item.id"></Checkbox>
                                     </td>
-                                    <td>{{item.goods.goodsName}}</td>
-                                    <td>{{item.restNum}}</td>
-                                    <td>{{item.seckillPrice}}</td>
-                                    <td>{{item.goods.goodsPrice}}</td>
-                                    <td>{{datetimeFormatFromLong(item.seckillBeginTime)}}</td>
-                                    <td>
+                                    <td style="line-height: 40px;">{{item.goods.goodsName}}</td>
+                                    <td style="line-height: 40px;">{{item.restNum}}</td>
+                                    <td style="line-height: 40px;">{{item.seckillPrice}}</td>
+                                    <td style="line-height: 40px;">{{item.goods.goodsPrice}}</td>
+                                    <td style="line-height: 40px;">{{datetimeFormatFromLong(item.seckillBeginTime)}}</td>
+                                    <td style="line-height: 40px;">
+                                        <i-switch v-model="item.deleteFlag" @on-change="changeStatus(item.deleteFlag,item.id)" style="line-height: 40px;"></i-switch>
+                                    </td>
+                                    <td style="line-height: 40px;">
                                         <a @click="edit(item.id)">
                                             <Icon type="edit"></Icon> 编辑
                                         </a>
@@ -275,6 +279,13 @@
 
     function edit_ok(id) {
         document.getElementById(id).contentWindow.submit();
+    }
+
+    function changeStatus(status,id)
+    {
+        ajaxGet("/onlineSale/myStore/changeSecKillGoodsStatus?id="+id+"&status="+status,function (res) {
+
+        },null,false);
     }
 </script>
 </body>
