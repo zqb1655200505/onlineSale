@@ -18,12 +18,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by zqb on 2018/5/1.
+ *
  */
 
 public class DoSecKillThread extends Thread{
 
-    private static boolean flag=true;
 
+
+    private static boolean flag=true;
 
     @Autowired
     private OrderService orderService;

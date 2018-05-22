@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +20,6 @@ public class TimedTask {
     @Autowired
     private SecKillDao secKillDao;
 
-//    无法在此处获取到session，可能是多线程问题
-//    @Autowired
-//    private HttpSession session;
 
     //设置每隔1小时执行1次
     @Scheduled(cron = "0 0/10 * * * ?")//参数依次为秒，分，小时，天，月
@@ -54,12 +50,14 @@ public class TimedTask {
         System.out.println("======更新秒杀商品成功======");
         System.out.println(seckillList);
 
-        if(seckillList!=null&&seckillList.size()>0)
-        {
-            DoSecKillThread thread1=new DoSecKillThread();
-            thread1.start();
-            CurrentSecKill.setThread(thread1);
-        }
+
+        //开启消费者服务
+//        if(seckillList!=null&&seckillList.size()>0)
+//        {
+//            DoSecKillThread thread1=new DoSecKillThread();
+//            thread1.start();
+//            CurrentSecKill.setThread(thread1);
+//        }
 
     }
 

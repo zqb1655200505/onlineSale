@@ -14,10 +14,14 @@
     <style type="text/css">
         .demo-carousel
         {
-            height: 500px;
+            height: 400px;
+            width: 45%;
             text-align: center;
             color: #fff;
             font-size: 20px;
+        }
+        .single-item{
+            margin-left: 27%;
         }
 
         .goods-item-img
@@ -132,7 +136,7 @@
         <Content class="layout-content-center">
             <Row v-if="hasSecKillGoods">
                 <i-col offset="3" span="5">
-                    <div style="height: 500px;background-color: #444965;">
+                    <div style="height: 400px;background-color: #444965;">
                         <a class="sk_hd_lk" >
                             <div class="sk_tit">秒杀进行中ing</div>
                             <div class="sk_subtit">FLASH DEALS</div>
@@ -141,14 +145,49 @@
                     </div>
                 </i-col>
 
-                <i-col offset="2" span="11">
-                    <Carousel autoplay autoplay-speed="3000" loop>
-                        <Carousel-item v-for="(item,index) in seckillList">
-                            <div class="demo-carousel" @click="gotoSeckill(item)">
-                                <img :src="'<%=basePath%>'+item.goods.goodsPic" style="width: 100%;height: 100%;">
-                            </div>
-                        </Carousel-item>
+                <i-col offset="1" span="12">
+                    <Carousel autoplay autoplay-speed="30000" loop>
+                        <Carousel-item v-for="(item,index) in seckillList" v-if="index<seckillList.length&&index%2==0">
+                            <div style=" width: 100%;" >
+                                <div  class="demo-carousel" @click="gotoSeckill(item)" :class="getClass(index)">
+                                    <img :src="'<%=basePath%>'+item.goods.goodsPic" style="width: 100%;height: 85%;">
+                                    <div style="height: 60px;width: 100%;border: 1px solid grey;">
+                                        <div style="width: 50%;height: 100%;float: left;background-color: red;line-height: 60px;">
+                                            <span>￥{{item.seckillPrice}}</span>
+                                        </div>
+                                        <div style="width: 50%;height: 100%;float: right;text-decoration: line-through;color: grey;line-height: 60px;">
+                                            ￥{{item.goods.goodsPrice}}
+                                        </div>
+                                    </div>
 
+                                </div>
+
+                                <div style="margin-left:55%;margin-top:-400px;" class="demo-carousel"@click="gotoSeckill(seckillList[index+1])" v-if="index<seckillList.length-1">
+                                    <img :src="'<%=basePath%>'+seckillList[index+1].goods.goodsPic" style="width: 100%;height: 85%;">
+                                    <div style="height: 60px;width: 97%;border: 1px solid grey;">
+                                        <div style="width: 50%;height: 100%;float: left;background-color: red;line-height: 60px;margin-top: -58px;">
+                                            <span>￥{{seckillList[index+1].seckillPrice}}</span>
+                                        </div>
+                                        <div style="width: 50%;height: 100%;float: right;margin-top: -60px;text-decoration: line-through;color: grey;line-height: 60px;">
+                                            ￥{{seckillList[index+1].goods.goodsPrice}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%--<Row style="margin: 0 auto;">--%>
+                                <%--<i-col span="11">--%>
+                                    <%--<div class="demo-carousel" @click="gotoSeckill(item)">--%>
+                                        <%--<img :src="'<%=basePath%>'+item.goods.goodsPic" style="width: 100%;height: 100%;">--%>
+                                    <%--</div>--%>
+                                <%--</i-col>--%>
+
+                                <%--<i-col offset="2" span="11" v-if="index<seckillList.length-1">--%>
+                                    <%--<div class="demo-carousel" @click="gotoSeckill(seckillList[index+1])">--%>
+                                        <%--<img :src="'<%=basePath%>'+seckillList[index+1].goods.goodsPic" style="width: 100%;height: 100%;">--%>
+                                    <%--</div>--%>
+                                <%--</i-col>--%>
+                            <%--</Row>--%>
+                        </Carousel-item>
                     </Carousel>
                 </i-col>
             </Row>
@@ -272,10 +311,16 @@
         refresh();
     });
 
-    function gotoSeckill(id) {
-
+    function gotoSeckill(item) {
+        console.log(item);
+        //alert(id);
     }
 
+    function getClass(index) {
+        if(index==app.seckillList.length-1)
+            return "single-item";
+        return "";
+    }
 
 </script>
 </body>
