@@ -7,6 +7,7 @@ import com.zqb.main.dto.CurrentSecKill;
 import com.zqb.main.dto.MsgType;
 import com.zqb.main.entity.Seckill;
 import com.zqb.main.entity.User;
+import com.zqb.main.service.DoSecKillThread;
 import com.zqb.main.service.OrderService;
 import com.zqb.main.utils.KafkaProducerUtils;
 import com.zqb.main.utils.WebSocketDto;
@@ -42,7 +43,7 @@ public class SecKillController {
     {
         User user= (User) session.getAttribute("userSession");
         String goodsId=request.getParameter("goodsId");
-        List<Seckill> seckillList= CurrentSecKill.getSeckillList();
+        List<Seckill> seckillList= CurrentSecKill.seckillList;
         boolean flag=false;
         for(Seckill item:seckillList)
         {
@@ -73,22 +74,55 @@ public class SecKillController {
     @ResponseBody
     public Object getSecKillGoods(HttpServletRequest request)
     {
-        List<Seckill> list=CurrentSecKill.getSeckillList();
+        List<Seckill> list=CurrentSecKill.seckillList;
         if(list!=null)
-            return new AjaxMessage().Set(MsgType.Success,list);
+        {
+            return new AjaxMessage().Set(MsgType.Success, list);
+        }
         else
         {
             Date now=new Date();
             List<Seckill> seckillList=secKillDao.getCurrentSecKill(now);
-            if(seckillList==null)
+            if(seckillList==null||seckillList.size()==0)
             {
                 return new AjaxMessage().Set(MsgType.Error,"当前暂无秒杀商品",null);
             }
             else
             {
-                CurrentSecKill.setSeckillList(seckillList);
+                CurrentSecKill.seckillList=seckillList;
+                System.out.println(seckillList);
+                CurrentSecKill.secKillEndTime = seckillList.get(0).getSeckillEndTime().getTime();
+
+                //开启消费者服务
+//                DoSecKillThread thread=CurrentSecKill.thread;
+//                if(thread!=null)
+//                {
+//                    thread.setFlag(false);
+//                }
+//                DoSecKillThread thread1=new DoSecKillThread();
+//                thread1.start();
+//                CurrentSecKill.thread=thread1;
+
                 return new AjaxMessage().Set(MsgType.Success,seckillList);
             }
         }
+    }
+
+
+    @RequestMapping("/getSecKillTime")
+    @ResponseBody
+    public Object getSecKillTime(HttpServletRequest request)
+    {
+        if(CurrentSecKill.secKillEndTime!=-1)
+        {
+            return new AjaxMessage().Set(MsgType.Success,CurrentSecKill.secKillEndTime);
+        }
+        return new AjaxMessage().Set(MsgType.Error,null);
+    }
+
+    @RequestMapping("/secKillList")
+    public Object secKillList()
+    {
+        return "secKillList";
     }
 }

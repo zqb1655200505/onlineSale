@@ -2,6 +2,7 @@ package com.zqb.main.service;
 
 import com.zqb.main.dao.SecKillDao;
 import com.zqb.main.dto.AjaxMessage;
+import com.zqb.main.dto.CurrentSecKill;
 import com.zqb.main.dto.MsgType;
 import com.zqb.main.entity.Seckill;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,19 @@ public class SecKillService {
             return new AjaxMessage().Set(MsgType.Success,"秒杀商品状态修改成功",null);
         }
         return new AjaxMessage().Set(MsgType.Error,"秒杀商品状态修改失败",null);
+    }
+
+
+    public Seckill getSecKillFromCache(String id)
+    {
+        for(Seckill item: CurrentSecKill.seckillList)
+        {
+            if(item.getId().equals(id))
+            {
+                return item;
+            }
+        }
+        return null;
     }
 
 }

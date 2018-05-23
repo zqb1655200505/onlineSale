@@ -11,25 +11,10 @@ import java.util.List;
  */
 public class CurrentSecKill {
 
-     private static List<Seckill> seckillList=null;
+    public static List<Seckill> seckillList=null;
 
-    private static DoSecKillThread thread=null;
+    public static DoSecKillThread thread=null;
 
-    public static void setSeckillList(List<Seckill> list)
-    {
-        seckillList=list;
-    }
+    public static long secKillEndTime=-1L;
 
-    public static List<Seckill> getSeckillList()
-    {
-        return seckillList;
-    }
-
-    public static DoSecKillThread getThread() {
-        return thread;
-    }
-
-    public static void setThread(DoSecKillThread thread) {
-        CurrentSecKill.thread = thread;
-    }
 }

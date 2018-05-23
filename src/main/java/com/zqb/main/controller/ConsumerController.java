@@ -75,9 +75,21 @@ public class ConsumerController {
 
 
     @RequestMapping(value = "/goodsDetail")
-    public String goodsDetail(Goods goods,Model model)
+    public String goodsDetail(HttpServletRequest request,Model model)
     {
-        model.addAttribute("goods",goods);
+        String isSecKill=request.getParameter("isSecKill");
+        String id=request.getParameter("id");
+        if(isSecKill.equals("true"))
+        {
+            model.addAttribute("isSecKill","true");
+            model.addAttribute("secKillGoods",secKillService.getSecKillFromCache(id));
+        }
+        else
+        {
+            model.addAttribute("isSecKill","false");
+            model.addAttribute("goods",get(id));
+        }
+
         return "goodsDetail";
     }
 

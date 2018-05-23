@@ -4,7 +4,9 @@
     String basePath = request.getScheme() + "://"
             + request.getServerName() + ":" + request.getServerPort()
             + path;
-    String baseUrl="/onlineSale/consumer/goodsDetail?id=";
+    String goodsDetail="/onlineSale/consumer/goodsDetail?isSecKill=false&id=";
+    String secKillGoodsDetail="/onlineSale/consumer/goodsDetail?isSecKill=true&id=";
+    String secKillList="/onlineSale/secKill/secKillList";
 %>
 <html>
 <head>
@@ -18,6 +20,7 @@
             width: 45%;
             text-align: center;
             color: #fff;
+            cursor: pointer;
             font-size: 20px;
         }
         .single-item{
@@ -54,11 +57,33 @@
         .sk_subtit{
             width: 100%;
             text-align: center;
-            color: #f19999;
             color: rgba(255, 255, 255, 0.5);
             font-size: 25px;
             margin-top: 30px;
             margin-bottom: 20px;
+        }
+
+        .sk_desc
+        {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .sk_cd
+        {
+            width: 100%;
+            margin: 0 auto;
+
+        }
+        .cd_item {
+            text-align: center;
+            background-color: #1c2438;
+        }
+        .cd_item_txt {
+            position: relative;
+            line-height: 50px;
+            font-weight: bold;
+            font-size: 20px;
         }
     </style>
 
@@ -134,19 +159,33 @@
         </Header>
 
         <Content class="layout-content-center">
-            <Row v-if="hasSecKillGoods">
+            <%--v-if="hasSecKillGoods"--%>
+            <Row >
                 <i-col offset="3" span="5">
                     <div style="height: 400px;background-color: #444965;">
-                        <a class="sk_hd_lk" >
+                        <a class="sk_hd_lk" :href="'<%=secKillList%>'">
                             <div class="sk_tit">秒杀进行中ing</div>
                             <div class="sk_subtit">FLASH DEALS</div>
                             <Icon type="flash" style="font-size: 50px;"></Icon>
+                            <div class="sk_desc">本场距离结束还剩</div>
+                            <Row>
+                                <i-col span="4" offset="5" class="cd_item">
+                                    <span class="cd_item_txt">{{hour}}</span>
+                                </i-col>
+                                <i-col span="4" offset="1" class="cd_item">
+                                    <span class="cd_item_txt">{{minute}}</span>
+                                </i-col>
+
+                                <i-col span="4" offset="1" class="cd_item">
+                                    <span class="cd_item_txt">{{second}}</span>
+                                </i-col>
+                            </Row>
                         </a>
                     </div>
                 </i-col>
 
                 <i-col offset="1" span="12">
-                    <Carousel autoplay autoplay-speed="30000" loop>
+                    <Carousel autoplay autoplay-speed="5000" loop>
                         <Carousel-item v-for="(item,index) in seckillList" v-if="index<seckillList.length&&index%2==0">
                             <div style=" width: 100%;" >
                                 <div  class="demo-carousel" @click="gotoSeckill(item)" :class="getClass(index)">
@@ -164,7 +203,7 @@
 
                                 <div style="margin-left:55%;margin-top:-400px;" class="demo-carousel"@click="gotoSeckill(seckillList[index+1])" v-if="index<seckillList.length-1">
                                     <img :src="'<%=basePath%>'+seckillList[index+1].goods.goodsPic" style="width: 100%;height: 85%;">
-                                    <div style="height: 60px;width: 97%;border: 1px solid grey;">
+                                    <div style="height: 60px;width: 98%;border: 1px solid grey;">
                                         <div style="width: 50%;height: 100%;float: left;background-color: red;line-height: 60px;margin-top: -58px;">
                                             <span>￥{{seckillList[index+1].seckillPrice}}</span>
                                         </div>
@@ -174,19 +213,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <%--<Row style="margin: 0 auto;">--%>
-                                <%--<i-col span="11">--%>
-                                    <%--<div class="demo-carousel" @click="gotoSeckill(item)">--%>
-                                        <%--<img :src="'<%=basePath%>'+item.goods.goodsPic" style="width: 100%;height: 100%;">--%>
-                                    <%--</div>--%>
-                                <%--</i-col>--%>
 
-                                <%--<i-col offset="2" span="11" v-if="index<seckillList.length-1">--%>
-                                    <%--<div class="demo-carousel" @click="gotoSeckill(seckillList[index+1])">--%>
-                                        <%--<img :src="'<%=basePath%>'+seckillList[index+1].goods.goodsPic" style="width: 100%;height: 100%;">--%>
-                                    <%--</div>--%>
-                                <%--</i-col>--%>
-                            <%--</Row>--%>
                         </Carousel-item>
                     </Carousel>
                 </i-col>
@@ -195,19 +222,19 @@
             <Row :gutter="64">
                 <i-col v-for="(item,index) in goodsList" v-if="index%4==0" span="5" offset="2" style="margin-top: 30px;">
                     <Card>
-                        <a :href="'<%=baseUrl%>'+item.id" target="_blank"><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
+                        <a :href="'<%=goodsDetail%>'+item.id" target="_blank"><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
                         <div class="goods-item-description">
                             <p style="color: red;font-size: 22px;">￥{{item.goodsPrice}}</p>
-                            <a :href="'<%=baseUrl%>'+item.id" target="_blank">{{item.goodsName}}</a>
+                            <a :href="'<%=goodsDetail%>'+item.id" target="_blank">{{item.goodsName}}</a>
                         </div>
                     </Card>
                 </i-col>
                 <i-col v-else span="5" style="margin-top: 30px;">
                     <Card>
-                        <a :href="'<%=baseUrl%>'+item.id" target="_blank"><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
+                        <a :href="'<%=goodsDetail%>'+item.id" target="_blank"><img :src="'<%=basePath%>'+item.goodsPic" class="goods-item-img"></a>
                         <div class="goods-item-description">
                             <p style="color: red;font-size: 22px;">￥{{item.goodsPrice}}</p>
-                            <a :href="'<%=baseUrl%>'+item.id" target="_blank">{{item.goodsName}}</a>
+                            <a :href="'<%=goodsDetail%>'+item.id" target="_blank">{{item.goodsName}}</a>
                         </div>
                     </Card>
                 </i-col>
@@ -255,8 +282,11 @@
                 size: parseInt(cookie("pageSize")) || 8,
             },
 
+            hour:"00",
+            minute:"00",
+            second:"00",
 
-            hasSecKillGoods:true,
+            hasSecKillGoods:false,
         }
     });
 
@@ -285,13 +315,19 @@
 
 
         ajaxGet("/onlineSale/secKill/getSecKillGoods"
-            ,function (res) {
-                app.seckillList=res.data;
-                if(app.seckillList.length==null||app.seckillList.length==0)
+            ,function (res)
+            {
+                if(res.code=="success")
                 {
-                    app.hasSecKillGoods=false;
+                    app.hasSecKillGoods=true;
+                    app.seckillList=res.data;
+                    if(app.seckillList.length==null||app.seckillList.length==0)
+                    {
+                        app.hasSecKillGoods=false;
+                    }
                 }
             },null,false);
+        getRemainTime();
 
     }
 
@@ -312,8 +348,8 @@
     });
 
     function gotoSeckill(item) {
-        console.log(item);
-        //alert(id);
+        alert("<%=secKillGoodsDetail%>"+item.id);
+        window.location.href="<%=secKillGoodsDetail%>"+item.id;
     }
 
     function getClass(index) {
@@ -322,6 +358,47 @@
         return "";
     }
 
+    function getRemainTime() {
+        ajaxGet("/onlineSale/secKill/getSecKillTime",function (res) {
+            if(res.code==="success")
+            {
+                var date = new Date();
+                date.setTime(res.data);
+                var date1=new Date();    //当前时间
+                var date3=date.getTime()-date1.getTime();  //时间差的毫秒数
+                timer(parseInt(date3/1000));
+            }
+        },null,false);
+    }
+
+
+    function timer(intDiff)
+    {
+        window.setInterval(function() {
+            var day = 0,
+                hour = 0,
+                minute = 0,
+                second = 0; //时间默认值
+            if (intDiff > 0)
+            {
+                hour = Math.floor(intDiff / (60 * 60)) ;
+                minute = Math.floor(intDiff / 60) -  (hour * 60);
+                second = Math.floor(intDiff) -  (hour * 60 * 60) - (minute * 60);
+            }
+            if(hour<=9)
+                hour = '0' + hour;
+            if (minute <= 9)
+                minute = '0' + minute;
+            if (second <= 9)
+                second = '0' + second;
+
+            app.hour=hour;
+            app.minute=minute;
+            app.second=second;
+
+            intDiff--;
+        }, 1000);
+    }
 </script>
 </body>
 </html>

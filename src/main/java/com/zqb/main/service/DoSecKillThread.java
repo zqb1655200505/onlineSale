@@ -50,7 +50,7 @@ public class DoSecKillThread extends Thread{
                     Lock lock = new ReentrantLock();
                     lock.lock(); //注意这个地方,lock会锁住此部分代码区
 //=====================================================================================
-                    List<Seckill> seckills= CurrentSecKill.getSeckillList();
+                    List<Seckill> seckills= CurrentSecKill.seckillList;
                     for(Seckill seckill:seckills)
                     {
                         if(seckill.getGoods().getId().equals(goodsId))//秒杀商品存在

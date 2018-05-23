@@ -107,7 +107,7 @@
         <Content class="layout-content-center">
             <Row>
                 <i-col span="16" offset="4" style="min-height: 650px;">
-                    <Row>
+                    <Row v-if="isSecKill">
                         <i-col span="8">
                             <img src="<%=basePath%>${goods.goodsPic}" style="width: 100%;cursor:pointer;"/>
                         </i-col>
@@ -178,11 +178,21 @@
             isSeller:false,
             cartNum:cookie("cartGoodsNum")||0,
             purchaseNum:1,
+            isSecKill:false,
         }
     });
 
 
     $(document).ready(function () {
+        alert('${isSecKill}');
+        if('${isSecKill}'=='true')
+        {
+            app.isSecKill=true;
+        }
+        else
+        {
+            app.isSecKill=false;
+        }
         ajaxGet("/onlineSale/getLoginUserInfo",function (res) {
             if(res.code==="success")
             {
@@ -195,6 +205,7 @@
                 }
             }
         },null,false);
+
     });
 
 

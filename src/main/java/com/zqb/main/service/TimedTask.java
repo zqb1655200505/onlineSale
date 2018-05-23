@@ -26,8 +26,8 @@ public class TimedTask {
     public void getSecKillGoods()
     {
         //更新前一批秒杀商品状态
-        List<Seckill> list=CurrentSecKill.getSeckillList();
-        DoSecKillThread thread=CurrentSecKill.getThread();
+        List<Seckill> list=CurrentSecKill.seckillList;
+        DoSecKillThread thread=CurrentSecKill.thread;
         if(thread!=null)
         {
             thread.setFlag(false);
@@ -43,10 +43,18 @@ public class TimedTask {
 
         //开启新一轮秒杀
         System.out.println("======开始更新秒杀商品======");
-        CurrentSecKill.setSeckillList(null);
+        CurrentSecKill.seckillList=null;
         Date now=new Date();
         List<Seckill> seckillList=secKillDao.getCurrentSecKill(now);
-        CurrentSecKill.setSeckillList(seckillList);
+        CurrentSecKill.seckillList=seckillList;
+        if(seckillList!=null&&seckillList.size()>0)
+        {
+            CurrentSecKill.secKillEndTime = seckillList.get(0).getSeckillEndTime().getTime();
+        }
+        else
+        {
+            CurrentSecKill.secKillEndTime=-1L;
+        }
         System.out.println("======更新秒杀商品成功======");
         System.out.println(seckillList);
 
@@ -56,7 +64,7 @@ public class TimedTask {
 //        {
 //            DoSecKillThread thread1=new DoSecKillThread();
 //            thread1.start();
-//            CurrentSecKill.setThread(thread1);
+//            CurrentSecKill.thread=thread1;
 //        }
 
     }

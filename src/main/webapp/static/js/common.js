@@ -25,7 +25,7 @@ function errorMsg(msg){
  */
 function ajaxGet(url, successCallback,errorCallback,showMsg) {
 
-    showMsg = showMsg || true;
+    //showMsg = showMsg || true;
 
     //headers['CSRFToken']=$("#csrftoken").val();
     $.ajax({
