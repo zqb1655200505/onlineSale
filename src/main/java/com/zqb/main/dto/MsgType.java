@@ -24,4 +24,5 @@ public enum MsgType
     private int code;
 
     private String msgName;
+
 }

@@ -256,9 +256,6 @@
     </Layout>
 </div>
 
-<%--获取本机ip，存储在returnCitySN对象中--%>
-<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
-
 <script type="text/javascript">
     //# sourceURL=index.js
     var app = new Vue({
@@ -306,7 +303,7 @@
     };
 
     function refresh() {
-        //alert(returnCitySN["cip"]);//222.130.135.84
+
         ajaxGet("/onlineSale/consumer/getGoods?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.keys)
             ,function (res) {
                 app.goodsList=res.data.list;
@@ -347,9 +344,11 @@
         refresh();
     });
 
-    function gotoSeckill(item) {
-        alert("<%=secKillGoodsDetail%>"+item.id);
-        window.location.href="<%=secKillGoodsDetail%>"+item.id;
+    function gotoSeckill(item)
+    {
+        //alert("<%=secKillGoodsDetail%>"+item.id);
+        window.open("<%=secKillGoodsDetail%>"+item.id);
+        //window.location.href="<%=secKillGoodsDetail%>"+item.id;
     }
 
     function getClass(index) {

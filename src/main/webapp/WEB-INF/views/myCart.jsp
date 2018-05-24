@@ -11,6 +11,7 @@
     String basePath = request.getScheme() + "://"
             + request.getServerName() + ":" + request.getServerPort()
             + path;
+    String goodsDetail="/onlineSale/consumer/goodsDetail?isSecKill=false&id=";
 %>
 <html>
 <head>
@@ -153,10 +154,10 @@
                         </i-col>
                         <i-col span="11">
                             <i-col span="6">
-                                <a><img style="height: 100px;" :src="item.goodsPic"/></a>
+                                <a :href="'<%=goodsDetail%>'+item.id"><img style="height: 100px;" :src="item.goodsPic"/></a>
                             </i-col>
                             <i-col offset="1" span="17" style="padding-top: 20px;line-height: 25px;text-align: left;">
-                                <a>{{item.goodsName}}</a>
+                                <a :href="'<%=goodsDetail%>'+item.id">{{item.goodsName}}</a>
                             </i-col>
                         </i-col>
 
@@ -312,7 +313,6 @@
                 }
 
                 //登录成功，将cookie中的购物车记录加入数据库
-
             }
         },null,false);
 
@@ -516,7 +516,7 @@
             form.style.display = "none";
             var opt = document.createElement("input");
             opt.name = "redirectUrl";
-            opt.value = window.location;//"/onlineSale/myCart/";
+            opt.value = window.location;
             form.appendChild(opt);
             document.body.appendChild(form);//将表单放置在web中
             form.submit();//表单提交

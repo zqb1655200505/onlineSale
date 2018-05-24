@@ -281,7 +281,7 @@
 
     function showDetail(id) {
         ajaxGet("/onlineSale/myOrder/getOrderDetail?orderId="+id,function (res) {
-
+            console.log(res);
         },null,false);
     }
     function del(id) {

@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping("/onlineSale/secKill")
 public class SecKillController {
 
-    private static final String topic="";
+    private static final String topic="onlinesale";
 
     @Autowired
     private OrderService orderService;
@@ -59,6 +59,7 @@ public class SecKillController {
         }
 
         //WebSocketDto webSocketDto = WebSocketListen.getWebsocketMap().get(user.getId());
+
         if(user!=null&&user.getId()!=null&&goodsId.length()>0)
         {
             JSONObject json=new JSONObject();
@@ -66,7 +67,7 @@ public class SecKillController {
             json.put("goodsId",goodsId);
             KafkaProducerUtils.senStrMsg(topic,json.toJSONString());
         }
-        return new AjaxMessage().Set(MsgType.SecKillLoading,"秒杀处理中。。。",null);
+        return new AjaxMessage().Set(MsgType.SecKillLoading,null);
     }
 
 
@@ -94,14 +95,14 @@ public class SecKillController {
                 CurrentSecKill.secKillEndTime = seckillList.get(0).getSeckillEndTime().getTime();
 
                 //开启消费者服务
-//                DoSecKillThread thread=CurrentSecKill.thread;
-//                if(thread!=null)
-//                {
-//                    thread.setFlag(false);
-//                }
-//                DoSecKillThread thread1=new DoSecKillThread();
-//                thread1.start();
-//                CurrentSecKill.thread=thread1;
+                DoSecKillThread thread=CurrentSecKill.thread;
+                if(thread!=null)
+                {
+                    thread.setFlag(false);
+                }
+                DoSecKillThread thread1=new DoSecKillThread();
+                thread1.start();
+                CurrentSecKill.thread=thread1;
 
                 return new AjaxMessage().Set(MsgType.Success,seckillList);
             }

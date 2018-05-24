@@ -163,7 +163,7 @@
     function getDateTime(time) {
         var d=new Date(time);
         var year=d.getFullYear();
-        var month=d.getMonth();
+        var month=d.getMonth()+1;
         var arr=time.split(" ");
         return year+"-"+month+"-"+arr[2]+" "+arr[3];
     }

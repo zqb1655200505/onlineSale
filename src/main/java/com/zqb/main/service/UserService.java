@@ -60,8 +60,7 @@ public class UserService {
 
     public User getUserFromSession(HttpSession session)
     {
-        User user= (User) session.getAttribute("userSession");
-        return user;
+        return (User) session.getAttribute("userSession");
     }
 
 

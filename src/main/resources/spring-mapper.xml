@@ -44,6 +44,8 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
+    <!---->
+    <bean class="com.zqb.config.MyApplicationContext"/>
 
     <!-- 开启事务控制的注解支持。 如果配置的事务管理器的id就是transactionManager，这里是可以省略transaction-manager-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
