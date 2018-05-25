@@ -51,7 +51,7 @@
             width: 100%;
             text-align: center;
             font-size: 30px;
-            padding-top: 50px;
+            padding-top: 35px;
         }
 
         .sk_subtit{
@@ -160,12 +160,22 @@
 
         <Content class="layout-content-center">
             <Row v-if="hasSecKillGoods">
-                <i-col offset="3" span="5">
+
+                <i-col span="1" offset="1"  style="height: 400px;">
+                    <Row style="margin-top: 160px;">
+                        <i-button type="success" @click="testNormal()">使用传统</i-button>
+                    </Row>
+                    <Row style="margin-top: 20px;">
+                        <i-button type="warning" @click="testFramework()">使用框架</i-button>
+                    </Row>
+                </i-col>
+
+                <i-col offset="1" span="5">
                     <div style="height: 400px;background-color: #444965;">
                         <a class="sk_hd_lk" :href="'<%=secKillList%>'">
                             <div class="sk_tit">秒杀进行中ing</div>
                             <div class="sk_subtit">FLASH DEALS</div>
-                            <Icon type="flash" style="font-size: 50px;"></Icon>
+                            <Icon type="flash" style="font-size: 70px;color: #dbffa7;"></Icon>
                             <div class="sk_desc">本场距离结束还剩</div>
                             <Row>
                                 <i-col span="4" offset="5" class="cd_item">
@@ -184,7 +194,7 @@
                 </i-col>
 
                 <i-col offset="1" span="12">
-                    <Carousel autoplay autoplay-speed="50000" loop>
+                    <Carousel autoplay autoplay-speed="5000" loop>
                         <Carousel-item v-for="(item,index) in seckillList" v-if="index<seckillList.length&&index%2==0">
                             <div style=" width: 100%;" >
                                 <div  class="demo-carousel"  :class="getClass(index)">
@@ -283,6 +293,8 @@
             second:"00",
 
             hasSecKillGoods:false,
+            testNormalNum:1,
+            testFrameworkNum:1,
         }
     });
 
@@ -303,18 +315,6 @@
 
     function refresh() {
 
-        ajaxGet("/onlineSale/secKill/getSecKillTime",function (res) {
-            console.log(res);
-            if(res.code==="success")
-            {
-                var date = new Date();
-                date.setTime(res.data);
-                var date1=new Date();    //当前时间
-                var date3=date.getTime()-date1.getTime();  //时间差的毫秒数
-                timer(parseInt(date3/1000));
-            }
-        },null,false);
-
 
         ajaxGet("/onlineSale/consumer/getGoods?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.keys)
             ,function (res) {
@@ -323,6 +323,7 @@
             },null,false);
 
 
+        //获取秒杀商品
         ajaxGet("/onlineSale/secKill/getSecKillGoods"
             ,function (res)
             {
@@ -334,9 +335,22 @@
                     {
                         app.hasSecKillGoods=false;
                     }
+                    else
+                    {
+                        ajaxGet("/onlineSale/secKill/getSecKillTime",function (res) {
+                            console.log(res);
+                            if(res.code==="success")
+                            {
+                                var date = new Date();
+                                date.setTime(res.data);
+                                var date1=new Date();    //当前时间
+                                var date3=date.getTime()-date1.getTime();  //时间差的毫秒数
+                                timer(parseInt(date3/1000));
+                            }
+                        },null,false);
+                    }
                 }
             },null,false);
-
 
     }
 
@@ -395,6 +409,54 @@
 
             intDiff--;
         }, 1000);
+    }
+
+    function testNormal()
+    {
+        app.$Modal.info({
+            title: '填写测试秒杀数量',
+            content: '<Row><Input-Number :min="1" v-model="testNormalNum"></Input-Number></i-input></Row>',
+            loading: true,
+            onOk: function ()
+            {
+                var data={
+                    goodsId:app.seckillList[0].goods.id
+                };
+                for(var i=0;i<app.testNormalNum;i++)
+                {
+                    ajaxPost("/onlineSale/secKill/testNormal", data, function () {
+                        app.viewModel.allChecked = false;
+                        refresh();
+                        app.$Modal.remove();
+                    },null,false);
+                }
+
+            }
+        });
+    }
+
+    function testFramework()
+    {
+        app.$Modal.info({
+            title: '填写测试秒杀数量',
+            content: '<Row><Input-Number :min="1" v-model="testFrameworkNum"></Input-Number></i-input></Row>',
+            loading: true,
+            onOk: function ()
+            {
+                var data={
+                    goodsId:app.seckillList[0].goods.id
+                };
+                for(var i=0;i<app.testFrameworkNum;i++)
+                {
+                    ajaxPost("/onlineSale/secKill/testFramework", data, function () {
+                        app.viewModel.allChecked = false;
+                        refresh();
+                        app.$Modal.remove();
+                    },null,false);
+                }
+
+            }
+        });
     }
 </script>
 </body>

@@ -126,4 +126,21 @@ public class SecKillController {
     {
         return "secKillList";
     }
+
+    @RequestMapping("/testNormal")
+    @ResponseBody
+    public Object testNormal(HttpServletRequest request)
+    {
+        String goodsId=request.getParameter("goodsId");
+        return null;
+    }
+
+    @RequestMapping("/testFramework")
+    @ResponseBody
+    public Object testFramework(HttpServletRequest request)
+    {
+        String goodsId=request.getParameter("goodsId");
+        return null;
+    }
+
 }

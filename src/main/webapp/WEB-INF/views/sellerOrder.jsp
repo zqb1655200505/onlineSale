@@ -100,7 +100,7 @@
 
                         <div class="wrapper-sm" style="padding: 10px 15px;">
                             <div style="margin-bottom:10px;margin-top: 5px;float: left;">
-                                <i-button @click="del()" type="error" icon="minus">删除订单</i-button>
+                                <i-button @click="del()" type="warning" icon="minus">删除订单</i-button>
                             </div>
                             <div style="float: right; margin-bottom: 10px;margin-top: 5px;">
                                 <i-input placeholder="请输入查询条件" v-model="viewModel.keys" style="width: 250px"
