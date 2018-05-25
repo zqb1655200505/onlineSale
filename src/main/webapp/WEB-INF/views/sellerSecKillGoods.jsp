@@ -122,8 +122,8 @@
                                     </th>
                                     <th style="line-height: 40px;">商品名称</th>
                                     <th style="line-height: 40px;">秒杀数量</th>
-                                    <th style="line-height: 40px;">秒杀价格(元)</th>
-                                    <th style="line-height: 40px;">商品原价(元)</th>
+                                    <th style="line-height: 40px;">秒杀价格</th>
+                                    <th style="line-height: 40px;">商品原价</th>
                                     <th style="line-height: 40px;">开始秒杀时间</th>
                                     <th style="line-height: 40px;">秒杀状态</th>
                                     <th style="line-height: 40px;">操作</th>
@@ -136,8 +136,8 @@
                                     </td>
                                     <td style="line-height: 40px;">{{item.goods.goodsName}}</td>
                                     <td style="line-height: 40px;">{{item.restNum}}</td>
-                                    <td style="line-height: 40px;">{{item.seckillPrice}}</td>
-                                    <td style="line-height: 40px;">{{item.goods.goodsPrice}}</td>
+                                    <td style="line-height: 40px;">￥{{item.seckillPrice}}</td>
+                                    <td style="line-height: 40px;">￥{{item.goods.goodsPrice}}</td>
                                     <td style="line-height: 40px;">{{datetimeFormatFromLong(item.seckillBeginTime)}}</td>
                                     <td style="line-height: 40px;">
                                         <i-switch v-model="item.deleteFlag" @on-change="changeStatus(item.deleteFlag,item.id)" style="line-height: 40px;"></i-switch>
@@ -145,10 +145,6 @@
                                     <td style="line-height: 40px;">
                                         <a @click="edit(item.id)">
                                             <Icon type="edit"></Icon> 编辑
-                                        </a>
-                                        &nbsp;
-                                        <a @click="del(item.id)">
-                                            <Icon type="android-delete"></Icon> 删除
                                         </a>
                                     </td>
                                 </tr>

@@ -22,7 +22,7 @@ public class TimedTask {
 
 
     //设置每隔1小时执行1次
-    @Scheduled(cron = "0 0/10 * * * ?")//参数依次为秒，分，小时，天，月
+    @Scheduled(cron = "0 0 0/1 * * ?")//参数依次为秒，分，小时，天，月
     public void getSecKillGoods()
     {
         //更新前一批秒杀商品状态
@@ -60,12 +60,12 @@ public class TimedTask {
 
 
         //开启消费者服务
-//        if(seckillList!=null&&seckillList.size()>0)
-//        {
-//            DoSecKillThread thread1=new DoSecKillThread();
-//            thread1.start();
-//            CurrentSecKill.thread=thread1;
-//        }
+        if(seckillList!=null&&seckillList.size()>0)
+        {
+            DoSecKillThread thread1=new DoSecKillThread();
+            thread1.start();
+            CurrentSecKill.thread=thread1;
+        }
 
     }
 

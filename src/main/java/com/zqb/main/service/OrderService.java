@@ -133,4 +133,16 @@ public class OrderService {
         return orderGoodsDao.getListByOrderId(orderId);
     }
 
+
+    public List<OrderGoods> getSellerOrder(OrderGoods orderGoods,String sellerId)
+    {
+        return orderGoodsDao.getSellerOrder(orderGoods,sellerId);
+    }
+
+
+    public int getSellerOrderCount(String sellerId)
+    {
+        return orderGoodsDao.getSellerOrderCount(sellerId);
+    }
+
 }

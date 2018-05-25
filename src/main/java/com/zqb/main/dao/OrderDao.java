@@ -19,5 +19,8 @@ public interface OrderDao {
 
     List<Order> getOrderByBuyer(Order order);
 
-    List<Order> getSellerOrder(@Param("userId") String userId);
+    List<Order> getSellerOrder(@Param("order") Order order,
+                                @Param("userId") String userId);
+
+    int getSellerOrderCount(@Param("userId") String userId);
 }

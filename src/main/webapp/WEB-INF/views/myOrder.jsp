@@ -157,10 +157,6 @@
                                             <a @click="showDetail(item.id)">
                                                 <Icon type="edit"></Icon> 订单详情
                                             </a>
-                                            &nbsp;
-                                            <a @click="del(item.id)">
-                                                <Icon type="android-delete"></Icon> 删除
-                                            </a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -267,13 +263,18 @@
             content: "<div style='margin-top: -16px;'><h4>移除记录</h4></div><br><p>确定要将所选购买记录移除？</p>",
             loading: true,
             onOk: function () {
+
+                ajaxPostJSON("",list,function (res) {
+
+                },null,true);
+
                 app.$Modal.remove();
             }
         });
     }
     
     function refresh() {
-        ajaxGet("/onlineSale/myOrder/getMyOrder?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys),
+        ajaxGet("/onlineSale/myOrder/getConsumerOrder?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys),
             function (res) {
                 app.viewModel.list=res.data;
         },null,false);
@@ -282,6 +283,37 @@
     function showDetail(id) {
         ajaxGet("/onlineSale/myOrder/getOrderDetail?orderId="+id,function (res) {
             console.log(res);
+            var detail="<div style='margin-top: -12px;'><h4>订单详情</h4></div>";
+            detail+='<table class="table table-hover table-bordered table-condensed" style="margin-top: 35px;margin-left: -23px;">';
+            detail+='<thead><tr>';
+            detail+='<th>商品名称 </th>';
+            detail+='<th>商品数目(个) </th>';
+            detail+='<th>是否为秒杀商品 </th>';
+            detail+='<th>商家用户名 </th>';
+            detail+='</tr></thead>';
+
+            detail+='<tbody>';
+
+            for(var i=0;i<res.data.length;i++)
+            {
+                detail+='<tr style="height: 32px;">';
+                detail+='<td style="width:25%;line-height: 32px;">'+res.data[i].goods.goodsName+'</td>';
+                detail+='<td style="width:25%;line-height: 32px;">'+res.data[i].goodsNum+'</td>';
+                detail+='<td style="width:25%;line-height: 32px;">'+(res.data[i].seckill==true?"是":"否")+'</td>';
+                detail+='<td style="width:25%;line-height: 32px;">'+res.data[i].goods.user.userName+'</td>';
+                detail+='</tr>';
+            }
+            detail+='</tbody>';
+            detail+='</table>';
+            app.$Modal.info({
+                content: detail,
+                width:700,
+                top:300,
+                loading: true,
+                onOk: function () {
+                    app.$Modal.remove();
+                }
+            });
         },null,false);
     }
     function del(id) {

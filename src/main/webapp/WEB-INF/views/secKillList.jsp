@@ -124,7 +124,7 @@
                                     <span style="color: grey;">库存：{{item.restNum}}</span>
                                 </div>
                             </div>
-                            <div style="width: 30%;height: 100%;float: right;text-align: center;cursor: pointer;background-color: red;color: white;">
+                            <div style="width: 30%;height: 100%;float: right;text-align: center;cursor: pointer;background-color: red;color: white;" @click="rushToBuy(item.id)">
                                 <h4 style="line-height: 60px;">立即抢购</h4>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                                     <span style="color: grey;">库存：{{item.restNum}}</span>
                                 </div>
                             </div>
-                            <div style="width: 30%;height: 100%;float: right;text-align: center;cursor: pointer;background-color: red;color: white;">
+                            <div style="width: 30%;height: 100%;float: right;text-align: center;cursor: pointer;background-color: red;color: white;" @click="rushToBuy(item.id)">
                                 <h4 style="line-height: 60px;">立即抢购</h4>
                             </div>
                         </div>
@@ -215,6 +215,11 @@
         },null,false);
         refresh();
     });
+
+
+    function rushToBuy(id) {
+        window.open('<%=baseUrl%>'+id);
+    }
 
 </script>
 </body>

@@ -30,4 +30,21 @@
     <select id="getListByOrderId" resultMap="orderGoodsMap">
         SELECT * FROM t_order_goods WHERE order_id=#{orderId}
     </select>
+
+    <select id="getSellerOrder" resultMap="orderGoodsMap">
+      SELECT * FROM t_order_goods WHERE goods_id IN (
+        SELECT id FROM t_goods WHERE user_id=#{userId})
+        <choose>
+            <when test="orderGoods.page !=null">
+                limit #{orderGoods.page.start},#{orderGoods.page.end}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getSellerOrderCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_order_goods WHERE goods_id IN (
+          SELECT id FROM t_goods WHERE user_id=#{userId})
+    </select>
 </mapper>

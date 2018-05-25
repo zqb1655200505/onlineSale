@@ -29,7 +29,9 @@
             text-align: left;
             font-size: 16px;
         }
-
+        th,td{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -98,8 +100,7 @@
 
                         <div class="wrapper-sm" style="padding: 10px 15px;">
                             <div style="margin-bottom:10px;margin-top: 5px;float: left;">
-                                <i-button @click="edit()" type="success" icon="plus">上架商品</i-button>
-                                <i-button @click="del()" type="error" icon="minus">下架商品</i-button>
+                                <i-button @click="del()" type="error" icon="minus">删除订单</i-button>
                             </div>
                             <div style="float: right; margin-bottom: 10px;margin-top: 5px;">
                                 <i-input placeholder="请输入查询条件" v-model="viewModel.keys" style="width: 250px"
@@ -113,25 +114,37 @@
                                 <!--<table id="contentTable" class="table table-striped table-bordered table-condensed">-->
                                 <thead>
                                 <tr style="font-size: 15px;">
-                                    <th style="width: 50px;">
+                                    <th>
                                         <Checkbox @on-change="checkAll()"  v-model="viewModel.allChecked" style="margin-left: 8px;">
                                         </Checkbox>
                                     </th>
+                                    <th style="width:25%;line-height: 40px;">商品名称</th>
+                                    <th style="width:10%;line-height: 40px;">商品数目</th>
+                                    <th style="width:15%;line-height: 40px;">购买者</th>
+                                    <th style="width:25%;line-height: 40px;">购买时间</th>
+                                    <th style="width:15%;line-height: 40px;">是否秒杀</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="item in viewModel.list">
-                                    <td>
+                                <tr v-for="item in viewModel.list" style="cursor: pointer;">
+                                    <td style="width:10%;padding-top: 13px;">
                                         <Checkbox v-model="item.checked" style="margin-left: 8px;" :key="item.id"></Checkbox>
                                     </td>
 
+                                    <td style="width:25%;line-height: 40px;">{{item.goods.goodsName}}</td>
+                                    <td style="width:10%;line-height: 40px;">{{item.goodsNum}}</td>
+                                    <td style="width:15%;line-height: 40px;">{{item.order.buyer.userName}}</td>
+                                    <td style="width:25%;line-height: 40px;">{{datetimeFormatFromLong(item.order.orderTime)}}</td>
+                                    <td style="width:15%;line-height: 40px;">
+                                        {{item.seckill== true?'是':'否'}}
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
 
                             <Page :current="page.no" :total="page.total" :page-size="page.size"
                                   show-total show-sizer show-elevator style="text-align: right;" placement="top"
-                                  :page-size-opts="[ 4, 8, 16]" @on-change="changePage($event)"
+                                  :page-size-opts="[10, 25, 50]" @on-change="changePage($event)"
                                   @on-page-size-change="changePageSize($event)">
                             </Page>
                         </div>
@@ -143,9 +156,6 @@
 
         <jsp:include page="footer.jsp"/>
 
-        <Modal :title="editModal.title" width="600" :mask-closable="false"  v-model="editModal.show" :loading="editModal.loading" @on-ok="edit_ok('editFrame')">
-            <iframe id="editFrame" width="100%"  frameborder="0" :src="editModal.url"></iframe>
-        </Modal>
 
     </Layout>
 </div>
@@ -169,20 +179,12 @@
                 list:[],
             },
 
-
             page : {
                 no: 1,
                 total: 20,
-                size: parseInt(cookie("pageSize")) || 4,
+                size: parseInt(cookie("pageSize")) || 10,
             },
 
-            // 编辑模态框
-            editModal: {
-                title: "",
-                url: "",
-                loading: true,
-                show: false
-            },
 
         }
     });
@@ -201,6 +203,7 @@
                 }
             }
         },null,false);
+        refresh();
     });
 
     //改变每页数量
@@ -226,31 +229,46 @@
     };
 
 
-    function refresh()
-    {
+    function del(id) {
+        var list = [];
 
+        if (id == null) {
+            app.viewModel.list.forEach(function (item) {
+                if (item.checked) list.push(item.id);
+            });
+
+            if (list.length == 0) {
+                app.$Message.error('请选择欲删除记录');
+                return;
+            }
+        } else {
+            list.push(id);
+        }
+
+        app.$Modal.confirm({
+            title: '提示信息',
+            content: '确定要删除记录？',
+            loading: true,
+            onOk: function () {
+                ajaxPostJSON("", list, function () {
+                    app.viewModel.allChecked = false;
+                    refresh();
+                    app.$Modal.remove();
+                });
+            }
+        });
     }
 
 
-    //编辑
-    function edit(id) {
+    function refresh()
+    {
+        ajaxGet("/onlineSale/myOrder/getSellerOrder?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys),
+            function (res) {
+                app.viewModel.list=res.data.list;
+                app.page.total = res.data.total;
+        },null,false);
+    }
 
-        app.editModal= {
-            title: "",
-            url: "",
-            loading: true,
-            show: false
-        };
-
-        if (id == null) {
-            app.editModal.title = "添加商品";
-            app.editModal.url = "/onlineSale/myStore/goodsForm";
-        } else {
-            app.editModal.title = "编辑商品信息";
-            app.editModal.url = "/onlineSale/myStore/goodsForm?id=" + id;
-        }
-        app.editModal.show = true;
-    };
 
 </script>
 </body>

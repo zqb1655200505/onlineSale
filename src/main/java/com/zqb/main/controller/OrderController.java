@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -59,9 +60,9 @@ public class OrderController {
         return new AjaxMessage().Set(MsgType.Error,"参数错误",null);
     }
 
-    @RequestMapping(value = "/getMyOrder",method = RequestMethod.GET)
+    @RequestMapping(value = "/getConsumerOrder",method = RequestMethod.GET)
     @ResponseBody
-    public Object getMyOrder(HttpServletRequest request,
+    public Object getConsumerOrder(HttpServletRequest request,
                              HttpSession session,
                              @RequestParam("pageNo") int pageNo,
                              @RequestParam("pageSize") int pageSize,
@@ -86,5 +87,29 @@ public class OrderController {
     public Object getOrderDetail(@RequestParam("orderId") String orderId)
     {
         return new AjaxMessage().Set(MsgType.Success,orderService.getOrderDetail(orderId));
+    }
+
+    @RequestMapping(value = "/getSellerOrder",method = RequestMethod.GET)
+    @ResponseBody
+    public Object getSellerOrder(HttpSession session,
+                                 @RequestParam("pageNo") int pageNo,
+                                 @RequestParam("pageSize") int pageSize,
+                                 @RequestParam("keys") String keys)
+    {
+        if(keys != null && !keys.equals("")){
+            if(CheckSQLStrUtils.sql_inj(keys)){
+                return new AjaxMessage().Set(MsgType.Error, "请勿输入非法字符！",null);
+            }
+        }
+
+        User user= (User) session.getAttribute("userSession");
+        OrderGoods order=new OrderGoods();
+        Page<OrderGoods> page=new Page<OrderGoods>(pageNo, pageSize);
+        page.setFuncName("changePage");
+        order.setPage(page);
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("list", orderService.getSellerOrder(order,user.getId()));
+        map.put("total", orderService.getSellerOrderCount(user.getId()));
+        return  new AjaxMessage().Set(MsgType.Success,map);
     }
 }
