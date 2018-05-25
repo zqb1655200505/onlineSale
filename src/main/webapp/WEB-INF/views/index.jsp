@@ -159,8 +159,7 @@
         </Header>
 
         <Content class="layout-content-center">
-            <%--v-if="hasSecKillGoods"--%>
-            <Row >
+            <Row v-if="hasSecKillGoods">
                 <i-col offset="3" span="5">
                     <div style="height: 400px;background-color: #444965;">
                         <a class="sk_hd_lk" :href="'<%=secKillList%>'">
@@ -185,11 +184,11 @@
                 </i-col>
 
                 <i-col offset="1" span="12">
-                    <Carousel autoplay autoplay-speed="5000" loop>
+                    <Carousel autoplay autoplay-speed="50000" loop>
                         <Carousel-item v-for="(item,index) in seckillList" v-if="index<seckillList.length&&index%2==0">
                             <div style=" width: 100%;" >
-                                <div  class="demo-carousel" @click="gotoSeckill(item)" :class="getClass(index)">
-                                    <img :src="'<%=basePath%>'+item.goods.goodsPic" style="width: 100%;height: 85%;">
+                                <div  class="demo-carousel"  :class="getClass(index)">
+                                    <img :src="'<%=basePath%>'+item.goods.goodsPic" style="width: 100%;height: 85%;" @click="gotoSeckill(item)">
                                     <div style="height: 60px;width: 100%;border: 1px solid grey;">
                                         <div style="width: 50%;height: 100%;float: left;background-color: red;line-height: 60px;">
                                             <span>￥{{item.seckillPrice}}</span>
@@ -201,8 +200,8 @@
 
                                 </div>
 
-                                <div style="margin-left:55%;margin-top:-400px;" class="demo-carousel"@click="gotoSeckill(seckillList[index+1])" v-if="index<seckillList.length-1">
-                                    <img :src="'<%=basePath%>'+seckillList[index+1].goods.goodsPic" style="width: 100%;height: 85%;">
+                                <div style="margin-left:55%;margin-top:-400px;" class="demo-carousel"  v-if="index<seckillList.length-1">
+                                    <img :src="'<%=basePath%>'+seckillList[index+1].goods.goodsPic" @click="gotoSeckill(seckillList[index+1])" style="width: 100%;height: 85%;">
                                     <div style="height: 60px;width: 98%;border: 1px solid grey;">
                                         <div style="width: 50%;height: 100%;float: left;background-color: red;line-height: 60px;margin-top: -58px;">
                                             <span>￥{{seckillList[index+1].seckillPrice}}</span>
@@ -304,6 +303,19 @@
 
     function refresh() {
 
+        ajaxGet("/onlineSale/secKill/getSecKillTime",function (res) {
+            console.log(res);
+            if(res.code==="success")
+            {
+                var date = new Date();
+                date.setTime(res.data);
+                var date1=new Date();    //当前时间
+                var date3=date.getTime()-date1.getTime();  //时间差的毫秒数
+                timer(parseInt(date3/1000));
+            }
+        },null,false);
+
+
         ajaxGet("/onlineSale/consumer/getGoods?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.keys)
             ,function (res) {
                 app.goodsList=res.data.list;
@@ -324,7 +336,7 @@
                     }
                 }
             },null,false);
-        getRemainTime();
+
 
     }
 
@@ -346,7 +358,6 @@
 
     function gotoSeckill(item)
     {
-        //alert("<%=secKillGoodsDetail%>"+item.id);
         window.open("<%=secKillGoodsDetail%>"+item.id);
         //window.location.href="<%=secKillGoodsDetail%>"+item.id;
     }
@@ -355,19 +366,6 @@
         if(index==app.seckillList.length-1)
             return "single-item";
         return "";
-    }
-
-    function getRemainTime() {
-        ajaxGet("/onlineSale/secKill/getSecKillTime",function (res) {
-            if(res.code==="success")
-            {
-                var date = new Date();
-                date.setTime(res.data);
-                var date1=new Date();    //当前时间
-                var date3=date.getTime()-date1.getTime();  //时间差的毫秒数
-                timer(parseInt(date3/1000));
-            }
-        },null,false);
     }
 
 
