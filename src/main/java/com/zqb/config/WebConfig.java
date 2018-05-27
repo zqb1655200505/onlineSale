@@ -55,6 +55,9 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         //interceptorRegistration.addPathPatterns("/onlineSale/myCart/*");
         interceptorRegistration.addPathPatterns("/onlineSale/myOrder/*");
         interceptorRegistration.addPathPatterns("/onlineSale/myStore/*");
+        interceptorRegistration.addPathPatterns("/onlineSale/secKill/doSecKill");
+        //interceptorRegistration.addPathPatterns("/onlineSale/secKill/testNormal");
+        //interceptorRegistration.addPathPatterns("/onlineSale/secKill/testFramework");
         interceptorRegistration.addPathPatterns("/onlineSale/myCart/gotoSettlement");
 
         //还可以配置其他拦截器，当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +59,6 @@ public class SecKillController {
             return new AjaxMessage().Set(MsgType.SecKillFalse,"该商品未参与秒杀",null);
         }
 
-        //WebSocketDto webSocketDto = WebSocketListen.getWebsocketMap().get(user.getId());
 
         if(user!=null&&user.getId()!=null&&goodsId.length()>0)
         {
@@ -129,18 +129,78 @@ public class SecKillController {
 
     @RequestMapping("/testNormal")
     @ResponseBody
-    public Object testNormal(HttpServletRequest request)
+    public Object testNormal(HttpSession session,HttpServletRequest request)
     {
+        User user= (User) session.getAttribute("userSession");
+        if(user==null)
+        {
+            String userId=request.getParameter("userId");
+            user=new User();
+            user.setId(userId);
+        }
         String goodsId=request.getParameter("goodsId");
-        return null;
+        List<Seckill> seckillList= CurrentSecKill.seckillList;
+        boolean flag=false;
+        for(Seckill item:seckillList)
+        {
+            if(item.getGoods().getId().equals(goodsId))
+            {
+                flag=true;
+                break;
+            }
+        }
+        if(!flag)
+        {
+            return new AjaxMessage().Set(MsgType.SecKillFalse,"该商品未参与秒杀",null);
+        }
+        List<String> idList=new ArrayList<String>();
+        idList.add(goodsId);
+        List<Integer> numList=new ArrayList<Integer>();
+        numList.add(1);
+
+        try {
+            return orderService.addOrder(idList,numList,user,true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @RequestMapping("/testFramework")
     @ResponseBody
-    public Object testFramework(HttpServletRequest request)
+    public Object testFramework(HttpSession session,HttpServletRequest request)
     {
+        User user= (User) session.getAttribute("userSession");
+        if(user==null)
+        {
+            String userId=request.getParameter("userId");
+            user=new User();
+            user.setId(userId);
+        }
         String goodsId=request.getParameter("goodsId");
-        return null;
+
+        List<Seckill> seckillList= CurrentSecKill.seckillList;
+        boolean flag=false;
+        for(Seckill item:seckillList)
+        {
+            if(item.getGoods().getId().equals(goodsId))
+            {
+                flag=true;
+                break;
+            }
+        }
+        if(!flag)
+        {
+            return new AjaxMessage().Set(MsgType.SecKillFalse,"该商品未参与秒杀",null);
+        }
+        if(goodsId.length()>0&&user.getId()!=null)
+        {
+            JSONObject json=new JSONObject();
+            json.put("userId",user.getId());
+            json.put("goodsId",goodsId);
+            KafkaProducerUtils.senStrMsg(topic,json.toJSONString());
+        }
+        return new AjaxMessage().Set(MsgType.SecKillLoading,null);
     }
 
 }

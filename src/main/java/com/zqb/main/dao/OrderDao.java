@@ -23,4 +23,6 @@ public interface OrderDao {
                                 @Param("userId") String userId);
 
     int getSellerOrderCount(@Param("userId") String userId);
+
+    int getConsumerOrderCount(@Param("userId") String userId);
 }

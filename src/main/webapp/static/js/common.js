@@ -84,7 +84,7 @@ function ajaxGet(url, successCallback,errorCallback,showMsg) {
  */
 
 function ajaxPost(url, data, successCallback,errorCallback,showMsg) {
-    showMsg = showMsg || true;
+    //showMsg = showMsg || true;
     // var headers={};
     // headers['CSRFToken']=$("#csrftoken").val();
 
@@ -148,7 +148,7 @@ function ajaxPost(url, data, successCallback,errorCallback,showMsg) {
  */
 
 function ajaxPostJSON(url, data, successCallback,errorCallback,showMsg) {
-    showMsg = showMsg || true;
+    //showMsg = showMsg || true;
     $.ajax({
         type : 'post',
         url : url,

@@ -36,10 +36,8 @@ public class OrderService {
     @Autowired
     private GoodsDao goodsDao;
 
-
     @Autowired
     private OrderDao orderDao;
-
 
     @Autowired
     private OrderGoodsDao orderGoodsDao;
@@ -48,23 +46,23 @@ public class OrderService {
     private SecKillDao secKillDao;
 
     /**
-     * @param idList 此次订单商品id列表
-     * @param numList 与商品对应的商品数目
+     * @param goodsIdList 此次订单商品id列表
+     * @param goodsNumList 与商品对应的商品数目
      * @param buyer 购买者
      * @return
      */
     @Transactional
-    public Object addOrder(List<String> idList, List<Integer> numList, User buyer, boolean isSeckill) throws Exception {
+    public Object addOrder(List<String> goodsIdList, List<Integer> goodsNumList, User buyer, boolean isSeckill) throws Exception {
 
         Order order=new Order();
         order.setBuyer(buyer);
         order.setOrderTime(new Date());
         int totalNum=0;
         double totalPrice=0;
-        for(int i=0;i<numList.size();i++)
+        for(int i=0;i<goodsNumList.size();i++)
         {
-            totalNum+=numList.get(i);
-            String goodsId=idList.get(i);
+            totalNum+=goodsNumList.get(i);
+            String goodsId=goodsIdList.get(i);
             if(isSeckill)//获取秒杀价格
             {
                 double price=secKillDao.getSecKillGoodsPrice(goodsId);
@@ -82,11 +80,11 @@ public class OrderService {
         order.preInsert();
         if(orderDao.addOrder(order)>0)
         {
-            for(int i=0;i<numList.size();++i)
+            for(int i=0;i<goodsNumList.size();++i)
             {
                 OrderGoods orderGoods=new OrderGoods();
-                String goodsId=idList.get(i);
-                int goodsNum=numList.get(i);
+                String goodsId=goodsIdList.get(i);
+                int goodsNum=goodsNumList.get(i);
                 Goods goods=goodsDao.getGoodsByPrimaryKey(goodsId);
                 //减库存
                 if(goods.getGoodsNum()<goodsNum)
@@ -127,6 +125,10 @@ public class OrderService {
         return orderDao.getOrderByBuyer(order);
     }
 
+    public int getConsumerOrderCount(String userId)
+    {
+        return orderDao.getConsumerOrderCount(userId);
+    }
 
     public List<OrderGoods> getOrderDetail(String orderId)
     {

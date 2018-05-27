@@ -44,12 +44,12 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <!---->
+    <!--获取应用ApplicationContext对象，从该对象中获取未被spring装配的对象-->
     <bean class="com.zqb.config.MyApplicationContext"/>
 
     <!-- 开启事务控制的注解支持。 如果配置的事务管理器的id就是transactionManager，这里是可以省略transaction-manager-->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <!-- 开启定时任务 -->
+    <!-- 开启spring定时任务 -->
     <task:annotation-driven />
 </beans>

@@ -274,6 +274,7 @@
 
             avatarSrc:"/upload/image/defaultAvatar.jpg",
             username:"",
+            userId:"",
             haveLogin:false,
             isSeller:false,
             cartNum:cookie("cartGoodsNum")||0,
@@ -338,7 +339,6 @@
                     else
                     {
                         ajaxGet("/onlineSale/secKill/getSecKillTime",function (res) {
-                            console.log(res);
                             if(res.code==="success")
                             {
                                 var date = new Date();
@@ -360,6 +360,7 @@
             {
                 app.username=res.data.userName;
                 app.avatarSrc=res.data.userPic;
+                app.userId=res.data.id;
                 app.haveLogin=true;
                 if(res.data.userType==="ADMINISTRATOR")
                 {
@@ -413,21 +414,67 @@
 
     function testNormal()
     {
-        app.$Modal.info({
-            title: '填写测试秒杀数量',
-            content: '<Row><Input-Number :min="1" v-model="testNormalNum"></Input-Number></i-input></Row>',
+//        if(!app.haveLogin)
+//        {
+//            window.location.href="/onlineSale/login";
+//            return;
+//        }
+        app.$Modal.confirm({
+            content: "<div style='margin-top: -16px;'><h2>测试数目</h2></div><br><input type='number' style='height: 30px;width: 280px;' id='testNormalNum'/>",
             loading: true,
             onOk: function ()
             {
+                var testNormalNum=$("#testNormalNum").val();
+
                 var data={
-                    goodsId:app.seckillList[0].goods.id
+                    goodsId:app.seckillList[0].goods.id,
+                    userId:"c1409d9c3b794b91867144e2aba05304",
                 };
-                for(var i=0;i<app.testNormalNum;i++)
+                var date1=new Date().getTime();
+                var date2;
+                var cnt=0;
+                for(var i=0;i<testNormalNum;i++)
                 {
-                    ajaxPost("/onlineSale/secKill/testNormal", data, function () {
-                        app.viewModel.allChecked = false;
-                        refresh();
-                        app.$Modal.remove();
+                    ajaxPost("/onlineSale/secKill/testNormal", data, function (res) {
+                        cnt++;
+                        if(cnt==testNormalNum)
+                        {
+                            date2=new Date().getTime();
+                            console.log(parseInt(date2-date1));
+                            app.$Modal.remove();
+                        }
+                    },null,false);
+                }
+            }
+        });
+    }
+    var testFrameworkNum=0;
+    var date3,date4;
+    var cnt1=0;
+    function testFramework()
+    {
+//        if(!app.haveLogin)
+//        {
+//            window.location.href="/onlineSale/login";
+//            return;
+//        }
+
+        app.$Modal.confirm({
+            content: "<div style='margin-top: -16px;'><h2>测试数目</h2></div><br><input type='number' style='height: 30px;width: 280px;' id='testFrameworkNum'/>",
+            loading: true,
+            onOk: function ()
+            {
+                initWebSocket();
+                testFrameworkNum=$("#testFrameworkNum").val();
+                var data={
+                    goodsId:app.seckillList[0].goods.id,
+                    userId:"c1409d9c3b794b91867144e2aba05304",
+                };
+                date3=new Date().getTime();
+                for(var i=0;i<testFrameworkNum;i++)
+                {
+                    ajaxPost("/onlineSale/secKill/testFramework", data, function () {
+
                     },null,false);
                 }
 
@@ -435,28 +482,67 @@
         });
     }
 
-    function testFramework()
-    {
-        app.$Modal.info({
-            title: '填写测试秒杀数量',
-            content: '<Row><Input-Number :min="1" v-model="testFrameworkNum"></Input-Number></i-input></Row>',
-            loading: true,
-            onOk: function ()
-            {
-                var data={
-                    goodsId:app.seckillList[0].goods.id
-                };
-                for(var i=0;i<app.testFrameworkNum;i++)
-                {
-                    ajaxPost("/onlineSale/secKill/testFramework", data, function () {
-                        app.viewModel.allChecked = false;
-                        refresh();
-                        app.$Modal.remove();
-                    },null,false);
-                }
 
+
+    function initWebSocket()
+    {
+        var webSocket;
+        if(app.userId==null||app.userId.length==0)
+        {
+            app.$Message.warning("用户ID为空");
+            return ;
+        }
+        var host = window.location.host;    //主机IP:port
+        if(window.WebSocket)
+        {
+            webSocket = new WebSocket('ws://'+host+'/webSocket/'+app.userId);
+        }
+        else
+        {
+            alert('当前浏览器不支持webSocket');
+            return;
+        }
+
+        webSocket.onerror = function(event) {
+            console.log("socket连接出错");
+        };
+
+        webSocket.onopen = function(event) {
+            console.log("socket开启连接");
+        };
+
+        webSocket.onclose = function(event) {
+            console.log("socket关闭连接");
+        };
+
+        webSocket.onmessage = function(event)
+        {
+            if(event.data.substr(0,2)=="恭喜")
+            {
+                cnt1++;
+                if(cnt1==testFrameworkNum)
+                {
+                    date4=new Date().getTime();
+                    console.log(parseInt((date4-date3)));
+                    app.$Modal.remove();
+                }
             }
-        });
+            else
+            {
+                alert("测试秒杀请求失败");
+                app.$Modal.remove();
+            }
+        };
+
+
+        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        window.onbeforeunload = function ()
+        {
+            if(webSocket)
+            {
+                webSocket.close();
+            }
+        }
     }
 </script>
 </body>

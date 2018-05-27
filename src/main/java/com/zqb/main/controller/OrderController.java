@@ -10,6 +10,7 @@ import com.zqb.main.entity.OrderGoods;
 import com.zqb.main.entity.User;
 import com.zqb.main.service.OrderService;
 import com.zqb.main.utils.CheckSQLStrUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zqb on 2018/4/16.
@@ -79,7 +81,10 @@ public class OrderController {
         Order order=new Order();
         order.setBuyer(user);
         order.setPage(page);
-        return new AjaxMessage().Set(MsgType.Success,orderService.getConsumerOrder(order));
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("list", orderService.getConsumerOrder(order));
+        map.put("total", orderService.getConsumerOrderCount(user.getId()));
+        return new AjaxMessage().Set(MsgType.Success,map);
     }
 
     @RequestMapping(value = "/getOrderDetail",method = RequestMethod.GET)

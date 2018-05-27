@@ -276,7 +276,8 @@
     function refresh() {
         ajaxGet("/onlineSale/myOrder/getConsumerOrder?pageNo="+app.page.no+"&pageSize="+app.page.size+"&keys=" +encodeURIComponent(app.viewModel.keys),
             function (res) {
-                app.viewModel.list=res.data;
+                app.viewModel.list=res.data.list;
+                app.page.total=res.data.total;
         },null,false);
     }
 
