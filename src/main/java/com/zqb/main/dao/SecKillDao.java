@@ -34,4 +34,6 @@ public interface SecKillDao {
 
     int changeStatus(@Param("secKillId") String secKillId,
                      @Param("status") boolean status);
+
+
 }

@@ -103,4 +103,9 @@ public class SecKillService {
         return null;
     }
 
+    public int updateSecKillToRemove(Seckill item)
+    {
+        return secKillDao.updateSecKillStatusToRemove(item);
+    }
+
 }

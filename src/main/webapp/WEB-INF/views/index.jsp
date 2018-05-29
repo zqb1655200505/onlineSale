@@ -274,7 +274,7 @@
 
             avatarSrc:"/upload/image/defaultAvatar.jpg",
             username:"",
-            userId:"",
+            userId:"c1409d9c3b794b91867144e2aba05304",
             haveLogin:false,
             isSeller:false,
             cartNum:cookie("cartGoodsNum")||0,

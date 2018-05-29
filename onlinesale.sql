@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50715
 File Encoding         : 65001
 
-Date: 2018-05-27 16:12:15
+Date: 2018-05-29 11:09:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -159,10 +159,10 @@ CREATE TABLE `t_seckill` (
 -- ----------------------------
 -- Records of t_seckill
 -- ----------------------------
-INSERT INTO `t_seckill` VALUES ('8f0d1d3401974554ab85a4aabbc0e16a', '862a9981b62e4f27a78b862798be0630', '12010', '499.00', '2018-05-24 17:00:00', '2018-05-28 19:00:00', 0x31);
-INSERT INTO `t_seckill` VALUES ('bf949f9a2c8143128d762acf8cf840e8', 'd652f857d5f345a5a2dd4b71ee251abe', '12800', '6599.00', '2018-05-24 17:00:00', '2018-05-28 19:00:00', 0x31);
-INSERT INTO `t_seckill` VALUES ('c8c337c6e673494faec278f3f325c920', '437f12bfcf0e4943a409692c857857f2', '12500', '4999.00', '2018-05-24 17:00:00', '2018-05-28 19:00:00', 0x31);
-INSERT INTO `t_seckill` VALUES ('f4548b98aade4f1f820887c36189f9ab', 'a74e3c996932418bbb9fc8fb86b87737', '12500', '4999.00', '2018-05-24 17:00:00', '2018-05-28 19:00:00', 0x31);
+INSERT INTO `t_seckill` VALUES ('8f0d1d3401974554ab85a4aabbc0e16a', '862a9981b62e4f27a78b862798be0630', '12010', '499.00', '2018-05-28 17:00:00', '2018-05-31 19:00:00', 0x31);
+INSERT INTO `t_seckill` VALUES ('bf949f9a2c8143128d762acf8cf840e8', 'd652f857d5f345a5a2dd4b71ee251abe', '12800', '6599.00', '2018-05-28 17:00:00', '2018-05-31 19:00:00', 0x31);
+INSERT INTO `t_seckill` VALUES ('c8c337c6e673494faec278f3f325c920', '437f12bfcf0e4943a409692c857857f2', '12500', '4999.00', '2018-05-28 17:00:00', '2018-05-31 19:00:00', 0x31);
+INSERT INTO `t_seckill` VALUES ('f4548b98aade4f1f820887c36189f9ab', 'a74e3c996932418bbb9fc8fb86b87737', '12500', '4999.00', '2018-05-28 17:00:00', '2018-05-31 19:00:00', 0x31);
 
 -- ----------------------------
 -- Table structure for t_user

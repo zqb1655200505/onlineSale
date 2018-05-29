@@ -32,13 +32,13 @@ public class TimedTask {
         {
             thread.setFlag(false);
         }
-//        if(list!=null)
-//        {
-//            for (Seckill item:list)
-//            {
-//                secKillDao.updateSecKillStatusToRemove(item);
-//            }
-//        }
+        if(list!=null)
+        {
+            for (Seckill item:list)
+            {
+                secKillDao.updateSecKillStatusToRemove(item);
+            }
+        }
 
 
         //开启新一轮秒杀

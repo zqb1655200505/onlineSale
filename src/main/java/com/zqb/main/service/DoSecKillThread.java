@@ -33,7 +33,7 @@ public class DoSecKillThread extends Thread{
     //此类并未使用spring注解标识，不会被spring自动装配，无法自动注入，需从ApplicationContext中加载
     private static UserService userService= (UserService)MyApplicationContext.getBean("userService");
     private static OrderService orderService=(OrderService)MyApplicationContext.getBean("orderService");
-
+    private static SecKillService secKillService=(SecKillService)MyApplicationContext.getBean("secKillService");
 
     @Override
     public void run() {
@@ -66,10 +66,14 @@ public class DoSecKillThread extends Thread{
                                 User user=userService.getByPrimaryKey(userId);
                                 try {
                                     AjaxMessage obj= (AjaxMessage) orderService.addOrder(idList,numList,user,true);
-                                    System.out.println(obj);
                                     if(obj.getCode().equals(MsgType.Success.toString().toLowerCase()))
                                     {
+                                        seckill.setRestNum(seckill.getRestNum()-1);
                                         WebSocketListen.sendStrMessage(userId,"恭喜！抢购成功");
+                                    }
+                                    else
+                                    {
+                                        WebSocketListen.sendStrMessage(userId,"遗憾！秒杀失败");
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -87,6 +91,8 @@ public class DoSecKillThread extends Thread{
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
+                                secKillService.updateSecKillToRemove(seckill);
+
                             }
                             break;
                         }
