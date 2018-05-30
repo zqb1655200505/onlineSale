@@ -20,6 +20,7 @@ import java.io.IOException;
 @ComponentScan(basePackages = {"com.zqb.main.controller"})
 public class WebConfig extends WebMvcConfigurerAdapter{
 
+
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -33,20 +34,34 @@ public class WebConfig extends WebMvcConfigurerAdapter{
     }
 
     /**
+     * 配置静态文件访问
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry)
+    {
+        registry.addResourceHandler("/onlineSale/static/**").addResourceLocations("/static/");
+    }
+
+
+    /**
+     *          不起作用
+     *
      * @name configureDefaultServletHandling
-     * @description 要求DispatcherServlet将静态资源请求转发到servlet默认的servlet上，
+     * @description 要求DispatcherServlet将静态资源请求转发到默认的servlet上，
      *              而不是使用DispatcherServlet本身来处理。
      *              例如前端直接请求a.txt，我们会将其定位到服务器的路径上，
      *              而不是使用DispatcherServlet类来处理
      *              等同于配置 <mvc:default-servlet-handler />
      *              或 指定目录<mvc:resources mapping="/static/**" location="/WEB-INF/static/" />
-     * @param  configurer
+     * @param
      * @return
      */
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
