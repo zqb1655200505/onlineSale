@@ -3,6 +3,7 @@ package com.zqb.main.dto;
 import com.zqb.main.entity.Seckill;
 import com.zqb.main.service.DoSecKillThread;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ public class CurrentSecKill {
 
     public static List<Seckill> seckillList=null;
 
-    public static DoSecKillThread thread=null;
+    public static List<DoSecKillThread> threadList=new ArrayList<DoSecKillThread>();
 
     public static long secKillEndTime=-1L;
 

@@ -34,10 +34,10 @@
     <select id="getOrderByBuyer" resultMap="orderMap">
         SELECT * FROM t_order
         WHERE buyer=#{buyer.id}
-        ORDER BY order_time DESC,id
+        ORDER BY order_time DESC
         <choose>
             <when test="page !=null">
-                limit #{page.start},#{page.end}
+                limit #{page.start},#{page.pageSize}
             </when>
             <otherwise>
             </otherwise>
@@ -58,7 +58,7 @@
             ) ORDER BY order_time DESC
         <choose>
             <when test="order.page !=null">
-                limit #{order.page.start},#{order.page.end}
+                limit #{order.page.start},#{order.page.pageSize}
             </when>
             <otherwise>
             </otherwise>

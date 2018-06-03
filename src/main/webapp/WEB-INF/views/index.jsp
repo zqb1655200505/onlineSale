@@ -433,6 +433,21 @@
                 var date1=new Date().getTime();
                 var date2;
                 var cnt=0;
+                app.$Spin.show({
+                    render: function(h)
+                    {
+                        return h('div', [
+                            h('Icon', {
+                                'class': 'demo-spin-icon-load',
+                                props: {
+                                    type: 'load-c',
+                                    size: 25
+                                }
+                            }),
+                            h('div', '请勿刷新或关闭窗口。。。')
+                        ]);
+                    }
+                });
                 for(var i=0;i<testNormalNum;i++)
                 {
                     ajaxPost("/onlineSale/secKill/testNormal", data, function (res) {
@@ -441,6 +456,7 @@
                         {
                             date2=new Date().getTime();
                             console.log(parseInt(date2-date1));
+                            app.$Spin.hide();
                             app.$Modal.remove();
                         }
                     },null,false);
@@ -471,6 +487,21 @@
                     userId:"c1409d9c3b794b91867144e2aba05304",
                 };
                 date3=new Date().getTime();
+                app.$Spin.show({
+                    render: function(h)
+                    {
+                        return h('div', [
+                            h('Icon', {
+                                'class': 'demo-spin-icon-load',
+                                props: {
+                                    type: 'load-c',
+                                    size: 25
+                                }
+                            }),
+                            h('div', '请勿刷新或关闭窗口。。。')
+                        ]);
+                    }
+                });
                 for(var i=0;i<testFrameworkNum;i++)
                 {
                     ajaxPost("/onlineSale/secKill/testFramework", data, function () {
@@ -524,6 +555,7 @@
                 {
                     date4=new Date().getTime();
                     console.log(parseInt((date4-date3)));
+                    app.$Spin.hide();
                     app.$Modal.remove();
                 }
             }

@@ -27,21 +27,33 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class DoSecKillThread extends Thread{
 
-    private static String TOPIC="onlinesale";
-    private static boolean flag=true;
+    private static final String TOPIC="onlinesale";
+    private boolean flag=true;
 
     //此类并未使用spring注解标识，不会被spring自动装配，无法自动注入，需从ApplicationContext中加载
-    private static UserService userService= (UserService)MyApplicationContext.getBean("userService");
-    private static OrderService orderService=(OrderService)MyApplicationContext.getBean("orderService");
-    private static SecKillService secKillService=(SecKillService)MyApplicationContext.getBean("secKillService");
+    private UserService userService=null;
+    private OrderService orderService=null;
+    private SecKillService secKillService=null;
+    private KafkaConsumerUtils kafkaConsumerUtils=null;
+    private Lock lock=null;
+    public DoSecKillThread(Lock lock)
+    {
+        userService= (UserService)MyApplicationContext.getBean("userService");
+        orderService=(OrderService)MyApplicationContext.getBean("orderService");
+        secKillService=(SecKillService)MyApplicationContext.getBean("secKillService");
+        kafkaConsumerUtils=new KafkaConsumerUtils();
+        this.lock=lock;
+    }
+
 
     @Override
     public void run() {
         while (flag)
         {
-            List<KafkaMsg> list=KafkaConsumerUtils.getRowMessage(TOPIC);
-            if(list!=null)
+            List<KafkaMsg> list=kafkaConsumerUtils.getRowMessage(TOPIC);
+            if(list!=null&&list.size()>0)
             {
+                System.out.println(Thread.currentThread().getName());
                 for(KafkaMsg item:list)
                 {
                     String record=item.getValue();
@@ -49,7 +61,6 @@ public class DoSecKillThread extends Thread{
                     String userId=json.getString("userId");
                     String goodsId=json.getString("goodsId");
 
-                    Lock lock = new ReentrantLock();
                     lock.lock(); //注意这个地方,lock会锁住此部分代码区
 //=====================================================================================
                     List<Seckill> seckills= CurrentSecKill.seckillList;

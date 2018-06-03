@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 获取当前秒杀商品，存储在 CurrentSecKill类静态变量（session）中，防止秒杀时大量查询数据库
@@ -22,23 +24,28 @@ public class TimedTask {
 
 
     //设置每隔1小时执行1次
-    @Scheduled(cron = "0 0 0/1 * * ?")//参数依次为秒，分，小时，天，月
+    @Scheduled(cron = "0 0/10 * * * ?")//参数依次为秒，分，小时，天，月
     public void getSecKillGoods()
     {
         //更新前一批秒杀商品状态
         List<Seckill> list=CurrentSecKill.seckillList;
-        DoSecKillThread thread=CurrentSecKill.thread;
-        if(thread!=null)
-        {
-            thread.setFlag(false);
-        }
-        if(list!=null)
-        {
-            for (Seckill item:list)
-            {
-                secKillDao.updateSecKillStatusToRemove(item);
-            }
-        }
+
+//        List<DoSecKillThread> threadList=CurrentSecKill.threadList;
+//        for(DoSecKillThread item:threadList)
+//        {
+//            if(item!=null)
+//            {
+//                item.setFlag(false);
+//            }
+//        }
+
+//        if(list!=null)
+//        {
+//            for (Seckill item:list)
+//            {
+//                secKillDao.updateSecKillStatusToRemove(item);
+//            }
+//        }
 
 
         //开启新一轮秒杀
@@ -59,13 +66,14 @@ public class TimedTask {
         System.out.println(seckillList);
 
 
-        //开启消费者服务
-        if(seckillList!=null&&seckillList.size()>0)
-        {
-            DoSecKillThread thread1=new DoSecKillThread();
-            thread1.start();
-            CurrentSecKill.thread=thread1;
-        }
+//        CurrentSecKill.threadList.clear();
+//        Lock lock = new ReentrantLock();
+//        for(int i=0;i<3;i++)//通过消费者组进行消息消息消费
+//        {
+//            DoSecKillThread thread=new DoSecKillThread(lock);
+//            CurrentSecKill.threadList.add(thread);
+//            thread.start();
+//        }
 
     }
 

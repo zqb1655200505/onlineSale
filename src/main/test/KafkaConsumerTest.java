@@ -18,7 +18,7 @@ public class KafkaConsumerTest extends Thread{
     {
         while (true)
         {
-           List<KafkaMsg> list= KafkaConsumerUtils.getRowMessage("mytest",6);
+           List<KafkaMsg> list=new KafkaConsumerUtils().getRowMessage("mytest",6);
            if(list.size()>0)
            {
                System.out.println("收到消息");

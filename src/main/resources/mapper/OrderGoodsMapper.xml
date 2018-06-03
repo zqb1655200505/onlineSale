@@ -36,7 +36,7 @@
         SELECT id FROM t_goods WHERE user_id=#{userId})
         <choose>
             <when test="orderGoods.page !=null">
-                limit #{orderGoods.page.start},#{orderGoods.page.end}
+                limit #{orderGoods.page.start},#{orderGoods.page.pageSize}
             </when>
             <otherwise>
             </otherwise>

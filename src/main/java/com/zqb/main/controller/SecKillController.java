@@ -22,6 +22,8 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by zqb on 2018/4/30.
@@ -95,15 +97,13 @@ public class SecKillController {
                 CurrentSecKill.secKillEndTime = seckillList.get(0).getSeckillEndTime().getTime();
 
                 //开启消费者服务
-                DoSecKillThread thread=CurrentSecKill.thread;
-                if(thread!=null)
+                Lock lock = new ReentrantLock();
+                for(int i=0;i<3;i++)//通过消费者组进行消息消息消费
                 {
-                    thread.setFlag(false);
+                    DoSecKillThread thread=new DoSecKillThread(lock);
+                    CurrentSecKill.threadList.add(thread);
+                    thread.start();
                 }
-                DoSecKillThread thread1=new DoSecKillThread();
-                thread1.start();
-                CurrentSecKill.thread=thread1;
-
                 return new AjaxMessage().Set(MsgType.Success,seckillList);
             }
         }

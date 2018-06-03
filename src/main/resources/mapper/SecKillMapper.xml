@@ -39,7 +39,7 @@
 --         delete_flag=1
         <choose>
             <when test="page !=null">
-                limit #{page.start},#{page.end}
+                limit #{page.start},#{page.pageSize}
             </when>
             <otherwise>
             </otherwise>
