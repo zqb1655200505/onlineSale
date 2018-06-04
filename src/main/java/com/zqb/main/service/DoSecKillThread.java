@@ -88,11 +88,9 @@ public class DoSecKillThread extends Thread{
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    try {
-                                        WebSocketListen.sendStrMessage(userId,"遗憾！秒杀失败");
-                                    } catch (IOException e1) {
-                                        e1.printStackTrace();
-                                    }
+                                }finally
+                                {
+                                    break;
                                 }
                             }
                             else//无余量，从秒杀列表删除，返回秒杀失败
@@ -101,11 +99,11 @@ public class DoSecKillThread extends Thread{
                                     WebSocketListen.sendStrMessage(userId,"遗憾！秒杀失败");
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                }finally {
+                                    secKillService.updateSecKillToRemove(seckill);
+                                    break;
                                 }
-                                secKillService.updateSecKillToRemove(seckill);
-
                             }
-                            break;
                         }
                     }
 //==========================================================================================

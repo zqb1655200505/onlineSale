@@ -458,6 +458,7 @@
                             console.log(parseInt(date2-date1));
                             app.$Spin.hide();
                             app.$Modal.remove();
+                            app.$Message.success("测试成功，花费时间为 "+parseInt(date2-date1)+" ms");
                         }
                     },null,false);
                 }
@@ -514,10 +515,9 @@
     }
 
 
-
+    var webSocket;
     function initWebSocket()
     {
-        var webSocket;
         if(app.userId==null||app.userId.length==0)
         {
             app.$Message.warning("用户ID为空");
@@ -554,9 +554,10 @@
                 if(cnt1==testFrameworkNum)
                 {
                     date4=new Date().getTime();
-                    console.log(parseInt((date4-date3)));
+                    console.log(parseInt(date4-date3));
                     app.$Spin.hide();
                     app.$Modal.remove();
+                    app.$Message.success("测试成功，花费时间为 "+parseInt(date4-date3)+" ms");
                 }
             }
             else
@@ -575,6 +576,11 @@
                 webSocket.close();
             }
         }
+    }
+
+    //通过websocket发送消息
+    function sendMsgWithSocket(msg){
+        webSocket.send(msg);
     }
 </script>
 </body>
