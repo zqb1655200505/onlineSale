@@ -98,7 +98,7 @@ public class SecKillController {
 
                 //开启消费者服务
                 Lock lock = new ReentrantLock();
-                for(int i=0;i<3;i++)//通过消费者组进行消息消息消费
+                for(int i=0;i<1;i++)//通过消费者组进行消息消息消费
                 {
                     DoSecKillThread thread=new DoSecKillThread(lock);
                     CurrentSecKill.threadList.add(thread);

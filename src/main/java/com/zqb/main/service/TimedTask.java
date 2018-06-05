@@ -24,13 +24,20 @@ public class TimedTask {
 
 
     //设置每隔1小时执行1次
-    @Scheduled(cron = "0 0/10 * * * ?")//参数依次为秒，分，小时，天，月
+    @Scheduled(cron = "0 0 0/1 * * ?")//参数依次为秒，分，小时，天，月
     public void getSecKillGoods()
     {
         //更新前一批秒杀商品状态
         List<Seckill> list=CurrentSecKill.seckillList;
 
-//        List<DoSecKillThread> threadList=CurrentSecKill.threadList;
+        List<DoSecKillThread> threadList=CurrentSecKill.threadList;
+        if(threadList.size()==0)
+        {
+            Lock lock = new ReentrantLock();
+            DoSecKillThread thread=new DoSecKillThread(lock);
+            CurrentSecKill.threadList.add(thread);
+            thread.start();
+        }
 //        for(DoSecKillThread item:threadList)
 //        {
 //            if(item!=null)
@@ -39,13 +46,13 @@ public class TimedTask {
 //            }
 //        }
 
-//        if(list!=null)
-//        {
-//            for (Seckill item:list)
-//            {
-//                secKillDao.updateSecKillStatusToRemove(item);
-//            }
-//        }
+        if(list!=null)
+        {
+            for (Seckill item:list)
+            {
+                secKillDao.updateSecKillStatusToRemove(item);
+            }
+        }
 
 
         //开启新一轮秒杀

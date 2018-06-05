@@ -467,6 +467,7 @@
     }
     var testFrameworkNum=0;
     var date3,date4;
+    var cnt=0;
     var cnt1=0;
     function testFramework()
     {
@@ -516,8 +517,10 @@
 
 
     var webSocket;
+
     function initWebSocket()
     {
+        cnt=cnt1=0;
         if(app.userId==null||app.userId.length==0)
         {
             app.$Message.warning("用户ID为空");
@@ -551,19 +554,20 @@
             if(event.data.substr(0,2)=="恭喜")
             {
                 cnt1++;
-                if(cnt1==testFrameworkNum)
-                {
-                    date4=new Date().getTime();
-                    console.log(parseInt(date4-date3));
-                    app.$Spin.hide();
-                    app.$Modal.remove();
-                    app.$Message.success("测试成功，花费时间为 "+parseInt(date4-date3)+" ms");
-                }
             }
             else
             {
-                alert("测试秒杀请求失败");
+                cnt++;
+            }
+            if(cnt+cnt1==testFrameworkNum)
+            {
+                date4=new Date().getTime();
+                console.log(parseInt(date4-date3));
+                app.$Spin.hide();
                 app.$Modal.remove();
+                app.$Message.success("测试成功，成功秒杀人数为："+cnt1+",失败人数为："+cnt+",花费时间为 "+parseInt(date4-date3)+" ms");
+                console.log("测试成功，成功秒杀人数为："+cnt1+",失败人数为："+cnt+",花费时间为 "+parseInt(date4-date3)+" ms");
+                webSocket.onclose();
             }
         };
 

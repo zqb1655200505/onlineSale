@@ -96,11 +96,12 @@ public class DoSecKillThread extends Thread{
                             else//无余量，从秒杀列表删除，返回秒杀失败
                             {
                                 try {
+                                    secKillService.updateSecKillToRemove(seckill);
+                                    CurrentSecKill.seckillList.remove(seckill);
                                     WebSocketListen.sendStrMessage(userId,"遗憾！秒杀失败");
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }finally {
-                                    secKillService.updateSecKillToRemove(seckill);
                                     break;
                                 }
                             }
