@@ -15,8 +15,8 @@ import java.util.Properties;
  */
 public class KafkaTopicUtils {
 
-    private static final String zookeeper_connect="140.143.6.130:2181,123.207.165.243:2181,123.207.171.22:2181";//为zookeeperHosts
-
+    //private static final String zookeeper_connect="140.143.6.130:2181,123.207.165.243:2181,123.207.171.22:2181";//为zookeeperHosts
+    private static final String zookeeper_connect="188.131.170.109:2181,123.207.165.243:2181,188.131.170.29:2181";
     public static void createTopic(String topic,int partitions,int factors)
     {
         ZkUtils zkUtils = ZkUtils.apply(zookeeper_connect, 30000, 30000, JaasUtils.isZkSecurityEnabled());

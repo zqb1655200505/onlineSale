@@ -429,6 +429,8 @@
             cartGoodsIdList=cartGoodsIdList.substr(0,cartGoodsIdList.length-1);
             itemNumList=itemNumList.substr(0,itemNumList.length-1);
         }
+
+        //设置为全局cookie，若不加这个参数则cookie为该页面的
         var option={
             path:"/onlineSale",
             expires:7,

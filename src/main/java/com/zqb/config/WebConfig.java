@@ -33,6 +33,18 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         return resolver;
     }
 
+    @Bean(name="multipartResolver")
+    public CommonsMultipartResolver getResolver() throws IOException {
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setMaxUploadSize(104857600);
+        resolver.setMaxInMemorySize(4096);
+        resolver.setDefaultEncoding("UTF-8");
+        //设置文件上传时临时路径，未设置时默认为servlet容器所在目录
+        //resolver.setUploadTempDir(new FileSystemResource("/temp/project/uploads"));
+        return resolver;
+    }
+
+
     /**
      * 配置静态文件访问
      * @param registry
@@ -85,20 +97,22 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 //        interceptorRegistration.excludePathPatterns("/onlineSale/sysLogin");
     }
 
-    @Bean(name="multipartResolver")
-    public CommonsMultipartResolver getResolver() throws IOException {
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setMaxUploadSize(104857600);
-        resolver.setMaxInMemorySize(4096);
-        resolver.setDefaultEncoding("UTF-8");
-        //设置文件上传时临时路径，未设置时默认为servlet容器所在目录
-        //resolver.setUploadTempDir(new FileSystemResource("/temp/project/uploads"));
-        return resolver;
-    }
+
+
+
 
     //作用同上，均是配置文件上传
 //    @Bean(name = "standardServletMultipartResolver")
-//    public MultipartResolver multipartResolver() throws IOException{
+//    public MultipartResolver multipartResolver() throws IO Exception{
 //        return new StandardServletMultipartResolver();
 //    }
+
+
+
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        //配置该方法使得url路径中的 ‘.’ 不会被忽略。
+        configurer.setUseSuffixPatternMatch(false);
+    }
 }

@@ -21,7 +21,8 @@ import java.util.Properties;
  */
 public class KafkaConsumerUtils {
 
-    private static final String bootstrap_servers="140.143.6.130:9092,123.207.165.243:9092,123.207.171.22:9092";
+    //private static final String bootstrap_servers="140.143.6.130:9092,123.207.165.243:9092,123.207.171.22:9092";
+    private static final String bootstrap_servers="188.131.170.109:9092,123.207.165.243:9092,188.131.170.29:9092";
     private KafkaConsumer<String, String> consumer;
 
     public KafkaConsumerUtils()

@@ -12,7 +12,7 @@
             <value>com.mysql.jdbc.Driver</value>
         </property>
         <property name="url">
-            <value>jdbc:mysql://localhost:3306/onlinesale?useUnicode=true&amp;characterEncoding=utf8</value>
+            <value>jdbc:mysql://localhost:8066/onlinesale?useUnicode=true&amp;characterEncoding=utf8</value>
             <!--<value>jdbc:mysql://140.143.6.130:3306/onlinesale?useUnicode=true&amp;characterEncoding=utf8</value>-->
         </property>
         <property name="username">
@@ -33,6 +33,8 @@
         <constructor-arg index="0" ref="sqlSessionFactory"/>
     </bean>
 
+
+    <!--配置扫描dao包-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.zqb.main.dao"/>
         <property name="annotationClass" value="org.springframework.stereotype.Repository"/>

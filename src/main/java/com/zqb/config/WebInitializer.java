@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
  * @author zqb
  * @decription 代替web.xml对项目进行初始化配置
  * @create 2017/7/20
+ * AbstractAnnotationConfigDispatcherServletInitializer的祖先类实现了WebApplicationInitializer接口
  */
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override

@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * Created by zqb on 2018/5/24.
+ * 该类使得普通的java类中亦能调用ApplicationContext的服务。
+ * 类似的还有
  * 通过此类获取 ApplicationContext，再通过ApplicationContext获取实体bean
  */
 public class MyApplicationContext implements ApplicationContextAware {
