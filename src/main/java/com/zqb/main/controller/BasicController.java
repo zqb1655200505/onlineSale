@@ -4,6 +4,7 @@ import com.zqb.main.dto.AjaxMessage;
 import com.zqb.main.dto.MsgType;
 import com.zqb.main.entity.User;
 import com.zqb.main.entity.UserType;
+import com.zqb.main.service.AOP.LogAOP;
 import com.zqb.main.service.UserService;
 import com.zqb.main.utils.Encryption;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class BasicController {
     }
 
 
+    @LogAOP(operationName = "用户登录")
     @RequestMapping(value = "/doLogin",method = RequestMethod.POST)
     @ResponseBody
     public Object doLogin(User user, Model model, HttpSession session)
@@ -71,6 +73,7 @@ public class BasicController {
     }
 
 
+    //@LogAOP(operationName = "用户注册",operationType = "add")
     @RequestMapping(value = "/doRegister",method = RequestMethod.POST)
     @ResponseBody
     public Object doRegister(HttpServletRequest request, Model model)

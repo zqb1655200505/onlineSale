@@ -2,58 +2,69 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:task="http://www.springframework.org/schema/task" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
 
-        <property name="driverClassName">
-            <value>com.mysql.jdbc.Driver</value>
-        </property>
-        <property name="url">
-            <value>jdbc:mysql://localhost:8066/onlinesale?useUnicode=true&amp;characterEncoding=utf8</value>
-            <!--<value>jdbc:mysql://140.143.6.130:3306/onlinesale?useUnicode=true&amp;characterEncoding=utf8</value>-->
-        </property>
-        <property name="username">
-            <value>root</value>
-        </property>
-        <property name="password">
-            <value>123456</value>
-        </property>
-    </bean>
+        <!--<property name="driverClassName">-->
+            <!--<value>com.mysql.jdbc.Driver</value>-->
+        <!--</property>-->
+        <!--<property name="url">-->
+            <!--&lt;!&ndash;mycat&ndash;&gt;-->
+            <!--&lt;!&ndash;<value>jdbc:mysql://localhost:8066/onlinesale?useUnicode=true&amp;characterEncoding=utf8</value>&ndash;&gt;-->
 
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
-        <property name="configLocation" value="classpath:mybatis-config.xml"/>
-    </bean>
+            <!--<value>jdbc:mysql://localhost:3306/onlinesale?useUnicode=true&amp;characterEncoding=utf8</value>-->
+            <!--&lt;!&ndash;<value>jdbc:mysql://140.143.6.130:3306/onlinesale?useUnicode=true&amp;characterEncoding=utf8</value>&ndash;&gt;-->
+        <!--</property>-->
+        <!--<property name="username">-->
+            <!--<value>root</value>-->
+        <!--</property>-->
+        <!--<property name="password">-->
+            <!--<value>123456</value>-->
+        <!--</property>-->
+    <!--</bean>-->
 
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
-        <constructor-arg index="0" ref="sqlSessionFactory"/>
-    </bean>
+    <!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--<property name="mapperLocations" value="classpath:mapper/*.xml"/>-->
+        <!--<property name="configLocation" value="classpath:mybatis-config.xml"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">-->
+        <!--<constructor-arg index="0" ref="sqlSessionFactory"/>-->
+    <!--</bean>-->
 
 
     <!--配置扫描dao包-->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.zqb.main.dao"/>
-        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
-    </bean>
+    <!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
+        <!--<property name="basePackage" value="com.zqb.main.dao"/>-->
+        <!--<property name="annotationClass" value="org.springframework.stereotype.Repository"/>-->
+    <!--</bean>-->
 
     <!--事务管理-->
     <!--MyBatis自动参与到spring事务管理中，无需额外配置，只要org.mybatis.spring.SqlSessionFactoryBean引用的
             数据源与DataSourceTransactionManager引用的数据源一致即可，否则事务管理会不起作用。-->
-    <bean id="transactionManager"
-          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
+    <!--<bean id="transactionManager"-->
+          <!--class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+        <!--<property name="dataSource" ref="dataSource" />-->
+    <!--</bean>-->
 
     <!--获取应用ApplicationContext对象，从该对象中获取未被spring装配的对象-->
     <bean class="com.zqb.config.MyApplicationContext"/>
 
     <!-- 开启事务控制的注解支持。 如果配置的事务管理器的id就是transactionManager，这里是可以省略transaction-manager-->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
 
     <!-- 开启spring定时任务 -->
     <task:annotation-driven />
+
+
+    <!-- 启动对@AspectJ注解的支持 -->
+    <!-- proxy-target-class等于true是强制使用cglib代理，proxy-target-class默认是false，
+    如果你的类实现了接口 就走JDK代理，如果没有，走cglib代理  -->
+    <!-- 注：对于单例模式建议使用cglib代理，虽然JDK动态代理比cglib代理速度快，但性能不如cglib -->
+    <!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
 </beans>

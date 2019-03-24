@@ -9,15 +9,16 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
-    <typeAliases>
-        <typeAlias type="com.zqb.main.entity.User" alias="user"></typeAlias>
-        <typeAlias type="com.zqb.main.entity.Message" alias="message"></typeAlias>
-        <typeAlias type="com.zqb.main.entity.Goods" alias="goods"></typeAlias>
-        <typeAlias type="com.zqb.main.entity.Seckill" alias="secKill"></typeAlias>
-        <typeAlias type="com.zqb.main.entity.Cart" alias="cart"></typeAlias>
-        <typeAlias type="com.zqb.main.entity.Order" alias="order"></typeAlias>
-        <typeAlias type="com.zqb.main.entity.OrderGoods" alias="orderGoods"></typeAlias>
-    </typeAliases>
+    <!--<typeAliases>-->
+        <!--<typeAlias type="com.zqb.main.entity.User" alias="user"></typeAlias>-->
+        <!--<typeAlias type="com.zqb.main.entity.Message" alias="message"></typeAlias>-->
+        <!--<typeAlias type="com.zqb.main.entity.Goods" alias="goods"></typeAlias>-->
+        <!--<typeAlias type="com.zqb.main.entity.Seckill" alias="secKill"></typeAlias>-->
+        <!--<typeAlias type="com.zqb.main.entity.Cart" alias="cart"></typeAlias>-->
+        <!--<typeAlias type="com.zqb.main.entity.Order" alias="order"></typeAlias>-->
+        <!--<typeAlias type="com.zqb.main.entity.OrderGoods" alias="orderGoods"></typeAlias>-->
+        <!--<typeAlias type="com.zqb.main.service.AOP.Log" alias="log"></typeAlias>-->
+    <!--</typeAliases>-->
 
     <!--通常我们希望将表示状态的数值存入数据库，即ComputerState.OPEN存入数据库取值为0或1。-->
     <!--EnumTypeHandler-->

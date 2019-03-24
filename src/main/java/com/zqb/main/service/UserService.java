@@ -3,6 +3,7 @@ package com.zqb.main.service;
 import com.zqb.main.dao.UserDao;
 import com.zqb.main.entity.User;
 import com.zqb.main.entity.UserType;
+import com.zqb.main.service.AOP.LogAOP;
 import com.zqb.main.utils.Encryption;
 import com.zqb.main.utils.IdGen;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class UserService {
     private UserDao userDao;
 
 
+    @LogAOP(operationName = "用户注册",operationType = "user")
     public int addUser(User user)
     {
         return userDao.addUser(user);
@@ -37,7 +39,6 @@ public class UserService {
     {
         return userDao.getUserByName(userName);
     }
-
 
     public User getUserByNameAndPwd(String userName,String password)
     {
